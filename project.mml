@@ -1,0 +1,179 @@
+{
+  "bounds": [
+    -179,
+    -80,
+    179,
+    83
+  ],
+  "center": [
+    0,
+    0,
+    0
+  ],
+  "format": "png",
+  "interactivity": false,
+  "minzoom": 0,
+  "maxzoom": 10,
+  "srs": "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
+  "Stylesheet": [
+    "style.mss",
+    "placenames.mss"
+  ],
+  "Layer": [
+    {
+      "geometry": "polygon",
+      "extent": [
+        35.15111989999999,
+        54.2593361992327,
+        40.19803509999999,
+        56.94325960022949
+      ],
+      "id": "landcovers",
+      "class": "",
+      "Datasource": {
+        "file": "d:\\__4\\landcovers.shp"
+      },
+      "srs-name": "autodetect",
+      "srs": "",
+      "advanced": {},
+      "name": "landcovers"
+    },
+    {
+      "geometry": "polygon",
+      "extent": [
+        -180,
+        -85.051,
+        180,
+        83.62448911667343
+      ],
+      "id": "landcovers_aggr",
+      "class": "",
+      "Datasource": {
+        "file": "d:\\__4\\landcovers_aggr.shp"
+      },
+      "srs-name": "autodetect",
+      "srs": "",
+      "advanced": {},
+      "name": "landcovers_aggr"
+    },
+    {
+      "geometry": "raster",
+      "extent": [
+        -180,
+        -85.051,
+        180,
+        85.051
+      ],
+      "id": "ne1hrlc",
+      "class": "",
+      "Datasource": {
+        "file": "C:\\Users\\zkir\\Downloads\\NaturalEarth\\NE2_HR_LC.tif"
+      },
+      "srs-name": "WGS84",
+      "srs": "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
+      "advanced": {},
+      "name": "ne1hrlc"
+    },
+    {
+      "geometry": "raster",
+      "extent": [
+        -180,
+        -85.051,
+        180,
+        85.051
+      ],
+      "id": "srhr",
+      "class": "",
+      "Datasource": {
+        "file": "C:\\Users\\zkir\\Downloads\\NaturalEarth\\SR_HR.tif"
+      },
+      "srs-name": "WGS84",
+      "srs": "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
+      "advanced": {},
+      "name": "srhr"
+    },
+    {
+      "geometry": "polygon",
+      "extent": [
+        -179.95926288845504,
+        36.571967591748454,
+        179.93397940749523,
+        81.08891069960798
+      ],
+      "id": "waterbodies",
+      "class": "",
+      "Datasource": {
+        "file": "d:\\__4\\waterbodies_aggr.shp"
+      },
+      "srs-name": "autodetect",
+      "srs": "",
+      "advanced": {},
+      "name": "waterbodies"
+    },
+    {
+      "geometry": "polygon",
+      "extent": [
+        -179.99999999999991,
+        -85.051,
+        180,
+        85.051
+      ],
+      "id": "ocean",
+      "class": "",
+      "Datasource": {
+        "file": "d:\\__4\\ne_10m_ocean.shp",
+        "id": "ocean",
+        "project": "test",
+        "srs": ""
+      },
+      "srs-name": "autodetect",
+      "srs": "",
+      "advanced": {},
+      "name": "ocean"
+    },
+    {
+      "geometry": "linestring",
+      "extent": [
+        -140.99778,
+        -54.89681,
+        141.03385176001382,
+        70.16418999999999
+      ],
+      "id": "land_country_boundaries",
+      "class": "",
+      "Datasource": {
+        "file": "d:\\__4\\ne_admin_0_boundary_lines_land.shp"
+      },
+      "srs-name": "autodetect",
+      "srs": "",
+      "advanced": {},
+      "name": "land_country_boundaries"
+    },
+    {
+      "geometry": "point",
+      "extent": [
+        -179.87995009999997,
+        -77.84833470282445,
+        179.7110394,
+        78.3818823
+      ],
+      "id": "places",
+      "class": "",
+      "Datasource": {
+        "file": "d:\\__4\\places.shp",
+        "id": "places",
+        "project": "generalized_landcovers",
+        "srs": ""
+      },
+      "srs-name": "autodetect",
+      "srs": "",
+      "advanced": {},
+      "name": "places"
+    }
+  ],
+  "scale": 1,
+  "metatile": 2,
+  "name": "test",
+  "description": "test",
+  "attribution": ""
+}
