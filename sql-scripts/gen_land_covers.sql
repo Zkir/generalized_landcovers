@@ -8,13 +8,14 @@ DROP TABLE IF EXISTS h3.landcovers_aggr;
 DROP TABLE IF EXISTS h3.landcovers_aggr_m; 
 drop table IF EXISTS h3.landcover_quality;
 drop table IF EXISTS h3.landcover_quality2;  
+drop table IF EXISTS h3.landcover_quality3;  
 */
 
 /*
    select landcover from OSM data, naturals and landuses.
    we select ALL naturals and landuses regardless of their area.
 */
-CREATE TABLE h3.landcovers AS ;
+CREATE TABLE h3.landcovers AS 
 	SELECT * 
 		FROM (
 			SELECT 
