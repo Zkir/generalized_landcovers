@@ -10,33 +10,37 @@
     0,
     0
   ],
-  "format": "png",
+  "format": "png8",
   "interactivity": false,
   "minzoom": 0,
-  "maxzoom": 10,
+  "maxzoom": 12,
   "srs": "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
   "Stylesheet": [
     "style.mss",
-    "placenames.mss"
+    "placenames.mss",
+    "fonts.mss"
   ],
   "Layer": [
     {
       "geometry": "polygon",
       "extent": [
-        35.15111989999999,
-        54.2593361992327,
-        40.19803509999999,
-        56.94325960022949
+        30.630620799999996,
+        49.49216299957165,
+        47.8283572,
+        59.88537360159089
       ],
       "id": "landcovers",
       "class": "",
       "Datasource": {
-        "file": "d:\\__4\\landcovers.shp"
+        "file": "/home/zkir/src/generalized_landcovers/data/landcovers.shp",
+        "type": "shape"
       },
       "srs-name": "autodetect",
       "srs": "",
       "advanced": {},
-      "name": "landcovers"
+      "name": "landcovers",
+      "layerId": "landcovers",
+      "layer": null
     },
     {
       "geometry": "polygon",
@@ -44,136 +48,137 @@
         -180,
         -85.051,
         180,
-        83.62448911667343
+        83.62448911667346
       ],
       "id": "landcovers_aggr",
       "class": "",
       "Datasource": {
-        "file": "d:\\__4\\landcovers_aggr.shp"
+        "file": "/home/zkir/src/generalized_landcovers/data/landcovers_aggr.shp",
+        "type": "shape"
       },
       "srs-name": "autodetect",
       "srs": "",
       "advanced": {},
-      "name": "landcovers_aggr"
-    },
-    {
-      "geometry": "raster",
-      "extent": [
-        -180,
-        -85.051,
-        180,
-        85.051
-      ],
-      "id": "ne1hrlc",
-      "class": "",
-      "Datasource": {
-        "file": "C:\\Users\\zkir\\Downloads\\NaturalEarth\\NE2_HR_LC.tif"
-      },
-      "srs-name": "WGS84",
-      "srs": "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
-      "advanced": {},
-      "name": "ne1hrlc"
-    },
-    {
-      "geometry": "raster",
-      "extent": [
-        -180,
-        -85.051,
-        180,
-        85.051
-      ],
-      "id": "srhr",
-      "class": "",
-      "Datasource": {
-        "file": "C:\\Users\\zkir\\Downloads\\NaturalEarth\\SR_HR.tif"
-      },
-      "srs-name": "WGS84",
-      "srs": "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
-      "advanced": {},
-      "name": "srhr"
+      "name": "landcovers_aggr",
+      "layerId": "landcovers_aggr",
+      "layer": null
     },
     {
       "geometry": "polygon",
       "extent": [
-        -179.95926288845504,
-        36.571967591748454,
-        179.93397940749523,
-        81.08891069960798
+        -180,
+        -85.051,
+        180,
+        83.54234606652606
       ],
       "id": "waterbodies",
       "class": "",
       "Datasource": {
-        "file": "d:\\__4\\waterbodies_aggr.shp"
+        "file": "/home/zkir/src/generalized_landcovers/data/waterbodies_aggr.shp",
+        "type": "shape"
       },
       "srs-name": "autodetect",
       "srs": "",
       "advanced": {},
-      "name": "waterbodies"
+      "name": "waterbodies",
+      "layerId": "waterbodies",
+      "layer": null
     },
     {
       "geometry": "polygon",
       "extent": [
-        -179.99999999999991,
-        -85.051,
-        180,
+        -179.9999999749438,
+        -78.7385903,
+        179.9999999749438,
         85.051
       ],
       "id": "ocean",
       "class": "",
       "Datasource": {
-        "file": "d:\\__4\\ne_10m_ocean.shp",
+        "file": "/home/zkir/src/generalized_landcovers/data/ne_10m_ocean.shp",
         "id": "ocean",
         "project": "test",
-        "srs": ""
+        "srs": "",
+        "type": "shape"
       },
       "srs-name": "autodetect",
       "srs": "",
       "advanced": {},
-      "name": "ocean"
+      "name": "ocean",
+      "layerId": "ocean",
+      "layer": null
     },
     {
       "geometry": "linestring",
       "extent": [
         -140.99778,
-        -54.89681,
-        141.03385176001382,
+        -54.89680999999999,
+        141.0338517600138,
         70.16418999999999
       ],
       "id": "land_country_boundaries",
       "class": "",
       "Datasource": {
-        "file": "d:\\__4\\ne_admin_0_boundary_lines_land.shp"
+        "file": "/home/zkir/src/generalized_landcovers/data/ne_admin_0_boundary_lines_land.shp",
+        "type": "shape"
       },
       "srs-name": "autodetect",
       "srs": "",
       "advanced": {},
-      "name": "land_country_boundaries"
+      "name": "land_country_boundaries",
+      "layerId": "land_country_boundaries",
+      "layer": null
     },
     {
       "geometry": "point",
       "extent": [
         -179.87995009999997,
-        -77.84833470282445,
-        179.7110394,
-        78.3818823
+        -77.84833470282443,
+        179.71103939999998,
+        78.38188230000002
       ],
       "id": "places",
       "class": "",
       "Datasource": {
-        "file": "d:\\__4\\places.shp",
+        "file": "/home/zkir/src/generalized_landcovers/data/places.shp",
         "id": "places",
         "project": "generalized_landcovers",
-        "srs": ""
+        "srs": "",
+        "type": "shape"
       },
       "srs-name": "autodetect",
       "srs": "",
       "advanced": {},
-      "name": "places"
+      "name": "places",
+      "layerId": "places",
+      "layer": null
+    },
+    {
+      "geometry": "point",
+      "extent": [
+        -179.9703455,
+        -85.051,
+        179.98729169999996,
+        83.5714722
+      ],
+      "id": "peaks",
+      "class": "",
+      "Datasource": {
+        "file": "/home/zkir/src/generalized_landcovers/data/peaks.shp",
+        "type": "shape"
+      },
+      "layer": null,
+      "srs-name": "autodetect",
+      "srs": "",
+      "advanced": {},
+      "name": "peaks",
+      "layerId": "peaks"
     }
   ],
   "scale": 1,
   "metatile": 2,
   "name": "test",
   "description": "test",
-  "attribution": ""
+  "attribution": "",
+  "lastBrowsedFolder": "/home/zkir/src/generalized_landcovers/data"
 }

@@ -1,7 +1,17 @@
 //==missing standards
-@book-fonts: "Arial Regular";//"Arial Regular";
+//@book-fonts: "Arial Regular";//"Arial Regular";
+
 @standard-halo-radius: 1;
 @standard-halo-fill: rgba(255,255,255,0.6);
+
+@standard-font-size: 10;
+@standard-wrap-width: 30; // 3 em
+@standard-line-spacing-size: -1.5; // -0.15 em
+@standard-font: @book-fonts;
+
+@landform-color: #d08f55;
+@transportation-icon: #0092da;
+@transportation-text: #0066ff;
 
 //============
 
