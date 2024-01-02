@@ -1,4 +1,6 @@
 fonts/*.*
 data/*.*
 data/tables/*
+layers/*/*
 
+landcovers_test_render.png
