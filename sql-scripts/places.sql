@@ -1,13 +1,14 @@
  /*
     fetch place=city|town and calcuate importance rank using the Grid Sell method.
  */
-  
+ 
+SET statement_timeout = 0;  
 --drop table h3.places
   
 CREATE TABLE h3.places AS
 SELECT *,
        RANK() OVER(PARTITION BY r1ix
-                   /* ORDER BY admin_level ASC,*/ population DESC) Rank
+                   ORDER BY /* admin_level ASC,*/ population DESC) Rank
 FROM
     (SELECT osm_id,
             place,
