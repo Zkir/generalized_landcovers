@@ -1,7 +1,13 @@
+/*
+  Here we do more or less traditional generalization for water bodies: 
+  buffer outside, concatenate adjucent, buffer inside.
+  this allow to create geometry for objects that are drawn as many small objects and simplify geometry a bit.
+*/
+
 SET statement_timeout = 0;
-drop table IF EXISTS  h3.water_bodies;
-drop table IF EXISTS  h3.water_bodies_aggr;
---drop table IF EXISTS  h3.water_bodies_aggr_m;
+-- drop table IF EXISTS  h3.water_bodies;
+-- drop table IF EXISTS  h3.water_bodies_aggr;
+
 CREATE TABLE h3.water_bodies AS 
 	SELECT 
 	  osm_id,
@@ -14,7 +20,7 @@ CREATE TABLE h3.water_bodies AS
   
 CREATE INDEX gix_h3_water_bodies ON h3.water_bodies USING GIST (geom);  
 
-SELECT 'Number of water bodies for aggregation' as feature, COUNT(1) as count FROM h3.water_bodies;
+--SELECT 'Number of water bodies for aggregation' as feature, COUNT(1) as count FROM h3.water_bodies;
 
 
 /* create generalized water bodies*/
@@ -23,16 +29,11 @@ CREATE TABLE h3.water_bodies_aggr AS
 		     (ST_dump(  ST_Union(f.geom)  )).geom  as geom  	    
 		 FROM h3.water_bodies As f
 	--GROUP BY feature;
-	
 
 
 UPDATE h3.water_bodies_aggr  SET geom=ST_Buffer(geom,-500);
 DELETE FROM h3.water_bodies_aggr WHERE ST_Area(geom)<100000000;
 
-
-SELECT *, Round(ST_Area(geom)) 
-  FROM h3.water_bodies_aggr 
-  ORDER BY 3 desc;
 
 --SELECT sum(ST_NPoints(geom)) from h3.water_bodies ;
 --SELECT sum(ST_NPoints(geom)) from h3.water_bodies_aggr;

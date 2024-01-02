@@ -1,4 +1,6 @@
- 
+ /*
+    fetch place=city|town and calcuate importance rank using the Grid Sell method.
+ */
   
 --drop table h3.places
   
@@ -28,4 +30,4 @@ ORDER BY r1ix ASC,
          population DESC;
   
 
-SELECT * FROM h3.places WHERE admin_level IS NOT NULL ORDER BY r1ix asc, rank asc;
+--SELECT * FROM h3.places WHERE admin_level IS NOT NULL ORDER BY r1ix asc, rank asc;
