@@ -13,14 +13,10 @@ Map {
     line-color: #000;
     line-width: 1.4;
     line-join: round;
-    line-dasharray: 2, 8, 4;
-  }
-}
 
 #srhr_{ 
   raster-opacity:1;
   raster-comp-op:multiply; 
-  raster-scaling: lanczos;   
 }
 
 
@@ -179,10 +175,10 @@ Map {
 
   //residential,industrial etc (after transformation)
   [feature='built_up']{
-    polygon-fill:red;
+    polygon-fill:#F05050;
   }
   [feature='landfill']{
-    polygon-fill:red;
+    polygon-fill:#F06050;
   }
 
   [feature='allotments']{
@@ -204,10 +200,6 @@ Map {
 
 #places{    
       [zoom=3][rank<=1],
-      [zoom=4][rank<=4],
-      [zoom=5][rank<=10],
-      [zoom=6][rank<=40],
-      [zoom=7][rank<=160]{
         shield-file: url('symbols/place/place-4.svg');
         shield-text-dx: 0;
         shield-text-dy: 0;
@@ -229,3 +221,72 @@ Map {
       }
 }
 
+#peaks[ele>800]{
+  [zoom=1][score>3000000],
+  [zoom=2][score>3000000],
+  [zoom=3][score>1500000],
+  [zoom=4][score> 600000],
+  [zoom=5][score> 300000],
+  [zoom>=6][score>150000]
+  {
+    
+    [natural = 'peak'] {
+      marker-file: url('symbols/natural/peak.svg');
+      //marker-fill: @landform-color;
+      marker-fill: #d40000;
+      marker-clip: false;
+    }
+
+    [natural = 'volcano'] {
+      marker-file: url('symbols/natural/peak.svg');
+      marker-fill: #d40000;
+      marker-clip: false;
+    }
+
+    [natural = 'saddle'] { 
+      marker-file: url('symbols/natural/saddle.svg');
+      marker-fill: @landform-color;
+      marker-clip: false;
+    }
+
+    [natural = 'mountain_pass'] {
+      marker-file: url('symbols/natural/saddle.svg');
+      marker-fill: @transportation-icon;
+      marker-clip: false;
+    }
+    
+
+    [natural = 'peak'],
+    [natural = 'volcano'],
+    [natural = 'saddle'],
+    [natural = 'mountain_pass'] {
+      ::name{
+        text-name: "[name]";
+        text-size:  @standard-font-size;
+        text-wrap-width: @standard-wrap-width;
+        text-line-spacing: @standard-line-spacing-size;
+        text-fill: darken(@landform-color, 30%);
+        [natural = 'volcano'] { text-fill: #d40000; }
+        [natural = 'mountain_pass'] { text-fill: @transportation-text; }
+        text-dy: 7;
+        text-face-name: @standard-font;
+        text-halo-radius: @standard-halo-radius*2;
+        text-halo-fill: @standard-halo-fill;}
+      
+      ::elevation1{
+        text-name: "[ele]";
+        text-size: @standard-font-size - 1;
+        text-wrap-width: @standard-wrap-width;
+        text-line-spacing: @standard-line-spacing-size;
+        text-fill: darken(@landform-color, 30%);
+        text-dy: -7;
+        text-face-name: @standard-font;
+        text-halo-radius: @standard-halo-radius*1.5;
+        text-halo-fill: @standard-halo-fill;
+        
+        
+        }
+    }
+  }
+  
+}
