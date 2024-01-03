@@ -23,7 +23,16 @@ h3 extension should be installed on the gis database, each time gis database is 
 CREATE EXTENSION h3;
 CREATE EXTENSION h3_postgis CASCADE;
 ```
-I remember that I had to compile it from sources and install some compilers.
+_I remember that I had to compile it from sources and install some compilers._
+
+### Postgres user name and password
+ogr2org requires both name and password even for local user, so please specify it
+
+```sh
+export PGUSER=<somedumbuser>
+export PGPASSWORD=<somestrongpassword>
+```
+probably ~/.bashrc is a good place for that.
 
 ### Run data creation
 We need to create generalized geometry, to be used for rendering. 
@@ -42,7 +51,7 @@ Also it should create **mapnik.xml** from  mss files, but it is not yet implemen
 Run 
 
 ```sh
-python3 test.py
+make test
 ```
 
 If all is OK, it will render map of the world to 'landcovers_test_render.png', compare it with 'landcovers_test_render_sample.png'
