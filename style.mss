@@ -189,7 +189,6 @@ Map {
     polygon-fill:#B0E0A0;
     polygon-pattern-file: url('patterns/allotments.png');
   }  
-
   
 }
 
@@ -197,7 +196,7 @@ Map {
     [feature='water']{polygon-fill:@water;}
 }
 
- #ocean{//[zoom<=7] 
+#ocean_lz{//[zoom<=7] 
    polygon-fill:@water;
 }
 

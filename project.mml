@@ -71,10 +71,10 @@
         179.9999999749438,
         85.051
       ],
-      "id": "ocean",
+      "id": "ocean_lz",
       "class": "",
       "Datasource": {
-        "file": "/home/zkir/src/generalized_landcovers/data/ne_10m_ocean.shp",
+        "file": "/home/zkir/src/generalized_landcovers/data/ocean_lz.shp",
         "id": "ocean",
         "project": "test",
         "srs": "",
@@ -83,8 +83,8 @@
       "srs-name": "autodetect",
       "srs": "",
       "advanced": {},
-      "name": "ocean",
-      "layerId": "ocean",
+      "name": "ocean_lz",
+      "layerId": "ocean_lz",
       "layer": null
     },
     {

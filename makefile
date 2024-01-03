@@ -43,6 +43,13 @@ data/peaks.shp: data/tables/peaks
   -sql "SELECT * FROM h3.peaks" \
   -lco ENCODING=UTF-8
 
+data/ocean_lz.shp: 
+	ogr2ogr -f "ESRI Shapefile" \
+  -progress -overwrite \
+  data/ocean_lz.shp \
+  "PG:dbname=gis host=localhost port=5432 user=$(PGUSER) password=$(PGPASSWORD)" \
+  -sql "SELECT * FROM simplified_water_polygons" \
+  -lco ENCODING=UTF-8
 
 
 data/tables/peaks: data/tables/h3_hexes
