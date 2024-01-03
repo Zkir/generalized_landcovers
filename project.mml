@@ -24,27 +24,6 @@
     {
       "geometry": "polygon",
       "extent": [
-        30.630620799999996,
-        49.49216299957165,
-        47.8283572,
-        59.88537360159089
-      ],
-      "id": "landcovers",
-      "class": "",
-      "Datasource": {
-        "file": "/home/zkir/src/generalized_landcovers/data/landcovers.shp",
-        "type": "shape"
-      },
-      "srs-name": "autodetect",
-      "srs": "",
-      "advanced": {},
-      "name": "landcovers",
-      "layerId": "landcovers",
-      "layer": null
-    },
-    {
-      "geometry": "polygon",
-      "extent": [
         -180,
         -85.051,
         180,
@@ -177,8 +156,8 @@
   ],
   "scale": 1,
   "metatile": 2,
-  "name": "test",
-  "description": "test",
+  "name": "Generalized-Landcovers",
+  "description": "Map of landcovers with proper cartographic generalization",
   "attribution": "",
   "lastBrowsedFolder": "/home/zkir/src/generalized_landcovers/data"
 }
