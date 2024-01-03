@@ -7,17 +7,17 @@ Map {
 }
 
 
-#land_country_boundaries {
+#admin-110m[zoom<=5],#admin-10m[zoom>5] {
   //polygon-fill: #fff;
   ::outline {
     line-color: #000;
     line-width: 1.4;
     line-join: round;
-    line-dasharray: 2, 8, 4; 
+    line-dasharray: 2, 8, 4;  
   } 
 } 
 
-#srhr_{ 
+#srhr_{  
   raster-opacity:1;
   raster-comp-op:multiply; 
   raster-scaling: lanczos;     
@@ -192,7 +192,7 @@ Map {
   
 }
 
-#waterbodies[zoom<=7]{
+#waterbodies[zoom<=8]{
     [feature='water']{polygon-fill:@water;}
 }
 
@@ -206,7 +206,8 @@ Map {
       [zoom=4][rank<=3],
       [zoom=5][rank<=12], 
       [zoom=6][rank<=48],
-      [zoom=7][rank<=120]{
+      [zoom=7][rank<=120],
+      [zoom=8][rank<=500]{
         shield-file: url('symbols/place/place-4.svg');
         shield-text-dx: 0;
         shield-text-dy: 0;

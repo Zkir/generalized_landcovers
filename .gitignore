@@ -1,5 +1,6 @@
 fonts/*.*
 data/*.*
+data/*/*
 data/tables/*
 layers/*/*
 

@@ -52,6 +52,14 @@ data/ocean_lz.shp:
   -lco ENCODING=UTF-8
 
 
+data/ne_10m_admin_0_boundary_lines_land.shp: data/downloads/ne_10m_admin_0_boundary_lines_land.zip
+	unzip -d data $<
+
+data/ne_110m_admin_0_boundary_lines_land.shp: data/downloads/ne_110m_admin_0_boundary_lines_land.zip
+	unzip -d data $<
+
+
+
 data/tables/peaks: data/tables/h3_hexes
 	psql -d gis -f "sql-scripts/peaks.sql" -v ON_ERROR_STOP=1
 	touch $@
@@ -71,6 +79,15 @@ data/tables/landcovers_aggr: data/tables/h3_hexes
 data/tables/h3_hexes:
 	psql -d gis -f "sql-scripts/prepare_h3_hexes.sql" -v ON_ERROR_STOP=1
 	touch $@
+
+data/downloads/ne_10m_admin_0_boundary_lines_land.zip: | data/downloads
+	wget -O $@ https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip
+
+data/downloads/ne_110m_admin_0_boundary_lines_land.zip: | data/downloads
+	wget -O $@ https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
+
+data/downloads:
+	mkdir $@
 
 .PHONY: test
 test: 

@@ -90,22 +90,43 @@
     {
       "geometry": "linestring",
       "extent": [
-        -140.99778,
-        -54.89680999999999,
-        141.0338517600138,
-        70.16418999999999
+        -141.00554863899987,
+        -55.120923766999944,
+        145.94101759835863,
+        70.07531036400012
       ],
-      "id": "land_country_boundaries",
+      "id": "admin-10m",
       "class": "",
       "Datasource": {
-        "file": "/home/zkir/src/generalized_landcovers/data/ne_admin_0_boundary_lines_land.shp",
+        "file": "/home/zkir/src/generalized_landcovers/data/ne_10m_admin_0_boundary_lines_land.shp",
+        "type": "shape"
+      },
+      "layer": null,
+      "srs-name": "autodetect",
+      "srs": "",
+      "advanced": {},
+      "name": "admin-10m",
+      "layerId": "admin-10m"
+    },
+    {
+      "geometry": "linestring",
+      "extent": [
+        -140.99778,
+        -54.89681,
+        141.03385176001382,
+        70.16419
+      ],
+      "id": "admin-110m",
+      "class": "",
+      "Datasource": {
+        "file": "/home/zkir/src/generalized_landcovers/data/ne_110m_admin_0_boundary_lines_land.shp",
         "type": "shape"
       },
       "srs-name": "autodetect",
       "srs": "",
       "advanced": {},
-      "name": "land_country_boundaries",
-      "layerId": "land_country_boundaries",
+      "name": "admin-110m",
+      "layerId": "admin-110m",
       "layer": null
     },
     {

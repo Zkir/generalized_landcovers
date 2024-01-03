@@ -10,7 +10,7 @@
     <Parameter name="scale">1</Parameter>
     <Parameter name="metatile">2</Parameter>
     <Parameter name="id"><![CDATA[generalized_landcovers]]></Parameter>
-    <Parameter name="_updated">1704247649000</Parameter>
+    <Parameter name="_updated">1704296033000</Parameter>
     <Parameter name="name"><![CDATA[Generalized-Landcovers]]></Parameter>
     <Parameter name="description"><![CDATA[Map of landcovers with proper cartographic generalization]]></Parameter>
     <Parameter name="lastBrowsedFolder"><![CDATA[/home/zkir/src/generalized_landcovers/data]]></Parameter>
@@ -143,13 +143,13 @@
     </Rule>
     <Rule>
       <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([feature] = 'paddy')]]></Filter>
+      <Filter><![CDATA[([feature] = 'farmland')]]></Filter>
       <LineSymbolizer stroke="#000000" stroke-width="0" />
       <PolygonSymbolizer fill="#a6d0a6" />
     </Rule>
     <Rule>
       <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([feature] = 'farmland')]]></Filter>
+      <Filter><![CDATA[([feature] = 'paddy')]]></Filter>
       <LineSymbolizer stroke="#000000" stroke-width="0" />
       <PolygonSymbolizer fill="#a6d0a6" />
     </Rule>
@@ -252,13 +252,6 @@
     </Rule>
     <Rule>
       <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([feature] = 'bare_rock')]]></Filter>
-      <LineSymbolizer stroke="#000000" stroke-width="0" />
-      <PolygonSymbolizer fill="#777777" />
-      <PolygonPatternSymbolizer file="patterns/rock_overlay.png" />
-    </Rule>
-    <Rule>
-      <MinScaleDenominator>1500000</MinScaleDenominator>
       <Filter><![CDATA[([feature] = 'blockfield')]]></Filter>
       <LineSymbolizer stroke="#000000" stroke-width="0" />
       <PolygonSymbolizer fill="#777777" />
@@ -266,7 +259,7 @@
     </Rule>
     <Rule>
       <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([feature] = 'scree')]]></Filter>
+      <Filter><![CDATA[([feature] = 'bare_rock')]]></Filter>
       <LineSymbolizer stroke="#000000" stroke-width="0" />
       <PolygonSymbolizer fill="#777777" />
       <PolygonPatternSymbolizer file="patterns/rock_overlay.png" />
@@ -280,13 +273,20 @@
     </Rule>
     <Rule>
       <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([feature] = 'glacier')]]></Filter>
+      <Filter><![CDATA[([feature] = 'scree')]]></Filter>
+      <LineSymbolizer stroke="#000000" stroke-width="0" />
+      <PolygonSymbolizer fill="#777777" />
+      <PolygonPatternSymbolizer file="patterns/rock_overlay.png" />
+    </Rule>
+    <Rule>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([feature] = 'naled')]]></Filter>
       <LineSymbolizer stroke="#000000" stroke-width="0" />
       <PolygonSymbolizer fill="#bbbbff" />
     </Rule>
     <Rule>
       <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([feature] = 'naled')]]></Filter>
+      <Filter><![CDATA[([feature] = 'glacier')]]></Filter>
       <LineSymbolizer stroke="#000000" stroke-width="0" />
       <PolygonSymbolizer fill="#bbbbff" />
     </Rule>
@@ -312,7 +312,7 @@
   </Layer>
   <Style filter-mode="first" name="waterbodies">
     <Rule>
-      <MinScaleDenominator>3000000</MinScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
       <Filter><![CDATA[([feature] = 'water')]]></Filter>
       <PolygonSymbolizer fill="#41418d" />
     </Rule>
@@ -339,15 +339,29 @@
       <Parameter name="type"><![CDATA[shape]]></Parameter>
     </Datasource>
   </Layer>
-  <Style filter-mode="first" name="land_country_boundaries-outline">
+  <Style filter-mode="first" name="admin-10m-outline">
     <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <LineSymbolizer stroke="#000000" stroke-dasharray="2, 8, 4" stroke-linejoin="round" stroke-width="1.4" />
     </Rule>
   </Style>
-  <Layer name="land_country_boundaries" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
-    <StyleName><![CDATA[land_country_boundaries-outline]]></StyleName>
+  <Layer name="admin-10m" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName><![CDATA[admin-10m-outline]]></StyleName>
     <Datasource>
-      <Parameter name="file"><![CDATA[/home/zkir/Documents/MapBox/project/generalized_landcovers/layers/land_country_boundaries/ne_admin_0_boundary_lines_land.shp]]></Parameter>
+      <Parameter name="file"><![CDATA[/home/zkir/Documents/MapBox/project/generalized_landcovers/layers/admin-10m/ne_10m_admin_0_boundary_lines_land.shp]]></Parameter>
+      <Parameter name="type"><![CDATA[shape]]></Parameter>
+    </Datasource>
+  </Layer>
+  <Style filter-mode="first" name="admin-110m-outline">
+    <Rule>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <LineSymbolizer stroke="#000000" stroke-dasharray="2, 8, 4" stroke-linejoin="round" stroke-width="1.4" />
+    </Rule>
+  </Style>
+  <Layer name="admin-110m" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName><![CDATA[admin-110m-outline]]></StyleName>
+    <Datasource>
+      <Parameter name="file"><![CDATA[/home/zkir/Documents/MapBox/project/generalized_landcovers/layers/admin-110m/ne_110m_admin_0_boundary_lines_land.shp]]></Parameter>
       <Parameter name="type"><![CDATA[shape]]></Parameter>
     </Datasource>
   </Layer>
@@ -355,31 +369,37 @@
     <Rule>
       <MaxScaleDenominator>25000000</MaxScaleDenominator>
       <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([admin_leve] = '2') and ([rank] <= 1)]]></Filter>
+      <Filter><![CDATA[([rank] <= 1) and ([admin_leve] = '2')]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <MinScaleDenominator>6500000</MinScaleDenominator>
-      <Filter><![CDATA[([admin_leve] = '2') and ([rank] <= 1)]]></Filter>
+      <Filter><![CDATA[([rank] <= 1) and ([admin_leve] = '2')]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>6500000</MaxScaleDenominator>
       <MinScaleDenominator>3000000</MinScaleDenominator>
-      <Filter><![CDATA[([admin_leve] = '2') and ([rank] <= 1)]]></Filter>
+      <Filter><![CDATA[([rank] <= 1) and ([admin_leve] = '2')]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 1) and ([admin_leve] = '2')]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 1) and ([admin_leve] = '2')]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000000</MaxScaleDenominator>
       <MinScaleDenominator>50000000</MinScaleDenominator>
-      <Filter><![CDATA[([admin_leve] = '2') and ([rank] <= 1)]]></Filter>
-      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([admin_leve] = '2') and ([rank] <= 1)]]></Filter>
+      <Filter><![CDATA[([rank] <= 1) and ([admin_leve] = '2')]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
@@ -397,6 +417,12 @@
     <Rule>
       <MaxScaleDenominator>6500000</MaxScaleDenominator>
       <MinScaleDenominator>3000000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 3) and ([admin_leve] = '2')]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
       <Filter><![CDATA[([rank] <= 3) and ([admin_leve] = '2')]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
@@ -421,6 +447,12 @@
     <Rule>
       <MaxScaleDenominator>6500000</MaxScaleDenominator>
       <MinScaleDenominator>3000000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 12) and ([admin_leve] = '2')]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
       <Filter><![CDATA[([rank] <= 12) and ([admin_leve] = '2')]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
@@ -433,6 +465,12 @@
     <Rule>
       <MaxScaleDenominator>6500000</MaxScaleDenominator>
       <MinScaleDenominator>3000000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 48) and ([admin_leve] = '2')]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
       <Filter><![CDATA[([rank] <= 48) and ([admin_leve] = '2')]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
@@ -443,8 +481,44 @@
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 120) and ([admin_leve] = '2')]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 500) and ([admin_leve] = '2')]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="14" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 1)]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 1)]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 1)]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
       <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <MinScaleDenominator>6500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 1)]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>6500000</MaxScaleDenominator>
+      <MinScaleDenominator>3000000</MinScaleDenominator>
       <Filter><![CDATA[([rank] <= 1)]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
@@ -455,26 +529,8 @@
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([rank] <= 1)]]></Filter>
-      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([rank] <= 1)]]></Filter>
-      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>6500000</MaxScaleDenominator>
-      <MinScaleDenominator>3000000</MinScaleDenominator>
-      <Filter><![CDATA[([rank] <= 1)]]></Filter>
-      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <MinScaleDenominator>6500000</MinScaleDenominator>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
       <Filter><![CDATA[([rank] <= 3)]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
@@ -491,14 +547,20 @@
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MinScaleDenominator>6500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 3)]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
       <MaxScaleDenominator>6500000</MaxScaleDenominator>
       <MinScaleDenominator>3000000</MinScaleDenominator>
       <Filter><![CDATA[([rank] <= 3)]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <MinScaleDenominator>6500000</MinScaleDenominator>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
       <Filter><![CDATA[([rank] <= 12)]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
@@ -509,9 +571,21 @@
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MinScaleDenominator>6500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 12)]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
       <MaxScaleDenominator>6500000</MaxScaleDenominator>
       <MinScaleDenominator>3000000</MinScaleDenominator>
       <Filter><![CDATA[([rank] <= 12)]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 48)]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
@@ -524,12 +598,24 @@
       <MaxScaleDenominator>6500000</MaxScaleDenominator>
       <MinScaleDenominator>3000000</MinScaleDenominator>
       <Filter><![CDATA[([rank] <= 48)]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 120)]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>6500000</MaxScaleDenominator>
       <MinScaleDenominator>3000000</MinScaleDenominator>
       <Filter><![CDATA[([rank] <= 120)]]></Filter>
+      <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([rank] <= 500)]]></Filter>
       <ShieldSymbolizer dx="0" dy="0" file="symbols/place/place-4.svg" fill="#222222" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.65" size="12" wrap-width="30"><![CDATA[[name]]]></ShieldSymbolizer>
     </Rule>
   </Style>
@@ -545,12 +631,6 @@
   </Layer>
   <Style filter-mode="first" name="peaks-elevation1">
     <Rule>
-      <MaxScaleDenominator>500000000</MaxScaleDenominator>
-      <MinScaleDenominator>200000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
       <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'saddle')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
@@ -582,18 +662,249 @@
     <Rule>
       <MaxScaleDenominator>500000000</MaxScaleDenominator>
       <MinScaleDenominator>200000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'saddle')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
     <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'saddle')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'saddle')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>50000000</MaxScaleDenominator>
       <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'saddle')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'saddle')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'saddle')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'saddle')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'saddle')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'saddle')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'saddle')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 150000) and ([natural] = 'saddle')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>200000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>500000000</MaxScaleDenominator>
+      <MinScaleDenominator>200000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>200000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>500000000</MaxScaleDenominator>
+      <MinScaleDenominator>200000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 150000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 150000) and ([natural] = 'mountain_pass')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
@@ -604,7 +915,14 @@
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
     <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
@@ -615,26 +933,43 @@
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
     <Rule>
+      <MaxScaleDenominator>500000000</MaxScaleDenominator>
+      <MinScaleDenominator>200000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
       <MaxScaleDenominator>100000000</MaxScaleDenominator>
       <MinScaleDenominator>50000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
     <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'peak')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000000</MaxScaleDenominator>
       <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'peak')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
     <Rule>
@@ -644,24 +979,13 @@
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
     <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
       <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'peak')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
     <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'peak')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
@@ -670,255 +994,17 @@
       <Filter><![CDATA[([ele] > 800) and ([score] > 150000) and ([natural] = 'peak')]]></Filter>
       <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
     </Rule>
-    <Rule>
-      <MaxScaleDenominator>500000000</MaxScaleDenominator>
-      <MinScaleDenominator>200000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>200000000</MaxScaleDenominator>
-      <MinScaleDenominator>100000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>200000000</MaxScaleDenominator>
-      <MinScaleDenominator>100000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>500000000</MaxScaleDenominator>
-      <MinScaleDenominator>200000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 150000) and ([natural] = 'mountain_pass')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 150000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 150000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="-7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="1.5" line-spacing="-1.5" size="9" wrap-width="30"><![CDATA[[ele]]]></TextSymbolizer>
-    </Rule>
   </Style>
   <Style filter-mode="first" name="peaks-name">
     <Rule>
-      <MaxScaleDenominator>500000000</MaxScaleDenominator>
-      <MinScaleDenominator>200000000</MinScaleDenominator>
+      <MaxScaleDenominator>200000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
       <TextSymbolizer dy="7" fill="#0066ff" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
-      <MaxScaleDenominator>200000000</MaxScaleDenominator>
-      <MinScaleDenominator>100000000</MinScaleDenominator>
+      <MaxScaleDenominator>500000000</MaxScaleDenominator>
+      <MinScaleDenominator>200000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
       <TextSymbolizer dy="7" fill="#0066ff" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
@@ -1002,18 +1088,6 @@
       <TextSymbolizer dy="7" fill="#0066ff" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
-      <MaxScaleDenominator>200000000</MaxScaleDenominator>
-      <MinScaleDenominator>100000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="7" fill="#d40000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>500000000</MaxScaleDenominator>
-      <MinScaleDenominator>200000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
-      <TextSymbolizer dy="7" fill="#d40000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
       <MaxScaleDenominator>100000000</MaxScaleDenominator>
       <MinScaleDenominator>50000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
@@ -1033,6 +1107,18 @@
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="7" fill="#d40000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>500000000</MaxScaleDenominator>
+      <MinScaleDenominator>200000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
+      <TextSymbolizer dy="7" fill="#d40000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>200000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
       <TextSymbolizer dy="7" fill="#d40000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
@@ -1091,6 +1177,81 @@
       <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 150000) and ([natural] = 'volcano')]]></Filter>
       <TextSymbolizer dy="7" fill="#d40000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>500000000</MaxScaleDenominator>
+      <MinScaleDenominator>200000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>200000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'peak')]]></Filter>
+      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500000</MaxScaleDenominator>
@@ -1181,81 +1342,6 @@
     <Rule>
       <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 150000) and ([natural] = 'saddle')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>200000000</MaxScaleDenominator>
-      <MinScaleDenominator>100000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>500000000</MaxScaleDenominator>
-      <MinScaleDenominator>200000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'peak')]]></Filter>
-      <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'peak')]]></Filter>
       <TextSymbolizer dy="7" fill="#6e441e" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.6)" halo-radius="2" line-spacing="-1.5" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
@@ -1288,8 +1374,14 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#0092da" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <MaxScaleDenominator>200000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
+      <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#0092da" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>500000000</MaxScaleDenominator>
+      <MinScaleDenominator>200000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#0092da" />
     </Rule>
@@ -1300,14 +1392,8 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#0092da" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>200000000</MaxScaleDenominator>
-      <MinScaleDenominator>100000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
-      <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#0092da" />
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>500000000</MaxScaleDenominator>
-      <MinScaleDenominator>200000000</MinScaleDenominator>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'mountain_pass')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#0092da" />
     </Rule>
@@ -1323,14 +1409,14 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#0092da" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'mountain_pass')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#0092da" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'mountain_pass')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#0092da" />
     </Rule>
@@ -1368,13 +1454,13 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#0092da" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'saddle')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'saddle')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
@@ -1403,13 +1489,13 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'saddle')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'saddle')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
@@ -1426,13 +1512,13 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'saddle')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'saddle')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
@@ -1443,13 +1529,13 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'saddle')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'saddle')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
@@ -1459,14 +1545,7 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/saddle.svg" fill="#d08f55" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
-      <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
@@ -1477,7 +1556,8 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
@@ -1488,9 +1568,32 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
+      <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
+    </Rule>
+    <Rule>
       <MaxScaleDenominator>500000000</MaxScaleDenominator>
       <MinScaleDenominator>200000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'volcano')]]></Filter>
+      <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
+      <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
+      <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
@@ -1500,20 +1603,14 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'volcano')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000000</MaxScaleDenominator>
       <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
-      <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'volcano')]]></Filter>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'volcano')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
@@ -1523,24 +1620,13 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'volcano')]]></Filter>
-      <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
-    </Rule>
-    <Rule>
       <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 600000) and ([natural] = 'volcano')]]></Filter>
-      <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>12500000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'volcano')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MaxScaleDenominator>25000000</MaxScaleDenominator>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 300000) and ([natural] = 'volcano')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
@@ -1555,6 +1641,12 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
+      <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
+    </Rule>
+    <Rule>
       <MaxScaleDenominator>100000000</MaxScaleDenominator>
       <MinScaleDenominator>50000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
@@ -1573,12 +1665,6 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
-      <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
-      <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
-    </Rule>
-    <Rule>
       <MaxScaleDenominator>25000000</MaxScaleDenominator>
       <MinScaleDenominator>12500000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 3000000) and ([natural] = 'peak')]]></Filter>
@@ -1590,14 +1676,14 @@
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>100000000</MaxScaleDenominator>
-      <MinScaleDenominator>50000000</MinScaleDenominator>
+      <MaxScaleDenominator>50000000</MaxScaleDenominator>
+      <MinScaleDenominator>25000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>25000000</MinScaleDenominator>
+      <MaxScaleDenominator>100000000</MaxScaleDenominator>
+      <MinScaleDenominator>50000000</MinScaleDenominator>
       <Filter><![CDATA[([ele] > 800) and ([score] > 1500000) and ([natural] = 'peak')]]></Filter>
       <MarkersSymbolizer clip="false" file="symbols/natural/peak.svg" fill="#d40000" />
     </Rule>
