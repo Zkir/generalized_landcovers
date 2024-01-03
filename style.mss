@@ -13,10 +13,14 @@ Map {
     line-color: #000;
     line-width: 1.4;
     line-join: round;
+    line-dasharray: 2, 8, 4; 
+  } 
+} 
 
 #srhr_{ 
   raster-opacity:1;
   raster-comp-op:multiply; 
+  raster-scaling: lanczos;     
 }
 
 
@@ -200,6 +204,10 @@ Map {
 
 #places{    
       [zoom=3][rank<=1],
+      [zoom=4][rank<=3],
+      [zoom=5][rank<=12], 
+      [zoom=6][rank<=48],
+      [zoom=7][rank<=120]{
         shield-file: url('symbols/place/place-4.svg');
         shield-text-dx: 0;
         shield-text-dy: 0;
