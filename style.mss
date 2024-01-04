@@ -11,7 +11,11 @@ Map {
   //polygon-fill: #fff;
   ::outline {
     line-color: #000;
-    line-width: 1.4;
+    
+    [zoom<=0],[zoom=1]{ line-width: 0.5;}
+    [zoom=2],[zoom=3]{ line-width: 0.75;}
+    [zoom=4]{ line-width: 1;}
+    [zoom>=5]{line-width: 1.4;}
     line-join: round;
     line-dasharray: 2, 8, 4;  
   } 
