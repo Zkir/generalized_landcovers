@@ -1,4 +1,11 @@
-all: data/landcovers_aggr.shp  data/waterbodies_aggr.shp data/places.shp data/peaks.shp mapnik_carto_generated.xml
+all: data/landcovers_aggr.shp \
+      data/waterbodies_aggr.shp \
+      data/ocean_lz.shp \
+      data/places.shp \
+      data/peaks.shp \
+      data/ne_10m_admin_0_boundary_lines_land.shp \
+      data/ne_110m_admin_0_boundary_lines_land.shp \
+      mapnik_carto_generated.xml
 
 mapnik_carto_generated.xml: *.mml *.mss
 	carto project.mml > mapnik_carto_generated.xml
@@ -53,10 +60,12 @@ data/ocean_lz.shp:
 
 
 data/ne_10m_admin_0_boundary_lines_land.shp: data/downloads/ne_10m_admin_0_boundary_lines_land.zip
-	unzip -d data $<
+	unzip -o -d data $<
+	touch $@
 
 data/ne_110m_admin_0_boundary_lines_land.shp: data/downloads/ne_110m_admin_0_boundary_lines_land.zip
-	unzip -d data $<
+	unzip -o -d data $<
+	touch $@
 
 
 
@@ -95,4 +104,7 @@ test:
 
 .PHONY: clean
 clean:
-	echo "please clean yourself"
+	psql -d gis -c "DROP SCHEMA IF EXISTS  h3 CASCADE" -v ON_ERROR_STOP=1
+	rm -rf data/* 
+	mkdir data/downloads
+	mkdir data/tables
