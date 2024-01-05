@@ -6,3 +6,4 @@ layers/*/*
 
 landcovers_test_render.png
 .thumb.png
+mapnik_carto_generated.xml
