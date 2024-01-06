@@ -1,29 +1,43 @@
 SET statement_timeout = 0;
+/*
+    We will create some table to store tag usage statistics
+    maybe it can be used for taginfo project
+*/
 
-SELECT tags['desert'] 
-FROM planet_osm_polygon 
-WHERE "natural"='desert'
+-- drop table h3.source_tag_list
+CREATE TABLE h3.source_tag_list AS 
+    (SELECT 'natural' AS "key" , "natural"  AS "value", COUNT(1) AS "count"  
+        FROM planet_osm_polygon
+        where ( planet_osm_polygon."natural" IS NOT NULL)
+        GROUP BY "natural"
+    )
+    union
+    (SELECT DISTINCT 'landuse' AS "key" , "landuse"  AS "value" , COUNT(1) AS "count"
+        FROM planet_osm_polygon
+        where (planet_osm_polygon.landuse IS NOT NULL )
+        GROUP BY "landuse"
+    )
+;
+
+/*
+    we will select single key for each value, not to have both natural=forest and landuse=forest, which both(!) exist in the source list
+*/
+CREATE TABLE h3.source_tag_list2 AS 
+    SELECT t1.* 
+        FROM h3.source_tag_list t1
+        INNER JOIN (
+          SELECT "value", MAX( "count" ) as max_count
+          FROM h3.source_tag_list
+          GROUP BY "value" ) t2
+          ON t1.value = t2.value AND t1.count = max_count
+    ORDER BY 3 DESC;        
 
 
---SELECT COUNT(1) FROM h3.landcovers;
 
---SELECT feature, COUNT(1), round(sum(st_area(geom))) FROM h3.landcovers
---GROUP BY feature
---ORDER BY 3 desc;
---SELECT COUNT(1) FROM h3.landcovers_clipped;   
---SELECT * from h3.hex_features_stats order by ix asc, 4 desc   
-
-
---SELECT * FROM h3.landcovers_h3 ORDER BY 4 desc;
-
-SELECT feature, COUNT( feature), round(MAX(area_rate)*1000)/1000 AS max_strength FROM h3.landcovers_h3 AS max_rate
-GROUP BY feature 
-HAVING MAX(area_rate) >=0.01
-ORDER BY 2 desc;    
 
 
 -- and some statistics: max area of generalized polygon for each feature. If max polygon is huge then feature is important.
-SELECT feature FROM 
+SELECT t3."key", t1.*    FROM 
     (SELECT t1.*, t2.size_in_hex  FROM (
             Select feature, COUNT(1) as COUNT, Round(Log(MAX(ST_Area(geom)))::NUMERIC,1) AS strength
                 FROM h3.landcovers_aggr
@@ -33,11 +47,10 @@ SELECT feature FROM
                 GROUP BY feature 
                 ) t2 ON t1.feature=t2.feature    
                  
-      ORDER BY 3 DESC
-      LIMIT 50
-      ) t1;
-
-
+      ) t1
+      LEFT OUTER JOIN  h3.source_tag_list2 t3 ON t1.feature=t3."value" 
+      ORDER BY 5 DESC
+      LIMIT 100;
 
 
 
@@ -46,14 +59,11 @@ SELECT feature FROM
 -- transform
 ice --> is not it the same thing as glacier?
 
-rock, stone  -- is just a single notable rock/stone, not a landcover like 'blockfield.
-
-
 paddy --> farmland?? paddy is a rice field 
 greenhouse_horticulture -- this is rather built_up. Since greenhouse is a building. 
 animal_keeping
 agricultural
-pasture -->meadow  landuse=pasture should be meadow=pasture
+pasture -->meadow,  landuse=pasture should be landuse=medadow+meadow=pasture
 
 
 moor -- deprecated.
@@ -61,34 +71,33 @@ barren??
 
 railway
 
-recreation_ground -- it's something like partk
+recreation_ground -- it's something like park
+winter_sports -- should it be accepted by landcovers
 
 forestry -- not clear is it the same thing as forest
 
 
 
-aquaculture -- landuse=aquaculture -- not completely clear :  "there is no convention on the exact meaning of this tag."Ы
 
+windfarm, wind_farm -- not clear what it is. landuse=wind_farm is not a proper feature, because wind_farms are located over some other landcover, usually farmland
 
+observatory -- landuse = observatory -- deprecated, but it is still used.
 
-
-
-
-windfarm -- not clear what it is
-observatory -- landuse = observatory -- deprecated. 
-
+dry_lake
 playa -- is the same as dry_lake?
+
+oil_field
+oilfield
+
+
 
 ==WTF?==
 spoils
 ground
 inlet
 
-epicentre
-objectiv
-project
-survey_area
-not_meadow
+
+
 property
 unknown
 ownership
@@ -99,13 +108,15 @@ ownership
 
 */
 
-SELECT * FROM h3.landcover_quality2 ORDER BY 2 DESC;
 
 
 
-SELECT COUNT(*) FROM  planet_osm_polygon WHERE "natural"='wood' -- 9 686 112
+
+SELECT 'total woods',COUNT(*) FROM  planet_osm_polygon WHERE "natural"='wood' -- 9 686 112
 UNION
-SELECT COUNT(*) FROM  planet_osm_polygon WHERE "natural"='wood' AND (tags['leaf_type'] IS NOT NULL OR tags['leaf_cycle'] IS NOT NULL)
+SELECT 'with leaf_type',COUNT(*) FROM  planet_osm_polygon WHERE "natural"='wood' AND (tags['leaf_type'] IS NOT NULL )
+Union
+SELECT 'with leaf_cycle',COUNT(*) FROM  planet_osm_polygon WHERE "natural"='wood' AND (tags['leaf_cycle'] IS NOT NULL)
 ; 
 
 
@@ -113,7 +124,4 @@ SELECT * FROM  planet_osm_polygon WHERE "natural"='wood' AND (tags['leaf_type'] 
 
 
 
-SELECT * FROM hex_features_stats WHERE ix='86390c377ffffff' ORDER BY 4 DESC;
 
-
-SELECT * FROM h3.landcovers_clipped limit 100;
