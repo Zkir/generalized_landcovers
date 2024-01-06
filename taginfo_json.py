@@ -31,7 +31,18 @@ for record in records:
         tags.append({"key":record[0],
                               "value":record[1], 
                               "description": description})    
-    
+
+cursor.execute('SELECT * FROM h3.tag_synonyms')
+records = cursor.fetchall()
+
+for record in records:
+    if record[2]=='built_up':
+        description = "Considered to be a synonym of " + str(record[2]) +" for the purposes of generalization"
+    else:
+        description = "Considered to be a synonym of natural=" + str(record[2]) 
+    tags.append({"key":record[0],
+                            "value":record[1], 
+                            "description": description})    
 
 taginfo_json={
        "data_format": 1,           # data format version, currently always 1, will get updated if there are incompatible changes to the format (required)
@@ -49,8 +60,9 @@ taginfo_json={
        "tags": tags               # list of keys and tags used (see below)
  }
 
-print(json.dumps(taginfo_json, sort_keys=True, indent=4))
-
 cursor.close()
 conn.close()
+
+print(json.dumps(taginfo_json, sort_keys=True, indent=4))
+
 

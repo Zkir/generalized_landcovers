@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20240106T212732Z",
+    "data_updated": "20240107T024624Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -503,6 +503,111 @@
             "description": "Accepted as landcover, but not rendered. Strength: 7.8, Total count: 9",
             "key": "landuse",
             "value": "farm"
+        },
+        {
+            "description": "Considered to be a synonym of natural=wood",
+            "key": "landuse",
+            "value": "forest"
+        },
+        {
+            "description": "Considered to be a synonym of natural=wood",
+            "key": "natural",
+            "value": "woodland"
+        },
+        {
+            "description": "Considered to be a synonym of natural=water",
+            "key": "landuse",
+            "value": "basin"
+        },
+        {
+            "description": "Considered to be a synonym of natural=water",
+            "key": "landuse",
+            "value": "reservoir"
+        },
+        {
+            "description": "Considered to be a synonym of natural=bare_rock",
+            "key": "natural",
+            "value": "bedrock"
+        },
+        {
+            "description": "Considered to be a synonym of natural=sand",
+            "key": "natural",
+            "value": "dune"
+        },
+        {
+            "description": "Considered to be a synonym of natural=sand",
+            "key": "natural",
+            "value": "dunes"
+        },
+        {
+            "description": "Considered to be a synonym of natural=grassland",
+            "key": "landuse",
+            "value": "grass"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "residential"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "industrial"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "harbour"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "commercial"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "education"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "institutional"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "civic_admin"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "retail"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "garages"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "greenfield"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "construction"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "brownfield"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "value": "village_green"
         }
     ]
 }

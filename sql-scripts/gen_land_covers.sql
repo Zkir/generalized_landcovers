@@ -110,40 +110,53 @@ CREATE INDEX feat_h3_landcovers ON h3.landcovers(feature);
 /*
   Perform some normalizaiton
 */
-/*landuse=forest is a synonym for natural=wood */
-UPDATE h3.landcovers SET feature='wood' WHERE feature='forest' OR feature='woodland'; --IN('forest','woodland');
+
+
+-- drop table h3.tag_synonyms
+CREATE TABLE h3.tag_synonyms(
+    "key" TEXT,
+    "tag" TEXT PRIMARY KEY,
+    "feature" TEXT
+);
+
+INSERT INTO h3.tag_synonyms ("key", "tag", "feature")
+VALUES 
+	('landuse', 'forest', 'wood'),   --landuse=forest is a synonym for natural=wood 
+    ('natural', 'woodland', 'wood'),
+    ('landuse', 'basin', 'water'),  -- landuse=basin is a synonym for natural=water + water=basin
+    ('landuse', 'reservoir', 'water'), --landuse=reservoir is a [deprecated] synonym of natural=water + water=reservoir
+    ('natural', 'bedrock', 'bare_rock'), /* natural=bedrock is deprecated synonim of  natural=bare_rock */
+    ('natural', 'dune', 'sand'),  /*  dune, dunes -->sand.   Arguable: according to wiki, dunes should be subtracted(!) from the sands. */
+    ('natural', 'dunes', 'sand'),
+    ('landuse', 'grass', 'grassland'),  /*  landuse=grass should be considered to be a synonim of grassland for the purposes of generalization. There are no lawns kilomers long! */
+    ('landuse', 'residential', 'built_up'), /*built up areas has to be groupped*/
+    ('landuse', 'industrial', 'built_up'),
+    ('landuse', 'harbour', 'built_up'),
+    ('landuse', 'commercial', 'built_up'),
+    ('landuse', 'education', 'built_up'),
+    ('landuse', 'institutional', 'built_up'),
+    ('landuse', 'civic_admin', 'built_up'),
+    ('landuse', 'retail', 'built_up'),
+    ('landuse', 'garages', 'built_up'),
+    ('landuse', 'greenfield', 'built_up'),
+    ('landuse', 'construction','built_up'),
+    ('landuse', 'brownfield','built_up'),
+    ('landuse', 'village_green','built_up')    
+    ;
+
+
+UPDATE h3.landcovers t1
+    SET feature =  t2.feature
+    FROM h3.tag_synonyms  t2
+    WHERE t1.feature = t2.tag;
+
 
 /*
-  landuse=basin is a synonym for natural=water + water=basin
-  landuse=reservoir is a [deprecated] synonym of natural=water + water=reservoir
- */
-UPDATE h3.landcovers SET feature='water' WHERE feature IN ('basin', 'reservoir'); 
-
-
-/* natural=bedrock is deprecated synonim of  natural=bare_rock */
-UPDATE h3.landcovers SET feature='bare_rock' WHERE feature IN ('bedrock'); 
-
-/*
-  dune, dunes -->sand
-  Arguable: according to wiki, dunes should be subtracted(!) from the sands. 
+  Also note that we have to replace synonyms first, and only then delete waterbodies, because some features may become water after synonim resolution
+  variant without water, because in some areas only lakes are mapped, and it creates seas, which is not really desirable
 */
-UPDATE h3.landcovers SET feature='sand' WHERE feature IN ('dune', 'dunes'); 
-
-
-/*
-  grass should be considered to be a synonim of grassland for the purposes of generalization. There are no lawn kilomers long!
-*/
-UPDATE h3.landcovers SET feature='grassland' WHERE feature ='grass';
-
-
-/*built up areas has to be groupped*/
-UPDATE h3.landcovers 
-    SET feature='built_up' 
-    WHERE feature IN('residential','industrial','harbour','commercial','education', 'institutional','civic_admin',
-                     'retail','garages', 'greenfield', 'construction', 'brownfield', 'village_green');
-
-/*varian without water, because in some areas only lakes are mapped, and it creates seas, which is not really desirable*/
 DELETE FROM h3.landcovers WHERE feature='water';
+
 
 /*
   Clip landcover polygons by hexes, 
