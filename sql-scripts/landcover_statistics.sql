@@ -37,22 +37,24 @@ CREATE TABLE h3.source_tag_list2 AS
 
 
 -- and some statistics: max area of generalized polygon for each feature. If max polygon is huge then feature is important.
-SELECT t3."key", t1.*    FROM 
-    (SELECT t1.*, t2.size_in_hex  FROM (
-            Select feature, COUNT(1) as COUNT, Round(Log(MAX(ST_Area(geom)))::NUMERIC,1) AS strength
-                FROM h3.landcovers_aggr
-                GROUP BY feature ) t1
-            INNER JOIN (
-                SELECT feature, Count(geom) AS size_in_hex FROM	h3.landcovers_h3
-                GROUP BY feature 
-                ) t2 ON t1.feature=t2.feature    
-                 
-      ) t1
-      LEFT OUTER JOIN  h3.source_tag_list2 t3 ON t1.feature=t3."value" 
-      ORDER BY 5 DESC
-      LIMIT 100;
+CREATE TABLE h3.landcover_tag_stats as
+    SELECT t3."key", t1.*    FROM 
+        (SELECT t1.*, t2.size_in_hex  FROM (
+                Select feature, COUNT(1) as COUNT, Round(Log(MAX(ST_Area(geom)))::NUMERIC,1) AS strength
+                    FROM h3.landcovers_aggr
+                    GROUP BY feature ) t1
+                INNER JOIN (
+                    SELECT feature, Count(geom) AS size_in_hex FROM	h3.landcovers_h3
+                    GROUP BY feature 
+                    ) t2 ON t1.feature=t2.feature    
+                     
+          ) t1
+          LEFT OUTER JOIN  h3.source_tag_list2 t3 ON t1.feature=t3."value" 
+          ORDER BY 5 DESC
+          LIMIT 100;
 
 
+SELECT * from h3.landcover_tag_stats ORDER BY strength DESC; 
 
 /*
 
