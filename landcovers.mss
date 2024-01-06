@@ -136,7 +136,7 @@ Combined naturals and landuses which imply landcovers
     ======================================================================================= */
   [feature='wood']{
      polygon-fill:@forest;
-     //polygon-pattern-file: url('patterns/leaftype_unknown.png');
+     [zoom>=7]{ polygon-pattern-file: url('patterns/leaftype_unknown.png');}
   } 
 
   [feature='logging']{polygon-fill:#598D4A;}  
