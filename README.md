@@ -2,6 +2,12 @@
 
 This is an attempt to create properly generalized map, to see at least something on zoom levels z0-z8. It is well known that standard OSM ("mapnik" aka "opensteetmap-carto") is empty and boring on those zooms.
 
+![picture to draw attention](landcovers_vs_mapnik.png)
+
+Currently, online map is accessible here: 
+
+**http://osm2.zkir.ru/landcovers/**
+
 
 ## Installation
 ### Prerequisites
