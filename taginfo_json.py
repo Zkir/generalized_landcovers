@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+# ======================================================
+#  we will generate taginfo.json with actual usage of tags in this project
+#  based on tag transformation rules in sql-files
+#  and in CartoCSS style sheets, especially landcovers.mss
+#  some details on taginfo.json: 
+#        https://wiki.openstreetmap.org/wiki/Taginfo/Projects
+# ======================================================
+
 import psycopg2
 import json
 from datetime import datetime
@@ -9,7 +18,6 @@ regex = re.compile("\[feature='(.*?)'\]")
 with open("landcovers.mss") as f:
     text = f.read()
 rendered_tags = [match.group(1) for match in regex.finditer(text)]
-
 
 ts = datetime.now()
 ts=ts.strftime("%Y%m%dT%H%M%SZ")
@@ -64,5 +72,3 @@ cursor.close()
 conn.close()
 
 print(json.dumps(taginfo_json, sort_keys=True, indent=4))
-
-
