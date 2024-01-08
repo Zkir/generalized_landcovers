@@ -18,8 +18,10 @@ So we need to create completely different geometry.  We will do it in a very sim
 We will take all the  <b>landuse= *</b> and <b>natural= *</b>’ polygons,  and match them with a hexagonal grid (‘h3’, currently of resolution 6).  For each grid cell, we identify single a tag which describes this sell in the best way,
 polygons of which occupy the maximum area in that cell.
 
-
 To make the map more inderesting, we will add cities and mountain peaks. _"Cartographic importance"_ should be calculated, since it is impossible to select cities/mountain peaks for zooms z0-z8 based directly on population/elevation.
+
+## Taginfo project
+* https://taginfo.openstreetmap.org/projects/openlandcovermap#tags
 
 ## Installation
 ### Prerequisites
