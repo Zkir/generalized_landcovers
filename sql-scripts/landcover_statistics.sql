@@ -47,8 +47,7 @@ CREATE TABLE h3.landcover_tag_stats as
                      
           ) t1
           LEFT OUTER JOIN  h3.source_tag_list2 t3 ON t1.feature=t3."value" 
-          ORDER BY 5 DESC
-          LIMIT 100;
+          ORDER BY 5 DESC ;
 
 
 -- SELECT * from h3.landcover_tag_stats ORDER BY strength DESC; 

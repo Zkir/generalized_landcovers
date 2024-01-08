@@ -35,10 +35,13 @@ for record in records:
             description = "Rendered as landcover. Strength "+ str(record[3]) +", Total count " + str(record[4]) 
         else:
             description = "Accepted as landcover, but not rendered. Strength: "+ str(record[3]) +", Total count: " + str(record[4]) 
-
-        tags.append({"key":record[0],
-                              "value":record[1], 
-                              "description": description})    
+        
+        # we may exclude strange occurences from statisitics for taginfo, but we still need to report rare tags included in rendering     
+        if (record[1] in rendered_tags) or (record[4]>10):
+            tags.append({"key":record[0],
+                                  "value":record[1], 
+                                  "description": description,
+                                  "object_types": [ "area"]})    
 
 cursor.execute('SELECT * FROM h3.tag_synonyms')
 records = cursor.fetchall()
@@ -50,7 +53,8 @@ for record in records:
         description = "Considered to be a synonym of natural=" + str(record[2]) 
     tags.append({"key":record[0],
                             "value":record[1], 
-                            "description": description})    
+                            "description": description,
+                            "object_types": ["area"]})      
 
 taginfo_json={
        "data_format": 1,           # data format version, currently always 1, will get updated if there are incompatible changes to the format (required)
