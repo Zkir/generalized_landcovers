@@ -1,8 +1,9 @@
-SET statement_timeout = 0;
 /*
-    We will create some table to store tag usage statistics
-    maybe it can be used for taginfo project
+    He we  create some tables to store tag usage statistics
+    it is used to generate taginfo.json file for our taginfo project
 */
+SET statement_timeout = 0;
+
 
 -- drop table h3.source_tag_list
 CREATE TABLE h3.source_tag_list AS 
@@ -32,10 +33,6 @@ CREATE TABLE h3.source_tag_list2 AS
           ON t1.value = t2.value AND t1.count = max_count
     ORDER BY 3 DESC;        
 
-
-
-
-
 -- and some statistics: max area of generalized polygon for each feature. If max polygon is huge then feature is important.
 CREATE TABLE h3.landcover_tag_stats as
     SELECT t3."key", t1.*    FROM 
@@ -54,7 +51,7 @@ CREATE TABLE h3.landcover_tag_stats as
           LIMIT 100;
 
 
-SELECT * from h3.landcover_tag_stats ORDER BY strength DESC; 
+-- SELECT * from h3.landcover_tag_stats ORDER BY strength DESC; 
 
 /*
 
@@ -104,25 +101,11 @@ property
 unknown
 ownership
 
-==mistypes=
-
-
 
 */
 
 
 
-
-
-SELECT 'total woods',COUNT(*) FROM  planet_osm_polygon WHERE "natural"='wood' -- 9 686 112
-UNION
-SELECT 'with leaf_type',COUNT(*) FROM  planet_osm_polygon WHERE "natural"='wood' AND (tags['leaf_type'] IS NOT NULL )
-Union
-SELECT 'with leaf_cycle',COUNT(*) FROM  planet_osm_polygon WHERE "natural"='wood' AND (tags['leaf_cycle'] IS NOT NULL)
-; 
-
-
-SELECT * FROM  planet_osm_polygon WHERE "natural"='wood' AND (tags['leaf_type'] IS NOT NULL OR tags['leaf_cycle'] IS NOT NULL);
 
 
 

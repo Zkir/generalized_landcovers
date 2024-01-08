@@ -5,7 +5,11 @@ all: data/landcovers_aggr.shp \
       data/peaks.shp \
       data/ne_10m_admin_0_boundary_lines_land.shp \
       data/ne_110m_admin_0_boundary_lines_land.shp \
-      mapnik_carto_generated.xml
+      mapnik_carto_generated.xml \
+      taginfo.json
+
+taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats
+	python3 taginfo_json.py > taginfo.json
 
 mapnik_carto_generated.xml: *.mml *.mss
 	carto project.mml > mapnik_carto_generated.xml
@@ -67,6 +71,9 @@ data/ne_110m_admin_0_boundary_lines_land.shp: data/downloads/ne_110m_admin_0_bou
 	unzip -o -d data $<
 	touch $@
 
+data/tables/landcover_tag_stats: data/tables/landcovers_aggr
+	psql -d gis -f "sql-scripts/landcover_statistics.sql" -v ON_ERROR_STOP=1
+	touch $@
 
 
 data/tables/peaks: data/tables/h3_hexes
