@@ -37,11 +37,13 @@ CREATE TABLE h3.landcovers AS
                 'plateau','mesa',  
                 'massif', 'mountain', 'mountain_range', 'mountains', 'hill','peak','saddle','ridge', 'cliff', 
                 'volcano', 'crater', 'caldera', 'crater_rim', 'sinkhole',
+                
                 /*
                   Standalone features
                 */
                 'tree', /* natural=tree is standalone tree, not a landcover like natural=wood */
                 'stone', 'rock', /* rock, stone  -- is just a single notable rock/stone, not a landcover like 'blockfield.*/ 
+                'shrub', /* unclike scrub, natural=shrub is just a single plant!*/ 
 
                 /*
                   various types of natural reserves, that can be anything

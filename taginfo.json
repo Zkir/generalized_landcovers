@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20240108T205956Z",
+    "data_updated": "20240109T021604Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -298,6 +298,14 @@
             "value": "oilfield"
         },
         {
+            "description": "Accepted as landcover, but not rendered. Strength: 9.0, Total count: 7",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "wellsite"
+        },
+        {
             "description": "Accepted as landcover, but not rendered. Strength: 9.0, Total count: 21",
             "key": "natural",
             "object_types": [
@@ -434,6 +442,22 @@
             "value": "cemetery"
         },
         {
+            "description": "Accepted as landcover, but not rendered. Strength: 8.5, Total count: 4",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "shrubbery"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered. Strength: 8.3, Total count: 5",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "wasteland"
+        },
+        {
             "description": "Accepted as landcover, but not rendered. Strength: 8.3, Total count: 14",
             "key": "landuse",
             "object_types": [
@@ -472,6 +496,38 @@
                 "area"
             ],
             "value": "property"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered. Strength: 8.1, Total count: 7",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "landslide"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered. Strength: 8.1, Total count: 4",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "field"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered. Strength: 8.0, Total count: 4",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "pasture"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered. Strength: 7.8, Total count: 9",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "farm"
         },
         {
             "description": "Considered to be a synonym of natural=wood",

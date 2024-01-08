@@ -9,9 +9,9 @@
 
 import psycopg2
 import json
-from datetime import datetime
-
 import re
+import requests
+from datetime import datetime
 
 #get rendered tag list from cartocss
 regex = re.compile("\[feature='(.*?)'\]")
@@ -35,9 +35,17 @@ for record in records:
             description = "Rendered as landcover. Strength "+ str(record[3]) +", Total count " + str(record[4]) 
         else:
             description = "Accepted as landcover, but not rendered. Strength: "+ str(record[3]) +", Total count: " + str(record[4]) 
+
+            if ' ' in record[1]:
+                wiki_described=False # Tags with spaces are not valid values for landuse/natural key
+            else:
+                wiki_url='https://wiki.openstreetmap.org/wiki/Tag:'+record[0]+'%3D'+record[1]
+                wiki_described=requests.head(wiki_url).ok
+
+            print (wiki_url+ ' : '+str(wiki_described))
         
         # we may exclude strange occurences from statisitics for taginfo, but we still need to report rare tags included in rendering     
-        if (record[1] in rendered_tags) or (record[4]>10):
+        if (record[1] in rendered_tags) or (record[4]>10) or (wiki_described and (record[4]>=4)):
             tags.append({"key":record[0],
                                   "value":record[1], 
                                   "description": description,
@@ -75,4 +83,5 @@ taginfo_json={
 cursor.close()
 conn.close()
 
-print(json.dumps(taginfo_json, sort_keys=True, indent=4))
+with open('taginfo.json', 'w') as f:
+    f.write(json.dumps(taginfo_json, sort_keys=True, indent=4))

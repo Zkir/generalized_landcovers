@@ -9,7 +9,7 @@ all: data/landcovers_aggr.shp \
       taginfo.json
 
 taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats
-	python3 taginfo_json.py > taginfo.json
+	python3 taginfo_json.py
 	python3 -m jsonschema --instance "taginfo.json" taginfo-project-schema.json || echo ERROR: taginfo.json does not validate against JSON schema 
 
 mapnik_carto_generated.xml: *.mml *.mss
