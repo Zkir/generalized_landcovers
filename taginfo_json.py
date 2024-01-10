@@ -45,7 +45,7 @@ for record in records:
             print (wiki_url+ ' : '+str(wiki_described))
         
         # we may exclude strange occurences from statisitics for taginfo, but we still need to report rare tags included in rendering     
-        if (record[1] in rendered_tags) or (record[4]>10) or (wiki_described and (record[4]>=4)):
+        if (record[1] in rendered_tags) or (record[4]>=20) or (wiki_described and (record[4]>=4)):
             tags.append({"key":record[0],
                                   "value":record[1], 
                                   "description": description,

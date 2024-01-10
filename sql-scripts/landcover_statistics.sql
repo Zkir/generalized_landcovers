@@ -50,55 +50,72 @@ CREATE TABLE h3.landcover_tag_stats as
           ORDER BY 5 DESC ;
 
 
--- SELECT * from h3.landcover_tag_stats ORDER BY strength DESC; 
+-- SELECT * from h3.landcover_tag_stats ORDER BY size_in_hex DESC; 
 
 /*
 
--- transform
-ice --> is not it the same thing as glacier?
+== to be rendered == 
 
-paddy --> farmland?? paddy is a rice field 
-greenhouse_horticulture -- this is rather built_up. Since greenhouse is a building. 
-animal_keeping
-agricultural
-pasture -->meadow,  landuse=pasture should be landuse=medadow+meadow=pasture
+cemetery  -- need to be rendered. for some stange reason it occurs on generalized map
 
+salt_pond
+    https://wiki.openstreetmap.org/wiki/RU:Tag:landuse%3Dsalt_pond        
 
-moor -- deprecated.
-barren??
+== not clear  == 
 
-railway
-
-recreation_ground -- it's something like park
-winter_sports -- should it be accepted by landcovers
-
+winter_sports -- significant areas in france and italy, in Alps
+recreation_ground  -- not clear what to do with it. is it something like park? - ignore? transform to built_up
+railway -- also not clear. 
 forestry -- not clear is it the same thing as forest
 
+plant_nursery  -- can be any type of vegetation, from flowers to trees. 
+    https://wiki.openstreetmap.org/wiki/Tag%3Alanduse%3Dplant_nursery
+    
+    
+    
+== missing bare ground ==
+
+ground   -- natural=ground
+bare_earth -- natural=bare_earth are undocumented tag for ground without vegetation, related to landcover=bare_ground, compare with bare_rock
+
+== argiculture, possibly should be transformed ==
 
 
+
+farm
+field
+animal_keeping
+agriculture
+agricultural
+pasture -->meadow,  landuse=pasture should be landuse=medadow+meadow=pasture
+paddy --> farmland?? paddy is a rice field 
+greenhouse_horticulture -- this is rather built_up. Since greenhouse is a building. 
+
+
+
+== other==
+gorge  -- natural=gorge not a landcover, but a landfeature
+
+landslide -- ?
 
 windfarm, wind_farm -- not clear what it is. landuse=wind_farm is not a proper feature, because wind_farms are located over some other landcover, usually farmland
 
-observatory -- landuse = observatory -- deprecated, but it is still used.
+oil_field, oilfield -- areas with oil or gass wells. does not imply a landcover. 
+
+observatory -- landuse = observatory -- deprecated, but it is still used. seems to have a right to existance
 
 dry_lake
 playa -- is the same as dry_lake?
 
-oil_field
-oilfield
+
 
 
 
 ==WTF?==
-spoils
-ground
-inlet
 
 
 
-property
-unknown
-ownership
+
 
 
 */

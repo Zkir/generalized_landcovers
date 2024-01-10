@@ -54,6 +54,9 @@ CREATE TABLE h3.landcovers AS
                   other landuses that does not mean any specific land cover
                 */
                 'military', 'protected_area', 'reservoir_watershed',
+                
+                /* especially wasteland. area is not just used for anything! but it does not imply any landcover*/
+                'wasteland',
                   
                 /* landuse=religious does not imply any landcover type. In Europe it is usually build up (e.g. monastery), but it can be a sacred orchard as well. */
                 'religious',  
@@ -96,7 +99,10 @@ CREATE TABLE h3.landcovers AS
                 'high-water',
                 'not_meadow',
                 'proposed',
-                'yes')
+                'yes',
+                'orchard abandon',
+                'property'
+                )
 
             /*common mistypes*/
             AND feature NOT IN (
@@ -128,8 +134,10 @@ VALUES
     ('landuse', 'basin', 'water'),  -- landuse=basin is a synonym for natural=water + water=basin
     ('landuse', 'reservoir', 'water'), --landuse=reservoir is a [deprecated] synonym of natural=water + water=reservoir
     ('natural', 'bedrock', 'bare_rock'), /* natural=bedrock is deprecated synonim of  natural=bare_rock */
+    ('natural', 'lava', 'bare_rock'), /* natural=lava is a strange tag, can be considered as a synonim of  natural=bare_rock*/
     ('natural', 'dune', 'sand'),  /*  dune, dunes -->sand.   Arguable: according to wiki, dunes should be subtracted(!) from the sands. */
     ('natural', 'dunes', 'sand'),
+    ('natural', 'shrubbery', 'scrub'),    
     ('landuse', 'grass', 'grassland'),  /*  landuse=grass should be considered to be a synonim of grassland for the purposes of generalization. There are no lawns kilomers long! */
     ('landuse', 'residential', 'built_up'), /*built up areas has to be groupped*/
     ('landuse', 'industrial', 'built_up'),
