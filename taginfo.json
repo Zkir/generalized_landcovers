@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20240109T223556Z",
+    "data_updated": "20240110T050415Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -330,7 +330,7 @@
             "value": "peat_cutting"
         },
         {
-            "description": "Accepted as landcover, but not rendered. Strength: 8.9, Total count: 319",
+            "description": "Rendered as landcover. Strength 8.9, Total count 319",
             "key": "landuse",
             "object_types": [
                 "area"
@@ -394,7 +394,7 @@
             "value": "gorge"
         },
         {
-            "description": "Accepted as landcover, but not rendered. Strength: 8.5, Total count: 227",
+            "description": "Rendered as landcover. Strength 8.5, Total count 227",
             "key": "landuse",
             "object_types": [
                 "area"

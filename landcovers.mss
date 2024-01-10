@@ -29,7 +29,7 @@ Combined naturals and landuses which imply landcovers
   [feature='quarry']{polygon-fill:#F0F050;}  
 
   [feature='bare_rock'],[feature='shingle'],[feature='scree'],[feature='blockfield']{
-    polygon-fill:#777;
+    polygon-fill:#A0A0A0;
     polygon-pattern-file: url('patterns/rock_overlay.png');
   } 
 
@@ -48,6 +48,10 @@ Combined naturals and landuses which imply landcovers
     //but we need to transform it into something based on surface=* maybe. 
     polygon-fill:yellow;
     polygon-pattern-file: url('patterns/beach.png');
+  }  
+  [feature='salt_pond']{
+    polygon-fill:#e0e0b0;
+    polygon-pattern-file: url('patterns/salt_pond.png') 
   }  
 
   /*=======================================================================================
@@ -168,6 +172,15 @@ Combined naturals and landuses which imply landcovers
     polygon-fill:#B0E0A0;
     polygon-pattern-file: url('patterns/allotments.png');
   }  
+  
+  /*=======================================================================================
+    == Special: cemetery ==
+    ======================================================================================= */
+  
+  [feature='cemetery']{
+    polygon-fill: #908090;
+    polygon-pattern-file: url('patterns/grave_yard_generic.svg'); 
+  }
   
 }
 
