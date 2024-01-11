@@ -38,6 +38,9 @@ CREATE TABLE h3.landcovers AS
                 'massif', 'mountain', 'mountain_range', 'mountains', 'hill','peak','saddle','ridge', 'cliff', 
                 'volcano', 'crater', 'caldera', 'crater_rim', 'sinkhole',
                 
+                /* natural=oasis is rather geographical feature, with other actual landcovers */
+                'oasis',
+                
                 /*
                   Standalone features
                 */
@@ -64,6 +67,9 @@ CREATE TABLE h3.landcovers AS
                 /*  natural=reef is underwater feature, not a landcover. */
                 'reef',
                 
+                /*  natural=shoal is rather an  underwater feature */
+               'shoal', 
+                
                 /*  landuse=aquaculture is water feature, not a landcover. */
                 'aquaculture',
                 
@@ -80,15 +86,20 @@ CREATE TABLE h3.landcovers AS
                 'drainage_divide',
 
                 /* natural=land is deprecated, used to map islands */                 
-                'land'
+                'land',
+                
+                /* landuse=farm and landuse=field are deprecated, let's ignore them*/
+                'farm', 'field', 'agriculture', 'agricultural', 'pasture',
+                
+                /* landuse=forestry is a strange tag. it's neither forest not clearcut nor logging nor parking etc.*/
+                'forestry'
                 )
      
          
             /* 
-              some strange features, better to doublecheck
+              some strange features, not described on wiki
             */
             AND feature NOT IN (
-                'shoal', /* can we just consider natural=shoal as underwater?*/
                 'old_coastline',
                 'fishing_bank',
                 'resource_extraction',
@@ -137,7 +148,10 @@ VALUES
     ('natural', 'lava', 'bare_rock'), /* natural=lava is a strange tag, can be considered as a synonim of  natural=bare_rock*/
     ('natural', 'dune', 'sand'),  /*  dune, dunes -->sand.   Arguable: according to wiki, dunes should be subtracted(!) from the sands. */
     ('natural', 'dunes', 'sand'),
-    ('natural', 'shrubbery', 'scrub'),    
+    ('natural', 'shrubbery', 'scrub'),  
+    ('natural', 'naled', 'glacier'),  
+    ('natural', 'ice', 'glacier'),  
+    ('natural', 'ground', 'bare_earth'),  
     ('landuse', 'grass', 'grassland'),  /*  landuse=grass should be considered to be a synonim of grassland for the purposes of generalization. There are no lawns kilomers long! */
     ('landuse', 'residential', 'built_up'), /*built up areas has to be groupped*/
     ('landuse', 'industrial', 'built_up'),
@@ -264,7 +278,7 @@ CREATE TABLE h3.landcovers_aggr AS
 /*
   Percentage of coverage.
 */
-CREATE TABLE h3.landcover_quality AS    
+CREATE TABLE h3.landcover_quality AS
     SELECT g1.ix, g1.filled_area/ST_Area(h3.hex.geom) AS filled_rate , h3.hex.geom AS geom
        FROM (
             SELECT ix, ST_area(ST_Multi((ST_Union(f.clipped_geom))))  AS filled_area, COUNT(1) --   ROUND(SUM(st_area(clipped_geom)))

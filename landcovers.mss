@@ -24,9 +24,7 @@ Combined naturals and landuses which imply landcovers
     == Barren, no vegetation  ==
     ======================================================================================= */
 
-  [feature='glacier'],[feature='naled'],[feature='ice']{polygon-fill:#BBF;}  
-
-  [feature='quarry']{polygon-fill:#F0F050;}  
+  [feature='glacier']{polygon-fill:#BBF;}  
 
   [feature='bare_rock'],[feature='shingle'],[feature='scree'],[feature='blockfield']{
     polygon-fill:#A0A0A0;
@@ -35,7 +33,13 @@ Combined naturals and landuses which imply landcovers
 
   [feature='mud']{
     polygon-fill:#777;
+    polygon-pattern-file: url('patterns/wetland.png');
   }
+  
+  [feature='bare_earth']{
+    polygon-fill:#777;
+  }
+  
   
   [feature='quarry']{
     //we do not really know what it is. Sand, stone, gravel etc.
