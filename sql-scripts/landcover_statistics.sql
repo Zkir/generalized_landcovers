@@ -52,14 +52,12 @@ CREATE TABLE h3.landcover_tag_stats as
 
 -- SELECT * from h3.landcover_tag_stats ORDER BY size_in_hex DESC; 
 
+--SELECT count(1), sum(size_in_hex), size_in_hex>20 from h3.landcover_tag_stats group by size_in_hex>20; 
+
 /*
 
 == to be rendered == 
-
-cemetery  -- need to be rendered. for some stange reason it occurs on generalized map
-
-salt_pond
-    https://wiki.openstreetmap.org/wiki/RU:Tag:landuse%3Dsalt_pond        
+...
 
 == not clear  == 
 
@@ -81,15 +79,12 @@ bare_earth -- natural=bare_earth are undocumented tag for ground without vegetat
 == argiculture, possibly should be transformed ==
 
 
-
-farm
-field
-animal_keeping
+animal_keeping -->farmyard
 agriculture
 agricultural
 pasture -->meadow,  landuse=pasture should be landuse=medadow+meadow=pasture
-paddy --> farmland?? paddy is a rice field 
-greenhouse_horticulture -- this is rather built_up. Since greenhouse is a building. 
+farm
+field
 
 
 
