@@ -86,3 +86,10 @@ Questions can be asked here, both in English and Russian
 
 * https://www.openstreetmap.org/user/Zkir/diary/403070
 * https://www.openstreetmap.org/user/Zkir/diary/403129
+
+## Acknowledgements
+This project is largely inspired by [gravitystorm openstreetmap-carto](https://github.com/gravitystorm/openstreetmap-carto) and many svg/png files for map features are borrowed from it.
+
+## Author and license
+This project is created by Zkir aka Kirill B. and released under [MIT License](LICENSE.md).
+
