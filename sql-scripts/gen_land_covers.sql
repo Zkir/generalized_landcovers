@@ -36,7 +36,7 @@ CREATE TABLE h3.landcovers AS
                 'islet','island','atoll','archipelago',
                 'plateau','mesa',  
                 'massif', 'mountain', 'mountain_range', 'mountains', 'hill','peak','saddle','ridge', 'cliff', 
-                'volcano', 'crater', 'caldera', 'crater_rim', 'sinkhole',
+                'volcano', 'crater', 'caldera', 'crater_rim', 'sinkhole', 'gorge', 
                 
                 /* natural=oasis is rather geographical feature, with other actual landcovers */
                 'oasis',
@@ -52,6 +52,9 @@ CREATE TABLE h3.landcovers AS
                   various types of natural reserves, that can be anything
                 */
                 'conservation', 'national_reserve', 'natural_reserve', 'nature_reserve',
+                
+                /* landuse=recreation_ground is used in USA rather as natural park or natural reserve */
+                'recreation_ground',
                     
                 /* 
                   other landuses that does not mean any specific land cover
@@ -153,6 +156,7 @@ VALUES
     ('natural', 'ice', 'glacier'),  
     ('natural', 'ground', 'bare_earth'),  
     ('landuse', 'grass', 'grassland'),  /*  landuse=grass should be considered to be a synonim of grassland for the purposes of generalization. There are no lawns kilomers long! */
+    ('landuse', 'animal_keeping', 'farmyard'),  
     ('landuse', 'residential', 'built_up'), /*built up areas has to be groupped*/
     ('landuse', 'industrial', 'built_up'),
     ('landuse', 'harbour', 'built_up'),
