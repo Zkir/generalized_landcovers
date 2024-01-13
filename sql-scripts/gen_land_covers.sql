@@ -55,6 +55,12 @@ CREATE TABLE h3.landcovers AS
                 
                 /* landuse=recreation_ground is used in USA rather as natural park or natural reserve */
                 'recreation_ground',
+                
+                /* 
+                   landuse=winter_sports is significant feature, but it does not imply any landcover type, 
+                   and should not screen features like wood, ice, glacier etc
+               */
+                'winter_sports',
                     
                 /* 
                   other landuses that does not mean any specific land cover
