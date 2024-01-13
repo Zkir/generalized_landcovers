@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20240111T210723Z",
+    "data_updated": "20240113T080855Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -18,7 +18,7 @@
             "value": "glacier"
         },
         {
-            "description": "Rendered as landcover. Strength 13.1, Total count 685044",
+            "description": "Rendered as landcover. Strength 13.1, Total count 685091",
             "key": "natural",
             "object_types": [
                 "area"
@@ -26,7 +26,7 @@
             "value": "wood"
         },
         {
-            "description": "Rendered as landcover. Strength 12.6, Total count 125298",
+            "description": "Rendered as landcover. Strength 12.6, Total count 125304",
             "key": "natural",
             "object_types": [
                 "area"
@@ -34,7 +34,7 @@
             "value": "desert"
         },
         {
-            "description": "Rendered as landcover. Strength 12.6, Total count 37991",
+            "description": "Rendered as landcover. Strength 12.6, Total count 38004",
             "key": "natural",
             "object_types": [
                 "area"
@@ -42,7 +42,7 @@
             "value": "bare_rock"
         },
         {
-            "description": "Rendered as landcover. Strength 12.1, Total count 149352",
+            "description": "Rendered as landcover. Strength 12.1, Total count 149385",
             "key": "landuse",
             "object_types": [
                 "area"
@@ -50,7 +50,7 @@
             "value": "farmland"
         },
         {
-            "description": "Rendered as landcover. Strength 11.8, Total count 89613",
+            "description": "Rendered as landcover. Strength 11.8, Total count 89639",
             "key": "natural",
             "object_types": [
                 "area"
@@ -66,7 +66,7 @@
             "value": "tundra"
         },
         {
-            "description": "Rendered as landcover. Strength 11.2, Total count 76480",
+            "description": "Rendered as landcover. Strength 11.2, Total count 76554",
             "key": "natural",
             "object_types": [
                 "area"
@@ -82,12 +82,20 @@
             "value": "dry_lake"
         },
         {
-            "description": "Rendered as landcover. Strength 11.0, Total count 15191",
+            "description": "Rendered as landcover. Strength 11.0, Total count 15201",
             "key": "landuse",
             "object_types": [
                 "area"
             ],
             "value": "meadow"
+        },
+        {
+            "description": "Rendered as landcover. Strength 10.9, Total count 34855",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "scrub"
         },
         {
             "description": "Rendered as landcover. Strength 10.9, Total count 141",
@@ -96,14 +104,6 @@
                 "area"
             ],
             "value": "arctic_desert"
-        },
-        {
-            "description": "Rendered as landcover. Strength 10.9, Total count 34850",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "scrub"
         },
         {
             "description": "Rendered as landcover. Strength 10.8, Total count 8501",
@@ -122,20 +122,20 @@
             "value": "fell"
         },
         {
+            "description": "Rendered as landcover. Strength 10.6, Total count 12711",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "grassland"
+        },
+        {
             "description": "Rendered as landcover. Strength 10.6, Total count 1630",
             "key": "landuse",
             "object_types": [
                 "area"
             ],
             "value": "logging"
-        },
-        {
-            "description": "Rendered as landcover. Strength 10.6, Total count 12708",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "grassland"
         },
         {
             "description": "Rendered as landcover. Strength 10.2, Total count 2007",
@@ -146,7 +146,7 @@
             "value": "scree"
         },
         {
-            "description": "Rendered as landcover. Strength 10.1, Total count 1524",
+            "description": "Rendered as landcover. Strength 10.1, Total count 1525",
             "key": "natural",
             "object_types": [
                 "area"
@@ -154,20 +154,12 @@
             "value": "beach"
         },
         {
-            "description": "Rendered as landcover. Strength 10.0, Total count 12799",
+            "description": "Rendered as landcover. Strength 10.0, Total count 12801",
             "key": "landuse",
             "object_types": [
                 "area"
             ],
             "value": "orchard"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered. Strength: 9.9, Total count: 175",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "oil_field"
         },
         {
             "description": "Rendered as landcover. Strength 9.9, Total count 2033",
@@ -178,20 +170,12 @@
             "value": "vineyard"
         },
         {
-            "description": "Rendered as landcover. Strength 9.8, Total count 8351",
+            "description": "Accepted as landcover, but not rendered. Strength: 9.9, Total count: 175",
             "key": "landuse",
             "object_types": [
                 "area"
             ],
-            "value": "quarry"
-        },
-        {
-            "description": "Rendered as landcover. Strength 9.8, Total count 1712",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "farmyard"
+            "value": "oil_field"
         },
         {
             "description": "Rendered as landcover. Strength 9.8, Total count 843",
@@ -202,7 +186,23 @@
             "value": "shingle"
         },
         {
-            "description": "Rendered as landcover. Strength 9.7, Total count 1407",
+            "description": "Rendered as landcover. Strength 9.8, Total count 8362",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "quarry"
+        },
+        {
+            "description": "Rendered as landcover. Strength 9.8, Total count 1727",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "farmyard"
+        },
+        {
+            "description": "Rendered as landcover. Strength 9.7, Total count 1411",
             "key": "natural",
             "object_types": [
                 "area"
@@ -210,7 +210,7 @@
             "value": "mud"
         },
         {
-            "description": "Rendered as landcover. Strength 9.5, Total count 1017",
+            "description": "Rendered as landcover. Strength 9.5, Total count 1021",
             "key": "landuse",
             "object_types": [
                 "area"
@@ -218,20 +218,12 @@
             "value": "landfill"
         },
         {
-            "description": "Accepted as landcover, but not rendered. Strength: 9.3, Total count: 421",
+            "description": "Accepted as landcover, but not rendered. Strength: 9.3, Total count: 422",
             "key": "landuse",
             "object_types": [
                 "area"
             ],
             "value": "winter_sports"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered. Strength: 9.2, Total count: 710",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "recreation_ground"
         },
         {
             "description": "Rendered as landcover. Strength 9.2, Total count 52",
@@ -242,14 +234,6 @@
             "value": "moor"
         },
         {
-            "description": "Rendered as landcover. Strength 9.1, Total count 188",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "paddy"
-        },
-        {
             "description": "Rendered as landcover. Strength 9.1, Total count 261",
             "key": "landuse",
             "object_types": [
@@ -258,20 +242,12 @@
             "value": "greenhouse_horticulture"
         },
         {
-            "description": "Accepted as landcover, but not rendered. Strength: 9.0, Total count: 23",
+            "description": "Rendered as landcover. Strength 9.1, Total count 188",
             "key": "landuse",
             "object_types": [
                 "area"
             ],
-            "value": "cultivo de ca\u00f1a"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered. Strength: 9.0, Total count: 25",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "oilfield"
+            "value": "paddy"
         },
         {
             "description": "Rendered as landcover. Strength 9.0, Total count 7",
@@ -298,12 +274,20 @@
             "value": "bare_earth"
         },
         {
-            "description": "Rendered as landcover. Strength 8.9, Total count 23",
+            "description": "Accepted as landcover, but not rendered. Strength: 9.0, Total count: 25",
             "key": "landuse",
             "object_types": [
                 "area"
             ],
-            "value": "peat_cutting"
+            "value": "oilfield"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered. Strength: 9.0, Total count: 23",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "cultivo de ca\u00f1a"
         },
         {
             "description": "Rendered as landcover. Strength 8.9, Total count 319",
@@ -330,6 +314,14 @@
             "value": "allotments"
         },
         {
+            "description": "Rendered as landcover. Strength 8.9, Total count 23",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "peat_cutting"
+        },
+        {
             "description": "Accepted as landcover, but not rendered. Strength: 8.8, Total count: 28",
             "key": "landuse",
             "object_types": [
@@ -346,15 +338,7 @@
             "value": "plant_nursery"
         },
         {
-            "description": "Accepted as landcover, but not rendered. Strength: 8.7, Total count: 11",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "gorge"
-        },
-        {
-            "description": "Rendered as landcover. Strength 8.5, Total count 227",
+            "description": "Rendered as landcover. Strength 8.5, Total count 229",
             "key": "landuse",
             "object_types": [
                 "area"
@@ -362,15 +346,7 @@
             "value": "cemetery"
         },
         {
-            "description": "Accepted as landcover, but not rendered. Strength: 8.3, Total count: 14",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "animal_keeping"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered. Strength: 8.2, Total count: 308",
+            "description": "Accepted as landcover, but not rendered. Strength: 8.2, Total count: 310",
             "key": "landuse",
             "object_types": [
                 "area"
@@ -488,6 +464,14 @@
                 "area"
             ],
             "value": "grass"
+        },
+        {
+            "description": "Considered to be a synonym of natural=farmyard",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "animal_keeping"
         },
         {
             "description": "Considered to be a synonym of built_up for the purposes of generalization",
