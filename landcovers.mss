@@ -138,7 +138,12 @@ Combined naturals and landuses which imply landcovers
   }
 
   [feature='orchard']{polygon-fill:#9ab676;}
-
+  
+  [feature='plant_nursery']{
+    polygon-fill:#9ab676;
+    polygon-pattern-file: url('patterns/plant_nursery.svg');
+  }
+  
   /*=======================================================================================
     == Trees  ==
     ======================================================================================= */
@@ -178,13 +183,25 @@ Combined naturals and landuses which imply landcovers
   }  
   
   /*=======================================================================================
-    == Special: cemetery ==
+    == Special:  ==
     ======================================================================================= */
   
+  // cemetery, railway and observatory are a special type of man-changed landscapes, 
+  // I am not brave enaugh yet to join them with other urban/buid up.
   [feature='cemetery']{
     polygon-fill: #908090;
     polygon-pattern-file: url('patterns/grave_yard_generic.svg'); 
   }
+  
+  [feature='railway']{
+     polygon-fill:#806060;
+  }  
+  
+  [feature='observatory']{
+     polygon-fill:#806060;
+  }  
+  
+  
   
 }
 
