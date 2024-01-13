@@ -1,15 +1,17 @@
 .PHONY: all
-all: data/landcovers_aggr.shp \
-      data/waterbodies_aggr.shp \
-      data/ocean_lz.shp \
-      data/places.shp \
-      data/peaks.shp \
-      data/ne_10m_admin_0_boundary_lines_land.shp \
-      data/ne_110m_admin_0_boundary_lines_land.shp \
+all: data/shapes \
       mapnik_carto_generated.xml \
-      taginfo.json
+      taginfo.json \
+      data/export/landcovers.mbtiles
 
-data/export/landcovers.mbtiles:  | data/export
+.PHONY: upload
+upload: data/export/landcovers.mbtiles
+	if [ -z "$(FTPUSER)" ] ; then   echo "FTPUSER env variable is not defined" ; exit 1; fi
+	if [ -z "$(FTPPASSWORD)" ] ; then   echo "FTPPASSWORD env variable is not defined" ; exit 1; fi
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ renderedtags.html
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
+
+data/export/landcovers.mbtiles: data/shapes  | data/export
 	node ../tilemill/index.js export generalized_landcovers  data/export/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8
 
 taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats
@@ -18,6 +20,15 @@ taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats
 
 mapnik_carto_generated.xml: *.mml *.mss
 	carto project.mml > mapnik_carto_generated.xml
+
+data/shapes: data/landcovers_aggr.shp \
+      data/waterbodies_aggr.shp \
+      data/ocean_lz.shp \
+      data/places.shp \
+      data/peaks.shp \
+      data/ne_10m_admin_0_boundary_lines_land.shp \
+      data/ne_110m_admin_0_boundary_lines_land.shp
+	touch $@ 
 
 data/landcovers_aggr.shp: data/tables/landcovers_aggr
 	ogr2ogr -f "ESRI Shapefile" \
