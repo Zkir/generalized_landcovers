@@ -5,6 +5,8 @@ data/*/*
 data/tables/*
 layers/*/*
 logs/*/*
+site/*/*
+site/*.*
 
 landcovers_test_render.png
 .thumb.png
