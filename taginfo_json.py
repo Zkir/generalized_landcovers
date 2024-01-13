@@ -38,7 +38,7 @@ conn = psycopg2.connect(dbname='gis', user=db_user_name,
                         password=db_user_password, host='localhost')
 cursor = conn.cursor()
 
-cursor.execute('SELECT * from h3.landcover_tag_stats ORDER BY strength desc')
+cursor.execute('SELECT * from h3.landcover_tag_stats ORDER BY size_in_hex desc') #strength
 records = cursor.fetchall()
 
 cursor.execute('SELECT * FROM h3.tag_synonyms')
@@ -61,9 +61,9 @@ for record in records:
         #print (wiki_url+ ' : '+str(wiki_described))
 
         if record[1] in rendered_tags:
-            description = "Rendered as landcover. Strength "+ str(record[3]) +", Total count " + str(record[4]) 
+            description = "Rendered as landcover." # Strength "+ str(record[3]) +", Total count " + str(record[4]) 
         else:
-            description = "Accepted as landcover, but not rendered. Strength: "+ str(record[3]) +", Total count: " + str(record[4]) 
+            description = "Accepted as landcover, but not rendered." # Strength: "+ str(record[3]) +", Total count: " + str(record[4]) 
         
         # we may exclude strange occurences from statisitics for taginfo, but we still need to report rare tags included in rendering     
         if (record[1] in rendered_tags) or (record[4]>=20) or (wiki_described and (record[4]>=4)):
