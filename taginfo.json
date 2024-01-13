@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20240113T080855Z",
+    "data_updated": "20240113T160124Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -322,7 +322,7 @@
             "value": "peat_cutting"
         },
         {
-            "description": "Accepted as landcover, but not rendered. Strength: 8.8, Total count: 28",
+            "description": "Rendered as landcover. Strength 8.8, Total count 28",
             "key": "landuse",
             "object_types": [
                 "area"
@@ -330,7 +330,7 @@
             "value": "observatory"
         },
         {
-            "description": "Accepted as landcover, but not rendered. Strength: 8.7, Total count: 144",
+            "description": "Rendered as landcover. Strength 8.7, Total count 144",
             "key": "landuse",
             "object_types": [
                 "area"
@@ -346,7 +346,7 @@
             "value": "cemetery"
         },
         {
-            "description": "Accepted as landcover, but not rendered. Strength: 8.2, Total count: 310",
+            "description": "Rendered as landcover. Strength 8.2, Total count 310",
             "key": "landuse",
             "object_types": [
                 "area"
