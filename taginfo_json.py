@@ -137,26 +137,27 @@ with open('taginfo.json', 'w') as f:
 
 
 rendered_tags_html='<html>' \
-                                  + '<head><style>' \
+                                  + '<head> <script src="/js/sorttable.js" type="Text/javascript"></script>' \
+                                  + '<style>' \
                                   + 'table {border: 1px solid grey;} ' \
                                   + 'th {border: 1px solid grey; }' \
                                   + 'td {border: 1px solid grey; padding:5px}' \
                                   + '</style></head>' \
                                   + '<body><h2>Rendered Landcovers</h2>' \
                                   + '<p>Those landcovers are rendered with own colour/pattern. </p>' \
-                                  + '<table>'  \
+                                  + '<table class="sortable">'  \
                                   + '<tr><th>Landcover</th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>'  \
                                   + rendered_tags_html + '</table>' \
                                   + '<h2>Not rendered Landcovers</h2>' \
                                   + '<p>Those landcovers are strong enough to appear on the generalized map but are rendered in black. <p>' \
-                                  + '<table>' \
+                                  + '<table class="sortable">' \
                                   + '<tr><th>Landcover</th><th>wiki described </th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>'  \
                                   +unrendered_tags_html + '</table></body></html>'
 
 #                                + '</body></html>'
 #unrendered_tags_html='<html><body>' \
 
-with open('renderedtags.html', 'w') as f1:
+with open('data/export/renderedtags.html', 'w') as f1:
     f1.write(rendered_tags_html)
 
 # with open('unrenderedtags.html', 'w') as f2:
