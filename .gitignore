@@ -1,9 +1,15 @@
 fonts/*.*
+data/*
 data/*.*
 data/*/*
 data/tables/*
 layers/*/*
+logs/*/*
 
 landcovers_test_render.png
 .thumb.png
 mapnik_carto_generated.xml
+make.svg
+make_profile.db
+report.json
+logs/latest
