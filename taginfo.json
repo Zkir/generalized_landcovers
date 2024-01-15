@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20240113T170746Z",
+    "data_updated": "20240114T063532Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -162,14 +162,6 @@
             "value": "mud"
         },
         {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "dry_lake"
-        },
-        {
             "description": "Rendered as landcover.",
             "key": "natural",
             "object_types": [
@@ -208,14 +200,6 @@
                 "area"
             ],
             "value": "allotments"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "winter_sports"
         },
         {
             "description": "Rendered as landcover.",
@@ -456,6 +440,14 @@
                 "area"
             ],
             "value": "ground"
+        },
+        {
+            "description": "Considered to be a synonym of natural=desert",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "dry_lake"
         },
         {
             "description": "Considered to be a synonym of natural=grassland",
