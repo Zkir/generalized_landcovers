@@ -61,35 +61,12 @@ CREATE TABLE h3.landcover_tag_stats as
 
 == not clear  == 
 
-winter_sports -- significant areas in france and italy, in Alps
-recreation_ground  -- not clear what to do with it. is it something like park? - ignore? transform to built_up
 railway -- also not clear. 
-forestry -- not clear is it the same thing as forest
-
-plant_nursery  -- can be any type of vegetation, from flowers to trees. 
-    https://wiki.openstreetmap.org/wiki/Tag%3Alanduse%3Dplant_nursery
-    
-    
-    
-== missing bare ground ==
-
-ground   -- natural=ground
-bare_earth -- natural=bare_earth are undocumented tag for ground without vegetation, related to landcover=bare_ground, compare with bare_rock
-
-== argiculture, possibly should be transformed ==
-
-
-animal_keeping -->farmyard
-agriculture
-agricultural
-pasture -->meadow,  landuse=pasture should be landuse=medadow+meadow=pasture
-farm
-field
 
 
 
 == other==
-gorge  -- natural=gorge not a landcover, but a landfeature
+
 
 landslide -- ?
 
@@ -101,17 +78,6 @@ observatory -- landuse = observatory -- deprecated, but it is still used. seems 
 
 dry_lake
 playa -- is the same as dry_lake?
-
-
-
-
-
-==WTF?==
-
-
-
-
-
 
 */
 

@@ -2,7 +2,8 @@
 all: data/shapes \
       mapnik_carto_generated.xml \
       taginfo.json \
-      data/export/landcovers.mbtiles
+      data/export/landcovers.mbtiles \
+      data/tables/landcover_quality_metrics
 
 .PHONY: upload
 upload: data/export/landcovers.mbtiles
@@ -102,6 +103,11 @@ data/tables/places: data/tables/h3_hexes
 
 data/tables/water_bodies_aggr: data/tables/h3_hexes
 	psql -d gis -f "sql-scripts/gen_water_bodies.sql" -v ON_ERROR_STOP=1
+	touch $@
+
+
+data/tables/landcover_quality_metrics: data/tables/landcovers_aggr 
+	psql -d gis -f "sql-scripts/landcover_quality_metrics.sql" -v ON_ERROR_STOP=1
 	touch $@
 
 data/tables/landcovers_aggr: data/tables/h3_hexes
