@@ -1,15 +1,22 @@
 .PHONY: all
-all: data/shapes \
+all: data/tables/landcover_quality_metrics \
+      data/shapes \
       mapnik_carto_generated.xml \
       taginfo.json \
       data/export/landcovers.mbtiles \
-      data/tables/landcover_quality_metrics
+      data/export/downloads/landcovers.zip \
+      data/export/downloads/peaks.zip \
+      data/export/downloads/places.zip
 
 .PHONY: upload
 upload: data/export/landcovers.mbtiles
 	if [ -z "$(FTPUSER)" ] ; then   echo "FTPUSER env variable is not defined" ; exit 1; fi
 	if [ -z "$(FTPPASSWORD)" ] ; then   echo "FTPPASSWORD env variable is not defined" ; exit 1; fi
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/landcovers.zip
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/peaks.zip
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/places.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ renderedtags.html
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
 
 data/export/landcovers.mbtiles: data/shapes  | data/export
@@ -21,6 +28,13 @@ taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats
 
 mapnik_carto_generated.xml: *.mml *.mss
 	carto project.mml > mapnik_carto_generated.xml
+
+data/export/downloads/landcovers.zip:
+	zip -j $@ data/landcovers_aggr.* misc/landcovers.readme.txt
+data/export/downloads/peaks.zip: data/peaks.shp
+	zip -j $@ data/peaks.* misc/peaks.readme.txt
+data/export/downloads/places.zip: data/places.shp
+	zip -j $@ data/places.* misc/places.readme.txt
 
 data/shapes: data/landcovers_aggr.shp \
       data/waterbodies_aggr.shp \

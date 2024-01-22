@@ -1,0 +1,32 @@
+PEAKS DATASET
+Format: ESRI Shapefile
+based on the original map data (c) Openstreetmap contributors ODbL
+
+
+This dataset is a generalized representation of the mountain peaks extracted from Openstreetmap data.
+
+All the mountain peaks in this shape file contain calculated Cartographic Importance, basing on which those
+objects can be selected for display zoom levels z0-z8 (scales approximately 1:500M - 1:2M), where standard 
+mapnik (aka OSM CartoCSS) is boring and empty.
+
+FIELDS:
+osm_id: Original osm id
+name: Name in local language
+name_en: Name in English where present.
+ele : Elevation in meters
+ix: Code of h3 grid cell, where the peak is located
+score: the cartographic importance value, calculated using Discrete Isolation method.
+           The higher score, the more important the peak is. 
+
+
+For more information and author contacts check  
+The project page: http://openlandcovermap.zkir.ru
+Github repository: https://github.com/Zkir/generalized_landcovers
+
+
+THE DATASET IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF CORRECTNESS, MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+WITH THE DATASET OR THE USE OR OTHER DEALINGS IN THE DATASET.

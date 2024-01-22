@@ -1,0 +1,39 @@
+PLACES DATASET
+format: ESRI Shapefile
+based on the original map data (c) Openstreetmap contributors ODbL
+
+This dataset is a generalized representation of the populated places extracted from Openstreetmap data.
+
+All the populated places in this dataset  contain calculated Cartographic Importance, basing on which those objects
+can be selected for display zoom levels z0-z8 (scales approximately 1:500M - 1:2M), where standard mapnik (aka OSM CartoCSS)
+is boring and empty.
+
+Fields:
+osm_id:
+    Original osm id
+place: 
+    Original osm place classificaiton
+name: 
+    Name in local language
+population: 
+    osm population value
+r1ix: 
+    Code of h3 grid cell, where the popualted place is located
+rank: 
+    the cartographic importance value, calculated using the GRID CELL method.
+           The lower the rank, the more important the place is. 
+
+
+For more information and author contacts check  
+the project page:
+http://openlandcovermap.zkir.ru
+
+Github repository:
+https://github.com/Zkir/generalized_landcovers
+
+THE DATASET IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF CORRECTNESS, MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+WITH THE DATASET OR THE USE OR OTHER DEALINGS IN THE DATASET.
