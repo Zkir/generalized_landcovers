@@ -4,23 +4,25 @@ This is an attempt to create properly generalized map, to see at least something
 
 ![picture to draw attention](landcovers_vs_mapnik.png)
 
-Currently, online map is accessible here: 
+Currently, the online map is accessible here: 
 
-**http://osm2.zkir.ru/landcovers/**
+**http://openlandcovermap.zkir.ru**
 
 ## Ideas
 What can be drawn on zooms z0-z8? 
 We cannot just draw existing osm polygonal features, because they are too small 
-(and there are to many of them). We cannot even select by size, because objects are fractional: 
-they consists of lots of smaller parts.
+(and there are to many of them). We cannot even select polygons by size, because objects are fractional: 
+they consist of lots of smaller parts.
 
 So we need to create completely different geometry.  We will do it in a very simple way. 
-We will take all the  <b>landuse= *</b> and <b>natural= *</b>’ polygons,  and match them with a hexagonal grid (‘h3’, currently of resolution 6).  For each grid cell, we identify single a tag which describes this sell in the best way,
-polygons of which occupy the maximum area in that cell.
+We will take all the  <b>landuse= *</b> and <b>natural= *</b>’ polygons,  and match them with a hexagonal grid (‘h3’, currently of resolution 6).  For each grid cell, we identify a **single tag** which describes this sell in the best way, polygons of which occupy the maximum area in that cell.
 
-To make the map more inderesting, we will add cities and mountain peaks. _"Cartographic importance"_ should be calculated, since it is impossible to select cities/mountain peaks for zooms z0-z8 based directly on population/elevation.
+To make the map more interesting, we will add cities and mountain peaks. _"Cartographic importance"_ should be calculated for each point, since it is impossible to select cities/mountain peaks for zooms z0-z8 based directly on population/elevation.
 
 ## Taginfo project
+
+We have our own Taginfo project page so that the tags that are used in this map are visible . 
+
 * https://taginfo.openstreetmap.org/projects/openlandcovermap#tags
 
 ## Installation
