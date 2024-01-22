@@ -152,13 +152,10 @@ rendered_tags_html='<html>' \
                                   + '<p>Those landcovers are strong enough to appear on the generalized map but are rendered in black. <p>' \
                                   + '<table class="sortable">' \
                                   + '<tr><th>Landcover</th><th>wiki described </th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>'  \
-                                  +unrendered_tags_html + '</table></body></html>'
-
-#                                + '</body></html>'
-#unrendered_tags_html='<html><body>' \
+                                  + unrendered_tags_html + '</table>' \
+                                  + '<hr />' \
+                                  + '<small><center> page created '+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'</center></small>' \
+                                  + '</body></html>'
 
 with open('data/export/renderedtags.html', 'w') as f1:
     f1.write(rendered_tags_html)
-
-# with open('unrenderedtags.html', 'w') as f2:
-#    f2.write(unrendered_tags_html)
