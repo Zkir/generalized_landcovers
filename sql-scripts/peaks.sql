@@ -30,8 +30,7 @@ CREATE TABLE h3.peaks_pre AS
               AND "name" IS NOT NULL) t1
     INNER JOIN h3.hex ON ST_Intersects(h3.hex.geom, t1.geom) AND h3.hex.resolution=2
     WHERE ele IS NOT NULL 
-    ORDER BY ele desc
-    LIMIT 2000000; 
+    ORDER BY ele desc; 
 
 CREATE INDEX gix_h3_peaks_pre ON h3.peaks_pre USING GIST (geom);
 CREATE INDEX ele_h3_peaks_pre ON h3.peaks_pre USING BTree(ele);
