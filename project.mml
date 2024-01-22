@@ -180,6 +180,6 @@
   "metatile": 2,
   "name": "Generalized-Landcovers",
   "description": "Map of landcovers with proper cartographic generalization",
-  "attribution": "",
+  "attribution": "Generalized map tiles (c) Zkir, based on orginal map data (c) OpenStreetMap contributors",
   "lastBrowsedFolder": "/home/zkir/src/generalized_landcovers/data"
 }
