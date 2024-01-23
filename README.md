@@ -2,7 +2,7 @@
 
 This is an attempt to create properly generalized map, to see at least something on zoom levels z0-z8. It is well known that standard OSM ("mapnik" aka "opensteetmap-carto") is empty and boring on those zooms.
 
-![picture to draw attention](landcovers_vs_mapnik.png)
+![picture: landcovers vs osm standard](pic01_landcovers_vs_mapnik.png)
 
 Currently, the online map is accessible here: 
 
@@ -16,6 +16,9 @@ they consist of lots of smaller parts.
 
 So we need to create completely different geometry.  We will do it in a very simple way. 
 We will take all the  <b>landuse= *</b> and <b>natural= *</b>’ polygons,  and match them with a hexagonal grid (‘h3’, currently of resolution 6).  For each grid cell, we identify a **single tag** which describes this sell in the best way, polygons of which occupy the maximum area in that cell.
+
+![picture: polygon grid matching](pic02_h3grid.png)
+
 
 To make the map more interesting, we will add cities and mountain peaks. _"Cartographic importance"_ should be calculated for each point, since it is impossible to select cities/mountain peaks for zooms z0-z8 based directly on population/elevation.
 
@@ -68,7 +71,7 @@ Note: it could take significant time, e.g. several hours.
 
 Also it should create **mapnik.xml** from  mss files, but it is not yet implemented (precompiled **mapnik.xml** is included).
 
-## Test installation
+### Test installation
 
 Run 
 
