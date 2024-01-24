@@ -148,6 +148,10 @@ data/export:
 test: 
 	python3 test.py
 
+.PHONY: import_planet
+import_planet:
+	osm2pgsql -d gis -U zkir --create --slim  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes ~/data/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style -r pbf ~/data/planet-latest.osm.pbf
+
 .PHONY: clean
 clean:
 	psql -d gis -c "DROP SCHEMA IF EXISTS  h3 CASCADE" -v ON_ERROR_STOP=1
