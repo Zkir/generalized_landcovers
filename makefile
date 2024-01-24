@@ -102,33 +102,33 @@ data/ne_110m_admin_0_boundary_lines_land.shp: data/downloads/ne_110m_admin_0_bou
 	unzip -o -d data $<
 	touch $@
 
-data/tables/landcover_tag_stats: data/tables/landcovers_aggr
+data/tables/landcover_tag_stats: data/tables/landcovers_aggr | data/tables
 	psql -d gis -f "sql-scripts/landcover_statistics.sql" -v ON_ERROR_STOP=1
 	touch $@
 
 
-data/tables/peaks: data/tables/h3_hexes
+data/tables/peaks: data/tables/h3_hexes | data/tables
 	psql -d gis -f "sql-scripts/peaks.sql" -v ON_ERROR_STOP=1
 	touch $@
 
-data/tables/places: data/tables/h3_hexes
+data/tables/places: data/tables/h3_hexes | data/tables
 	psql -d gis -f "sql-scripts/places.sql" -v ON_ERROR_STOP=1
 	touch $@
 
-data/tables/water_bodies_aggr: data/tables/h3_hexes
+data/tables/water_bodies_aggr: data/tables/h3_hexes | data/tables
 	psql -d gis -f "sql-scripts/gen_water_bodies.sql" -v ON_ERROR_STOP=1
 	touch $@
 
 
-data/tables/landcover_quality_metrics: data/tables/landcovers_aggr 
+data/tables/landcover_quality_metrics: data/tables/landcovers_aggr | data/tables
 	psql -d gis -f "sql-scripts/landcover_quality_metrics.sql" -v ON_ERROR_STOP=1
 	touch $@
 
-data/tables/landcovers_aggr: data/tables/h3_hexes
+data/tables/landcovers_aggr: data/tables/h3_hexes | data/tables
 	psql -d gis -f "sql-scripts/gen_land_covers.sql" -v ON_ERROR_STOP=1
 	touch $@
 
-data/tables/h3_hexes:
+data/tables/h3_hexes: | data/tables
 	psql -d gis -f "sql-scripts/prepare_h3_hexes.sql" -v ON_ERROR_STOP=1
 	touch $@
 
@@ -138,10 +138,16 @@ data/downloads/ne_10m_admin_0_boundary_lines_land.zip: | data/downloads
 data/downloads/ne_110m_admin_0_boundary_lines_land.zip: | data/downloads
 	wget -O $@ https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
 
-data/downloads:
+data/downloads: | data
 	mkdir $@
 
-data/export:
+data/export: | data
+	mkdir $@
+
+data/tables: | data
+	mkdir $@
+
+data: 
 	mkdir $@
 
 .PHONY: test
