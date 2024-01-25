@@ -29,11 +29,13 @@ taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats
 mapnik_carto_generated.xml: *.mml *.mss
 	carto project.mml > mapnik_carto_generated.xml
 
-data/export/downloads/landcovers.zip:
+data/export/downloads/landcovers.zip: data/landcovers_aggr.shp | data/export/downloads
 	zip -j $@ data/landcovers_aggr.* misc/landcovers.readme.txt
-data/export/downloads/peaks.zip: data/peaks.shp
+
+data/export/downloads/peaks.zip: data/peaks.shp | data/export/downloads
 	zip -j $@ data/peaks.* misc/peaks.readme.txt
-data/export/downloads/places.zip: data/places.shp
+
+data/export/downloads/places.zip: data/places.shp | data/export/downloads
 	zip -j $@ data/places.* misc/places.readme.txt
 
 data/shapes: data/landcovers_aggr.shp \
@@ -139,6 +141,9 @@ data/downloads/ne_110m_admin_0_boundary_lines_land.zip: | data/downloads
 	wget -O $@ https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
 
 data/downloads: | data
+	mkdir $@
+
+data/export/downloads: | data
 	mkdir $@
 
 data/export: | data
