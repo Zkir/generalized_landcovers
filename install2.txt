@@ -11,6 +11,7 @@ sudo npm install -g carto
 sudo apt install osm2pgsql 
 sudo apt install osmctools
 sudo apt install -y aria2
+sudo apt install zip
 sudo apt install unzip
 
 
@@ -56,7 +57,7 @@ psql -d gis -U $USER -c "GRANT ALL PRIVILEGES ON DATABASE gis TO test1;"
 cd ~/src/openstreetmap-carto/
 mkdir data
 scripts/get-external-data.py
-
+scripts/get-fonts.sh
 
 
 #https://dzen.ru/a/ZIgnHKuEFG5mTR0D
@@ -74,4 +75,4 @@ npm install
 
 
 
-ln -s /home/zkir/Documents/MapBox/project/generalized_landcovers /home/zkir/src/generalized_landcovers
+ln -s /home/zkir/src/generalized_landcovers /home/zkir/Documents/MapBox/project/generalized_landcovers 
