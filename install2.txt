@@ -2,18 +2,27 @@ sudo apt update
 sudo apt upgrade
 
 
-GNU Make
+#GNU Make
 sudo apt install make
 
-
+#install basic dependencies
 sudo apt install npm
-sudo npm install -g carto
 sudo apt install osm2pgsql 
 sudo apt install osmctools
 sudo apt install -y aria2
 sudo apt install zip
 sudo apt install unzip
+sudo apt install gdal-bin
+sudo npm install -g carto
 
+sudo apt install python3-pip
+sudo pip install check-jsonschema
+
+# Instal nvm. nvm is version manager for npm
+#https://tecadmin.net/how-to-install-nvm-on-ubuntu-20-04/
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+
+#install osm-carto
 
 mkdir ~/src
 cd ~/src
@@ -41,15 +50,10 @@ sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
 
 sudo apt install postgresql-14-h3
 
-### ogr2ogr
-sudo apt install gdal-bin
 
 
 psql -d gis -U $USER -c "CREATE USER $PGUSER SUPERUSER LOGIN PASSWORD '$PGPASSWORD'"
-
-
 psql -d gis -U $USER -c "GRANT ALL PRIVILEGES ON DATABASE gis TO test1;"
-
 
 
 
@@ -60,11 +64,7 @@ scripts/get-external-data.py
 scripts/get-fonts.sh
 
 
-#https://dzen.ru/a/ZIgnHKuEFG5mTR0D
-#https://tecadmin.net/how-to-install-nvm-on-ubuntu-20-04/
-
-curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-
+#install tilemill
 #https://tilemill-project.github.io/tilemill/docs/install/
 
 git clone https://github.com/tilemill-project/tilemill.git
