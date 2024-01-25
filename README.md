@@ -48,7 +48,23 @@ h3 extension should be installed on the gis database, each time gis database is 
 CREATE EXTENSION h3;
 CREATE EXTENSION h3_postgis CASCADE;
 ```
-_I remember that I had to compile it from sources and install some compilers._
+_I remember that I had to compile it from sources and install some compilers. No clue however how to repeat that._
+
+The following worked out for me on the second try.
+
+Connect to apt.postgresql.org repository.
+
+```sh
+sudo apt install -y postgresql-common
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+```
+
+Install h3 from that repository:  
+
+```sh
+sudo apt install postgresql-14-h3
+```
+replace 14 with the used version of postgres
 
 ### Postgres user name and password
 ogr2org requires both name and password even for local user, so please specify it
