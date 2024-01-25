@@ -1,0 +1,77 @@
+sudo apt update
+sudo apt upgrade
+
+
+GNU Make
+sudo apt install make
+
+
+sudo apt install npm
+sudo npm install -g carto
+sudo apt install osm2pgsql 
+sudo apt install osmctools
+sudo apt install -y aria2
+sudo apt install unzip
+
+
+mkdir ~/src
+cd ~/src
+git clone https://github.com/gravitystorm/openstreetmap-carto
+cd openstreetmap-carto
+#carto -v
+carto project.mml > mapnik.xml
+
+createdb -E UTF8 -O zkir gis
+psql -d gis -c 'CREATE EXTENSION postgis; CREATE EXTENSION hstore;'
+
+mkdir ~/data
+cd ~/data
+wget https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf
+#aria2c https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf.torrent --seed-time=0
+osmupdate planet-latest.osm.pbf planet-latest-updated.osm.pbf
+
+cd ~/src/generalized_landcovers
+
+osm2pgsql -d gis -U zkir -W --create --slim  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes ~/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style -r pbf ~/data/planet-latest-updated.osm.pbf
+
+
+sudo apt install -y postgresql-common
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+
+sudo apt install postgresql-14-h3
+
+### ogr2ogr
+sudo apt install gdal-bin
+
+
+psql -d gis -U $USER -c "CREATE USER $PGUSER SUPERUSER LOGIN PASSWORD '$PGPASSWORD'"
+
+
+psql -d gis -U $USER -c "GRANT ALL PRIVILEGES ON DATABASE gis TO test1;"
+
+
+
+
+
+cd ~/src/openstreetmap-carto/
+mkdir data
+scripts/get-external-data.py
+
+
+
+#https://dzen.ru/a/ZIgnHKuEFG5mTR0D
+#https://tecadmin.net/how-to-install-nvm-on-ubuntu-20-04/
+
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+
+#https://tilemill-project.github.io/tilemill/docs/install/
+
+git clone https://github.com/tilemill-project/tilemill.git
+cd tilemill
+nvm install lts/carbon
+nvm use v8.15.0
+npm install
+
+
+
+ln -s /home/zkir/Documents/MapBox/project/generalized_landcovers /home/zkir/src/generalized_landcovers
