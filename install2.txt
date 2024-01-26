@@ -5,8 +5,9 @@ sudo apt upgrade
 
 # ===============================================================================
 #install basic dependencies
-sudo apt install -y make npm osmctools aria2 zip unzip gdal-bin 
 # ===============================================================================
+
+sudo apt install -y make npm osmctools aria2 zip unzip gdal-bin 
 
 #install carto, via npm
 sudo npm install -g carto
@@ -89,7 +90,7 @@ sudo make install-gen
 # ===============================================================================
 # Create DB and import some initial data
 # ===============================================================================
-sudo -u postgres createuser -s $USER
+sudo -u postgres createuser -s $USER -P
 createdb -E UTF8 -O $USER gis
 psql -d gis -c 'CREATE EXTENSION postgis; CREATE EXTENSION hstore;'
 
