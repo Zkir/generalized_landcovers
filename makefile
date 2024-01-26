@@ -4,9 +4,8 @@ all: data/tables/landcover_quality_metrics \
       mapnik_carto_generated.xml \
       taginfo.json \
       data/export/landcovers.mbtiles \
-      data/export/downloads/landcovers.zip \
-      data/export/downloads/peaks.zip \
-      data/export/downloads/places.zip
+      data/export/downloads.html
+
 
 .PHONY: upload
 upload: data/export/landcovers.mbtiles
@@ -18,6 +17,9 @@ upload: data/export/landcovers.mbtiles
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ renderedtags.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
+
+data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip 
+	python3 downloads.py
 
 data/export/landcovers.mbtiles: data/shapes  | data/export
 	node ../tilemill/index.js export generalized_landcovers  data/export/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8
@@ -143,7 +145,7 @@ data/downloads/ne_110m_admin_0_boundary_lines_land.zip: | data/downloads
 data/downloads: | data
 	mkdir $@
 
-data/export/downloads: | data
+data/export/downloads: | data/export
 	mkdir $@
 
 data/export: | data
