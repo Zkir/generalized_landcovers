@@ -35,6 +35,7 @@ carto project.mml > mapnik.xml
 
 mkdir data
 scripts/get-fonts.sh
+ln -s  ~/src/openstreetmap-carto/fonts  ~/src/generalized_landcovers
 
 # ===============================================================================
 # postgresql, postis and extentions
