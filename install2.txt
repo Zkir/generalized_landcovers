@@ -1,78 +1,119 @@
+#ubuntu 22.04, just after installation is assumed
+
 sudo apt update
 sudo apt upgrade
 
-
-#GNU Make
-sudo apt install make
-
+# ===============================================================================
 #install basic dependencies
-sudo apt install npm
-sudo apt install osm2pgsql 
-sudo apt install osmctools
-sudo apt install -y aria2
-sudo apt install zip
-sudo apt install unzip
-sudo apt install gdal-bin
+sudo apt install -y make npm osmctools aria2 zip unzip gdal-bin 
+# ===============================================================================
+
+#install carto, via npm
 sudo npm install -g carto
 
-sudo apt install python3-pip
+#install python packages
+sudo apt install -y python3-pip
 sudo pip install check-jsonschema
+sudo pip install psycopg2
 
 # Instal nvm. nvm is version manager for npm
 #https://tecadmin.net/how-to-install-nvm-on-ubuntu-20-04/
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 
-#install osm-carto
+# !!!!!!!!!!!!! Close and reopen terminal !!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# ===============================================================================
+#  install osm-carto
+# ===============================================================================
 
 mkdir ~/src
 cd ~/src
 git clone https://github.com/gravitystorm/openstreetmap-carto
 cd openstreetmap-carto
-#carto -v
+carto -v
 carto project.mml > mapnik.xml
 
-createdb -E UTF8 -O zkir gis
-psql -d gis -c 'CREATE EXTENSION postgis; CREATE EXTENSION hstore;'
+mkdir data
+scripts/get-fonts.sh
 
-mkdir ~/data
-cd ~/data
-wget https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf
-#aria2c https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf.torrent --seed-time=0
-osmupdate planet-latest.osm.pbf planet-latest-updated.osm.pbf
-
-cd ~/src/generalized_landcovers
-
-osm2pgsql -d gis -U zkir -W --create --slim  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes ~/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style -r pbf ~/data/planet-latest-updated.osm.pbf
-
+# ===============================================================================
+# postgresql, postis and extentions
+# ===============================================================================
+#instal pgsql and postigs as well as postigis extentions
+#ubuntu has just version 14, so we will connect to another repository
 
 sudo apt install -y postgresql-common
 sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
 
-sudo apt install postgresql-14-h3
+sudo apt install -y postgresql-16 postgresql-16-postgis-3 postgresql-16-h3
+sudo service postgresql start
 
-
-
-psql -d gis -U $USER -c "CREATE USER $PGUSER SUPERUSER LOGIN PASSWORD '$PGPASSWORD'"
-psql -d gis -U $USER -c "GRANT ALL PRIVILEGES ON DATABASE gis TO test1;"
-
-
-
-
-cd ~/src/openstreetmap-carto/
-mkdir data
-scripts/get-external-data.py
-scripts/get-fonts.sh
-
-
-#install tilemill
+# ===============================================================================
+# tilemill
+# ===============================================================================
 #https://tilemill-project.github.io/tilemill/docs/install/
 
+cd ~/src
 git clone https://github.com/tilemill-project/tilemill.git
 cd tilemill
 nvm install lts/carbon
 nvm use v8.15.0
 npm install
 
+#this will work after tilemill creates its file structure
+mkdir -p ~/Documents/MapBox/project
+ln -s ~/src/generalized_landcovers ~/Documents/MapBox/project/generalized_landcovers 
+
+# ===============================================================================
+# osm2pgsql
+# ===============================================================================
+# We cannot install osm2pgsql using apt, because it has only version 1.6 in ubuntu 22.04, but we want 1.10+
+#sudo apt install osm2pgsql 
+#build from sources, see https://github.com/osm2pgsql-dev/osm2pgsql/blob/master/README.md
+
+cd ~/src
+git clone https://github.com/osm2pgsql-dev/osm2pgsql
+sudo apt-get install make cmake g++ libboost-dev libboost-system-dev \
+  libboost-filesystem-dev libexpat1-dev zlib1g-dev libpotrace-dev \
+  libopencv-dev libbz2-dev libpq-dev libproj-dev lua5.3 liblua5.3-dev \
+  pandoc nlohmann-json3-dev pyosmium
+cd osm2pgsql
+mkdir build && cd build
+cmake ..
+make
+make man
+sudo make install
+sudo make install-gen
+
+# ===============================================================================
+# Create DB and import some initial data
+# ===============================================================================
+sudo -u postgres createuser -s $USER
+createdb -E UTF8 -O $USER gis
+psql -d gis -c 'CREATE EXTENSION postgis; CREATE EXTENSION hstore;'
+
+# Upload Natural earth in DB
+# this should be done AFTER DB is initialized
+cd ~/src/openstreetmap-carto/
+scripts/get-external-data.py
 
 
-ln -s /home/zkir/src/generalized_landcovers /home/zkir/Documents/MapBox/project/generalized_landcovers 
+
+
+mkdir -p ~/data
+##cd ~/data
+##wget https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf
+##aria2c https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf.torrent --seed-time=0
+##osmupdate planet-latest.osm.pbf planet-latest-updated.osm.pbf
+
+cd ~/src/generalized_landcovers
+
+
+
+#strange!
+
+#psql -d gis -U $USER -c "CREATE USER $PGUSER SUPERUSER LOGIN PASSWORD '$PGPASSWORD'"
+#psql -d gis -U $USER -c "GRANT ALL PRIVILEGES ON DATABASE gis TO test1;"
+
+
+
