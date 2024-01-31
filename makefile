@@ -20,7 +20,7 @@ upload: data/export/landcovers.mbtiles
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ country_stats.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
 
-data/export/country_stats.html: 
+data/export/country_stats.html: data/tables/country_stats
 	python3 country_stats.py
 
 data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip 
@@ -127,6 +127,10 @@ data/ne_110m_admin_0_boundary_lines_land.shp: data/downloads/ne_110m_admin_0_bou
 	unzip -o -d data $<
 	touch $@
 
+data/ne_10m_admin_0_countries.shp: data/downloads/ne_10m_admin_0_countries.zip
+	unzip -o -d data $<
+	touch $@
+
 data/tables/landcover_tag_stats: data/tables/landcovers_aggr | data/tables
 	psql -d gis -f "sql-scripts/landcover_statistics.sql" -v ON_ERROR_STOP=1
 	touch $@
@@ -162,6 +166,9 @@ data/downloads/ne_10m_admin_0_boundary_lines_land.zip: | data/downloads
 
 data/downloads/ne_110m_admin_0_boundary_lines_land.zip: | data/downloads
 	wget -O $@ https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
+
+data/downloads/ne_10m_admin_0_countries.zip: | data/downloads
+	wget -O $@ https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip
 
 data/downloads: | data
 	mkdir $@
