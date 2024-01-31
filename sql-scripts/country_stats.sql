@@ -40,7 +40,7 @@ CREATE TABLE h3.country_stats AS
 
 -- SELECT * FROM h3.country_stats  ORDER BY 2 DESC;
 
-
+/*
 CREATE TABLE h3.country_stats2 AS 
     SELECT countries.name_en, ST_AREA(ST_INTERSECTION(countries.geom, landcovers.geom)) / ST_AREA(countries.geom) as pcover, countries.geom --ST_INTERSECTION(foo.geom, bar.geom) AS geom, bar.feature
     FROM (
@@ -52,6 +52,6 @@ CREATE TABLE h3.country_stats2 AS
             FROM h3.landcovers
          ) as landcovers
     WHERE ST_INTERSECTS(countries.geom, landcovers.geom) ;
-
+*/
 
 --SELECT * from  h3.country_stats2 
