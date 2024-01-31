@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20240114T063532Z",
+    "data_updated": "20240131T031405Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -11,19 +11,11 @@
     "tags": [
         {
             "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "wood"
-        },
-        {
-            "description": "Rendered as landcover.",
             "key": "landuse",
             "object_types": [
                 "area"
             ],
-            "value": "farmland"
+            "value": "allotments"
         },
         {
             "description": "Rendered as landcover.",
@@ -31,7 +23,7 @@
             "object_types": [
                 "area"
             ],
-            "value": "desert"
+            "value": "arctic_desert"
         },
         {
             "description": "Rendered as landcover.",
@@ -39,23 +31,7 @@
             "object_types": [
                 "area"
             ],
-            "value": "glacier"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "sand"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "wetland"
+            "value": "bare_earth"
         },
         {
             "description": "Rendered as landcover.",
@@ -71,86 +47,6 @@
             "object_types": [
                 "area"
             ],
-            "value": "scrub"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "meadow"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "orchard"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "grassland"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "heath"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "quarry"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "vineyard"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "scree"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "farmyard"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "logging"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
             "value": "beach"
         },
         {
@@ -159,71 +55,7 @@
             "object_types": [
                 "area"
             ],
-            "value": "mud"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "tundra"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "landfill"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "shingle"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "fell"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "allotments"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "salt_pond"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "railway"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "greenhouse_horticulture"
+            "value": "blockfield"
         },
         {
             "description": "Rendered as landcover.",
@@ -235,19 +67,11 @@
         },
         {
             "description": "Rendered as landcover.",
-            "key": "landuse",
+            "key": "natural",
             "object_types": [
                 "area"
             ],
-            "value": "paddy"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "oil_field"
+            "value": "desert"
         },
         {
             "description": "Rendered as landcover.",
@@ -255,7 +79,15 @@
             "object_types": [
                 "area"
             ],
-            "value": "plant_nursery"
+            "value": "farmland"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "farmyard"
         },
         {
             "description": "Rendered as landcover.",
@@ -263,15 +95,79 @@
             "object_types": [
                 "area"
             ],
-            "value": "arctic_desert"
+            "value": "fell"
         },
         {
-            "description": "Accepted as landcover, but not rendered.",
+            "description": "Rendered as landcover.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "glacier"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "grassland"
+        },
+        {
+            "description": "Rendered as landcover.",
             "key": "landuse",
             "object_types": [
                 "area"
             ],
-            "value": "windfarm"
+            "value": "greenhouse_horticulture"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "heath"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "lake"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "landfill"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "landslide"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "logging"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "meadow"
         },
         {
             "description": "Rendered as landcover.",
@@ -287,7 +183,7 @@
             "object_types": [
                 "area"
             ],
-            "value": "bare_earth"
+            "value": "mud"
         },
         {
             "description": "Rendered as landcover.",
@@ -303,7 +199,7 @@
             "object_types": [
                 "area"
             ],
-            "value": "oilfield"
+            "value": "oil_field"
         },
         {
             "description": "Accepted as landcover, but not rendered.",
@@ -311,7 +207,23 @@
             "object_types": [
                 "area"
             ],
-            "value": "cultivo de ca\u00f1a"
+            "value": "oilfield"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "orchard"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "paddy"
         },
         {
             "description": "Rendered as landcover.",
@@ -322,12 +234,36 @@
             "value": "peat_cutting"
         },
         {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "natural",
+            "description": "Rendered as landcover.",
+            "key": "landuse",
             "object_types": [
                 "area"
             ],
-            "value": "landslide"
+            "value": "plant_nursery"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "quarry"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "railway"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "salt_pond"
         },
         {
             "description": "Rendered as landcover.",
@@ -335,7 +271,47 @@
             "object_types": [
                 "area"
             ],
-            "value": "blockfield"
+            "value": "sand"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "scree"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "scrub"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "shingle"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "tundra"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "vineyard"
         },
         {
             "description": "Accepted as landcover, but not rendered.",
@@ -344,6 +320,30 @@
                 "area"
             ],
             "value": "wellsite"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "wetland"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "windfarm"
+        },
+        {
+            "description": "Rendered as landcover.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "wood"
         },
         {
             "description": "Considered to be a synonym of natural=wood",
