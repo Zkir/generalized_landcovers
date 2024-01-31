@@ -16,3 +16,4 @@ make_profile.db
 report.json
 logs/latest
 fonts
+__pycache__/zwebpage.cpython-310.pyc

@@ -13,6 +13,7 @@ import re
 import requests
 import os
 from datetime import datetime
+from zwebpage import ZWebPage
 
 db_user_name = os.environ.get("PGUSER")
 db_user_password = os.environ.get("PGPASSWORD")
@@ -38,7 +39,9 @@ conn = psycopg2.connect(dbname='gis', user=db_user_name,
                         password=db_user_password, host='localhost')
 cursor = conn.cursor()
 
-cursor.execute('SELECT * from h3.landcover_tag_stats ORDER BY size_in_hex desc') #strength
+cursor.execute('SELECT * from h3.landcover_tag_stats ORDER BY feature ASC')
+#cursor.execute('SELECT * from h3.landcover_tag_stats ORDER BY size_in_hex desc')
+
 records = cursor.fetchall()
 
 cursor.execute('SELECT * FROM h3.tag_synonyms')
@@ -131,31 +134,20 @@ taginfo_json={
  }
 
 
-
 with open('taginfo.json', 'w') as f:
     f.write(json.dumps(taginfo_json, sort_keys=True, indent=4))
 
+page = ZWebPage("renderedtags.html", "Used Tags statistics")
 
-rendered_tags_html='<html>' \
-                                  + '<head> <script src="/js/sorttable.js" type="Text/javascript"></script>' \
-                                  + '<style>' \
-                                  + 'table {border: 1px solid grey;} ' \
-                                  + 'th {border: 1px solid grey; }' \
-                                  + 'td {border: 1px solid grey; padding:5px}' \
-                                  + '</style></head>' \
-                                  + '<body><h2>Rendered Landcovers</h2>' \
-                                  + '<p>Those landcovers are rendered with own colour/pattern. </p>' \
-                                  + '<table class="sortable">'  \
-                                  + '<tr><th>Landcover</th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>'  \
-                                  + rendered_tags_html + '</table>' \
-                                  + '<h2>Not rendered Landcovers</h2>' \
-                                  + '<p>Those landcovers are strong enough to appear on the generalized map but are rendered in black. <p>' \
-                                  + '<table class="sortable">' \
-                                  + '<tr><th>Landcover</th><th>wiki described </th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>'  \
-                                  + unrendered_tags_html + '</table>' \
-                                  + '<hr />' \
-                                  + '<small><center> page created '+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'</center></small>' \
-                                  + '</body></html>'
+page.print( '<h2>Rendered Landcovers</h2>' \
+                  + '<p>Those landcovers are rendered with own colour/pattern. </p>' \
+                  + '<table class="sortable">'  \
+                  + '<tr><th>Landcover</th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>'  \
+                  + rendered_tags_html + '</table>' \
+                  + '<h2>Not rendered Landcovers</h2>' \
+                  + '<p>Those landcovers are strong enough to appear on the generalized map but are rendered in black. <p>' \
+                  + '<table class="sortable">' \
+                  + '<tr><th>Landcover</th><th>wiki described </th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>'  \
+                  + unrendered_tags_html + '</table>' )
 
-with open('data/export/renderedtags.html', 'w') as f1:
-    f1.write(rendered_tags_html)
+page.write()

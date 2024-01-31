@@ -4,7 +4,8 @@ all: data/tables/landcover_quality_metrics \
       mapnik_carto_generated.xml \
       taginfo.json \
       data/export/landcovers.mbtiles \
-      data/export/downloads.html
+      data/export/downloads.html \
+      data/export/country_stats.html
 
 
 .PHONY: upload
@@ -16,7 +17,11 @@ upload: data/export/landcovers.mbtiles
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/places.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ renderedtags.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads.html
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ country_stats.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
+
+data/export/country_stats.html: 
+	python3 country_stats.py
 
 data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip 
 	python3 downloads.py
@@ -96,6 +101,22 @@ data/ocean_lz.shp:
   "PG:dbname=gis host=localhost port=5432 user=$(PGUSER) password=$(PGPASSWORD)" \
   -sql "SELECT * FROM simplified_water_polygons" \
   -lco ENCODING=UTF-8
+
+data/tables/country_stats:  data/tables/ne_10m_admin_0_countries data/tables/landcovers_aggr
+	psql -d gis -f "sql-scripts/country_stats.sql" -v ON_ERROR_STOP=1
+	touch $@
+
+data/tables/ne_10m_admin_0_countries: data/ne_10m_admin_0_countries.shp
+	ogr2ogr -f "PostgreSQL" \
+                       "PG:dbname=gis host=localhost port=5432 user=$(PGUSER)  password=$(PGPASSWORD)" \
+                       data/ne_10m_admin_0_countries.shp \
+                       -nlt PROMOTE_TO_MULTI \
+                      -nln h3.ne_10m_admin_0_countries \
+                      -progress -overwrite 
+	touch $@
+
+
+#ogr2ogr -f PostgreSQL PG:"dbname='shape' host='127.0.0.1' port='5434' user='geosolutions' password='Geos'" ../data/user_data/Mainrd.shp -lco #GEOMETRY_NAME=geom -lco FID=gid -lco SPATIAL_INDEX=GIST -nlt PROMOTE_TO_MULTI -nln main_roads_2 -overwrite
 
 
 data/ne_10m_admin_0_boundary_lines_land.shp: data/downloads/ne_10m_admin_0_boundary_lines_land.zip
