@@ -27,6 +27,13 @@ class ZWebPage:
                                   + '</style>' \
                                   + '</head>' \
                                   + '<body>'
+
+        self.page_html += """<div id=menu>
+                  <b><a href="/">OpenLandcoverMap :)</a> </b> -- <a href="renderedtags.html">Tag usage</a> 
+                  -- <a href="downloads.html">Downloads</a> 
+                  -- <a href="https://github.com/Zkir/generalized_landcovers">GitHub</a>
+               </div>"""
+
         self.page_html += self.content
 
         self.page_html += '<hr />' \
