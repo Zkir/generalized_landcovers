@@ -27,7 +27,7 @@ data/export/downloads.html:      data/export/downloads/landcovers.zip  data/expo
 	python3 downloads.py
 
 data/export/landcovers.mbtiles: data/shapes  | data/export
-	node ../tilemill/index.js export generalized_landcovers  data/export/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8
+	node ../tilemill/index.js export generalized_landcovers  data/export/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet
 
 taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats
 	python3 taginfo_json.py
@@ -196,7 +196,7 @@ import_planet:
 
 .PHONY: update_db
 update_db:
-	osm2pgsql-replication update -v -d gis  --max-diff-size 100 --  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes ~/data/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style
+	osm2pgsql-replication update -d gis  --max-diff-size 100 --  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes ~/data/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style
 
 .PHONY: clean
 clean:
