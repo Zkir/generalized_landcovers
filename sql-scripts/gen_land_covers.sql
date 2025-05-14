@@ -35,7 +35,7 @@ CREATE TABLE h3.landcovers AS
                 'sea','isthmus', 'strait', 'gulf', 'bay', 'coastline',
                 'islet','island','atoll','archipelago',
                 'plateau','mesa',  
-                'massif', 'mountain', 'mountain_range', 'mountains', 'hill','peak','saddle','ridge', 'cliff', 
+                'massif', 'mountain', 'mountain_range', 'mountains', 'hill', 'hills', 'peak', 'saddle', 'ridge', 'cliff', 
                 'volcano', 'crater', 'caldera', 'crater_rim', 'sinkhole', 'gorge', 
                 
                 /* natural=oasis is rather geographical feature, with other actual landcovers */

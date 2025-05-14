@@ -4,7 +4,7 @@ sudo apt update
 sudo apt upgrade
 
 # ===============================================================================
-#install basic dependencies
+# install basic dependencies
 # ===============================================================================
 
 sudo apt install -y make npm osmctools aria2 zip unzip gdal-bin 
@@ -17,7 +17,15 @@ sudo apt install -y python3-pip
 sudo pip install check-jsonschema
 sudo pip install psycopg2
 
-# Instal nvm. nvm is version manager for npm
+# ===============================================================================
+# install mapnik
+# ===============================================================================
+sudo apt install python3-mapnik
+
+# ===============================================================================
+# Instal nvm. 
+# ===============================================================================
+#nvm is version manager for npm
 #https://tecadmin.net/how-to-install-nvm-on-ubuntu-20-04/
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 
@@ -62,6 +70,9 @@ nvm install lts/carbon
 nvm use v8.15.0
 npm install
 
+#run tilemill to create folder structure
+npm start
+
 #this will work after tilemill creates its file structure
 mkdir -p ~/Documents/MapBox/project
 ln -s ~/src/generalized_landcovers ~/Documents/MapBox/project/generalized_landcovers 
@@ -91,7 +102,9 @@ sudo make install-gen
 # Create DB and import some initial data
 # ===============================================================================
 sudo -u postgres createuser -s $USER -P
-createdb -E UTF8 -O $USER gis
+sudo -u postgres psql -c "CREATE TABLESPACE OSM LOCATION '/data/gis';"
+
+createdb -E UTF8 --owner=$USER gis --tablespace=OSM
 psql -d gis -c 'CREATE EXTENSION postgis; CREATE EXTENSION hstore;'
 
 # Upload Natural earth in DB

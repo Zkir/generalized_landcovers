@@ -6,7 +6,8 @@ Map {
   background-color:white;// @water;
 }
 
-
+// country bondaries are commented out due to well-known circumstances
+/*
 #admin-110m[zoom<=5],#admin-10m[zoom>5] {
   //polygon-fill: #fff;
   ::outline {
@@ -20,6 +21,7 @@ Map {
     line-dasharray: 2, 8, 4;  
   } 
 } 
+*/
 
 #srhr_{  
   raster-opacity:1;

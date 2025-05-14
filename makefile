@@ -29,7 +29,7 @@ data/export/downloads.html:      data/export/downloads/landcovers.zip  data/expo
 data/export/landcovers.mbtiles: data/shapes  | data/export
 	node ../tilemill/index.js export generalized_landcovers  data/export/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet
 
-taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats
+taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats | data/export
 	python3 taginfo_json.py
 	check-jsonschema "taginfo.json" --schemafile "taginfo-project-schema.json" || echo ERROR: taginfo.json does not validate against JSON schema 
 
@@ -162,13 +162,13 @@ data/tables/h3_hexes: | data/tables
 	touch $@
 
 data/downloads/ne_10m_admin_0_boundary_lines_land.zip: | data/downloads
-	wget -O $@ https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip
+	wget -O $@ http://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip
 
 data/downloads/ne_110m_admin_0_boundary_lines_land.zip: | data/downloads
-	wget -O $@ https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
+	wget -O $@ http://naciscdn.org/naturalearth/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
 
 data/downloads/ne_10m_admin_0_countries.zip: | data/downloads
-	wget -O $@ https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip
+	wget -O $@ http://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip
 
 data/downloads: | data
 	mkdir $@
@@ -182,21 +182,32 @@ data/export: | data
 data/tables: | data
 	mkdir $@
 
+data/source: | data
+	mkdir $@
+
 data: 
 	mkdir $@
+
+
+data/source/planet-latest.osm.pbf: | data/source
+	(cd data/source; aria2c https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf.torrent --seed-time=0)
+	(cd data/source; mv planet-*.osm.pbf planet-latest.osm.pbf)
+
+data/source/planet-latest-updated.osm.pbf: data/source/planet-latest.osm.pbf
+	(cd data/source; osmupdate planet-latest.osm.pbf planet-latest-updated.osm.pbf)
 
 .PHONY: test
 test: 
 	python3 test.py
 
 .PHONY: import_planet
-import_planet:
-	osm2pgsql -d gis -U $(USER) --create --slim  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes ~/data/nodes.bin --number-processes 16 -S ~/src/openstreetmap-carto/openstreetmap-carto.style -r pbf ~/data/planet-latest-updated.osm.pbf
+import_planet: data/source/planet-latest-updated.osm.pbf | data
+	osm2pgsql -d gis -U $(USER) --create --slim  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes data/nodes.bin --number-processes 16 -S ~/src/openstreetmap-carto/openstreetmap-carto.style -r pbf data/source/planet-latest-updated.osm.pbf
 	osm2pgsql-replication init -d gis --server https://planet.openstreetmap.org/replication/hour
 
 .PHONY: update_db
-update_db:
-	osm2pgsql-replication update -d gis  --max-diff-size 100 --  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes ~/data/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style
+update_db: 
+	osm2pgsql-replication update -d gis  --max-diff-size 100 --  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes data/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style
 
 .PHONY: clean
 clean:
