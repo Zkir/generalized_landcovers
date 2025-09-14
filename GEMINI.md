@@ -12,6 +12,24 @@ The project uses a combination of technologies:
 *   **Python:** Used for various scripting and data processing tasks.
 *   **Make:** For orchestrating the build and data processing pipeline.
 
+## Next Steps
+
+Prioritized via MoSCoW method:
+
+### Must
+*  **Add legend to the map.**  The most common complain is that the map legend is missing. We need to somehow add rendering samples to both **renderedtags.html** and  **index.html**
+
+### Should
+*  **Migrate to vector tiles** (See the 'Plan: Modernize the Rendering Stack' secton below)
+
+### Could
+None
+
+### Would Not
+None
+
+
+
 ## Building and Running
 
 The project uses a `makefile` to manage the build process. Here are the key commands:
