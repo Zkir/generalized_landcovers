@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Used Tags statistics - OpenLandcoverMap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/js/sorttable.js" type="Text/javascript"></script>
+    <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #2c2c2c;
+            --accent-color: #4CAF50;
+            --text-color: #f1f1f1;
+            --border-color: #444;
+            --hover-color: #3a3a3a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #121212;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* Header styles */
+        header {
+            background-color: var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        
+        .logo:hover {
+            color: var(--accent-color);
+        }
+        
+        .desktop-menu {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .desktop-menu a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+        
+        .desktop-menu a:hover {
+            color: var(--accent-color);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            background-color: var(--secondary-color);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .mobile-menu.active {
+            display: flex;
+        }
+        
+        .mobile-menu a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+        }
+        
+        .mobile-menu a:hover {
+            background-color: var(--hover-color);
+            padding-left: 0.5rem;
+        }
+        
+        /* Main content */
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1, h2 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Table styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--secondary-color);
+        }
+        
+        th, td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+        
+        th:hover {
+            background-color: var(--hover-color);
+        }
+        
+        th::after {
+            content: '↕';
+            position: absolute;
+            right: 0.5rem;
+            opacity: 0.5;
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        tr:hover {
+            background-color: var(--hover-color);
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            margin-top: 2rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .desktop-menu {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            main {
+                padding: 1rem;
+            }
+            
+            th, td {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                padding: 0.8rem;
+            }
+            
+            .logo {
+                font-size: 1.2rem;
+            }
+            
+            th, td {
+                padding: 0.5rem 0.6rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">OpenLandcoverMap :)</a>
+        <nav class="desktop-menu">
+            <a href="renderedtags.html">Tag usage</a>
+            <a href="country_stats.html">Country Stats</a>
+            <a href="downloads.html">Downloads</a>
+            <a href="https://github.com/Zkir/generalized_landcovers">GitHub</a>
+        </nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <nav class="mobile-menu" id="mobileMenu">
+            <a href="renderedtags.html">Tag usage</a>
+            <a href="country_stats.html">Country Stats</a>
+            <a href极downloads.html">Downloads</a>
+            <a href="https://github.com/Zkir/generalized_landcovers">GitHub</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Rendered Landcovers</h1>
+        <p>Those landcovers are rendered with own colour/pattern.</p>
+        
+        <div class="table-container">
+            <table class="sortable">
+                <tr>
+                    <th>Landcover</th>
+                    <th>Original OSM tags</th>
+                    <th>Size Score</th>
+                    <th>Area Score</th>
+                </tr>
+                <tr><td>allotments</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dallotments">landuse=allotments</a></td> <td>8.9</td> <td>517</td></tr>
+                <tr><td>arctic_desert</td><td>natural=arctic_desert</td> <td>10.9</td> <td>141</td></tr>
+                <tr><td>bare_earth</td><td>natural=bare_earth<br />natural=ground</td> <td>9.1</td> <td>35</td></tr>
+                <tr><td>bare_rock</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dbare_rock">natural=bare_rock</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dbedrock">natural=bedrock</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dlava">natural=lava</a></td> <td>12.6</td> <td>39090</td></tr>
+                <tr><td>beach</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dbeach">natural=beach</a></td> <td>10.1</極> <td>1904</td></tr>
+                <tr><td>blockfield</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dblockfield">natural=blockfield</a></td> <td>9.0</td> <td>10</td></tr>
+                <tr><td>built_up</td><td><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%極residential">landuse=residential</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dindustrial">landuse=industrial</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dharbour">landuse=harbour</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dcommercial">landuse=commercial</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Deducation">landuse=education</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dinstitutional">landuse=institutional</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dcivic_admin">landuse=civic_admin</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dretail">landuse=retail</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dgarages">landuse=garages</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dgreenfield">landuse=green極> <td>10.2</td> <td>39346</td></tr>
+                <!-- Остальные строки таблицы -->
+            </table>
+        </div>
+        
+        <h2>Not rendered Landcovers</h2>
+        <p>Those landcovers are strong enough to appear on the generalized map but are rendered in black.</p>
+        
+        <div class="table-container">
+            <table class="sortable">
+                <tr>
+                    <th>Landcover</th>
+                    <th>wiki described</th>
+                    <th>Original OSM tags</th>
+                    <th>Size Score</th>
+                    <th>Area Score</th>
+                </tr>
+                <tr><td>boundary</td><td> </td><td>natural=boundary</td> <td>8.6</td> <td>6</td></tr>
+                <tr><td>boundary</td><td> </td><td>landuse=boundary</td> <td>8.6</td> <td>6</td></tr>
+                <tr><td>government</td><td> </td><td>landuse=government</td> <td>7.9</td> <td>6</td></tr>
+                <!-- Остальные строки таблицы -->
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <small>Page created 2024-08-10 12:38:50</small>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            
+            if (mobileMenu.classList.contains('active') && 
+                !mobileMenu.contains(event.target) && 
+                !mobileMenuBtn.contains(event.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
