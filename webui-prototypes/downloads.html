@@ -6,222 +6,7 @@
     <title>OpenLandcoverMap Downloads</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="/js/sorttable.js" type="Text/javascript"></script>
-    <style>
-        :root {
-            --primary-color: #1a1a1a;
-            --secondary-color: #2c2c2c;
-            --accent-color: #4CAF50;
-            --text-color: #f1f1f1;
-            --border-color: #444;
-            --hover-color: #3a3a3a;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #121212;
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        
-        /* Header styles */
-        header {
-            background-color: var(--primary-color);
-            padding: 0.8rem 1.5rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text-color);
-            text-decoration: none;
-        }
-        
-        .logo:hover {
-            color: var(--accent-color);
-        }
-        
-        .desktop-menu {
-            display: flex;
-            gap: 1.5rem;
-        }
-        
-        .desktop-menu a {
-            color: var(--text-color);
-            text-decoration: none;
-            transition: color 极.3s;
-            font-weight: 500;
-        }
-        
-        .desktop-menu a:hover {
-            color: var(--accent-color);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .mobile-menu {
-            display: none;
-            flex-direction: column;
-            background-color: var(--secondary-color);
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            padding: 1rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        .mobile-menu.active {
-            display: flex;
-        }
-        
-        .mobile-menu a {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.3s;
-        }
-        
-        .mobile-menu a:hover {
-            background-color: var(--hover-color);
-            padding-left: 0.5rem;
-        }
-        
-        /* Main content */
-        main {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        h1, h2 {
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-        
-        p {
-            margin-bottom: 1.5rem;
-        }
-        
-        /* Table styles */
-        .table-container {
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: var(--secondary-color);
-        }
-        
-        th, td {
-            padding: 0.8rem 1rem;
-            text-align: left;
-            border: 1px solid var(--border-color);
-        }
-        
-        th {
-            background-color: var(--primary-color);
-            cursor: pointer;
-            position: relative;
-            user-select: none;
-        }
-        
-        th:hover {
-            background-color: var(--hover-color);
-        }
-        
-        th::after {
-            content: '↕';
-            position: absolute;
-            right: 0.5rem;
-            opacity: 0.5;
-        }
-        
-        tr:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        
-        tr:hover {
-            background-color: var(--hover-color);
-        }
-        
-        a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-        
-        a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            background-color: var(--primary-color);
-            color: var(--text-color);
-            margin-top: 2rem;
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .desktop-menu {
-                display: none;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            main {
-                padding: 1rem;
-            }
-            
-            th, td {
-                padding: 0.6rem 0.8rem;
-                font-size: 0.9rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            header {
-                padding: 0.8rem;
-            }
-            
-            .logo {
-                font-size: 1.2rem;
-            }
-            
-            th, td {
-                padding: 0.5rem 0.6rem;
-                font-size: 0.8rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -247,30 +32,26 @@
         <h1>OpenLandcoverMap downloads</h1>
         
         <div class="table-container">
-            <table class="sortable">
+           <table class="sortable" >
                 <tr>
                     <th>File</th>
                     <th>Description</th>
-                    <th>Update date</th>
+                    <th> Update date </th>
                     <th>Last known edit</th>
                 </tr>
                 <tr>
                     <td><a href="downloads/landcovers.zip">landcovers.zip</a></td>
                     <td>Generalized landcovers polygons in shape format</td>
-                    <td>2024-03-14</td>
-                    <td>2024-03-13T23:59:53Z</td>
-                </tr>
+                    <td> 2024-03-14  </td>  <td>2024-03-13T23:59:53Z</td></tr>
                 <tr>
-                    <td><a href="downloads/peaks.zip">peaks.zip</a></td>
-                    <td>Mountain peak points with cartographic importance calculated using the Discrete Isolation method.</td>
-                    <td>2024-03-14</td>
-                    <td极>2024-03-13T23:59:53Z</td>
+                    <td><a href="downloads/peaks.zip">peaks.zip</a>  </td>
+                    <td> Mountain peak points with cartographic importance calculated  <br />using the Discrete Isolation method.  </td>
+                    <td> 2024-03-14  </td>  <td>2024-03-13T23:59:53Z</td>
                 </tr>
                 <tr>
                     <td><a href="downloads/places.zip">places.zip</a></td>
-                    <td>City and town points with cartographic importance calculated using the Grid Cell method.</td>
-                    <td>2024-03-14</td>
-                    <td>2024-03-13T23:59:53Z</td>
+                    <td>City and town points with cartographic importance calculated <br />using the Grid Cell method.  </td>
+                    <td> 2024-03-14  </td>  <td>2024-03-13T23:59:53Z</td>
                 </tr>
             </table>
         </div>

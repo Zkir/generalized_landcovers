@@ -6,222 +6,7 @@
     <title>Used Tags statistics - OpenLandcoverMap</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="/js/sorttable.js" type="Text/javascript"></script>
-    <style>
-        :root {
-            --primary-color: #1a1a1a;
-            --secondary-color: #2c2c2c;
-            --accent-color: #4CAF50;
-            --text-color: #f1f1f1;
-            --border-color: #444;
-            --hover-color: #3a3a3a;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #121212;
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        
-        /* Header styles */
-        header {
-            background-color: var(--primary-color);
-            padding: 0.8rem 1.5rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text-color);
-            text-decoration: none;
-        }
-        
-        .logo:hover {
-            color: var(--accent-color);
-        }
-        
-        .desktop-menu {
-            display: flex;
-            gap: 1.5rem;
-        }
-        
-        .desktop-menu a {
-            color: var(--text-color);
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-        
-        .desktop-menu a:hover {
-            color: var(--accent-color);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .mobile-menu {
-            display: none;
-            flex-direction: column;
-            background-color: var(--secondary-color);
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            padding: 1rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        .mobile-menu.active {
-            display: flex;
-        }
-        
-        .mobile-menu a {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.3s;
-        }
-        
-        .mobile-menu a:hover {
-            background-color: var(--hover-color);
-            padding-left: 0.5rem;
-        }
-        
-        /* Main content */
-        main {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        h1, h2 {
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-        
-        p {
-            margin-bottom: 1.5rem;
-        }
-        
-        /* Table styles */
-        .table-container {
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: var(--secondary-color);
-        }
-        
-        th, td {
-            padding: 0.8rem 1rem;
-            text-align: left;
-            border: 1px solid var(--border-color);
-        }
-        
-        th {
-            background-color: var(--primary-color);
-            cursor: pointer;
-            position: relative;
-            user-select: none;
-        }
-        
-        th:hover {
-            background-color: var(--hover-color);
-        }
-        
-        th::after {
-            content: '↕';
-            position: absolute;
-            right: 0.5rem;
-            opacity: 0.5;
-        }
-        
-        tr:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        
-        tr:hover {
-            background-color: var(--hover-color);
-        }
-        
-        a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-        
-        a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            background-color: var(--primary-color);
-            color: var(--text-color);
-            margin-top: 2rem;
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .desktop-menu {
-                display: none;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            main {
-                padding: 1rem;
-            }
-            
-            th, td {
-                padding: 0.6rem 0.8rem;
-                font-size: 0.9rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            header {
-                padding: 0.8rem;
-            }
-            
-            .logo {
-                font-size: 1.2rem;
-            }
-            
-            th, td {
-                padding: 0.5rem 0.6rem;
-                font-size: 0.8rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -248,21 +33,44 @@
         <p>Those landcovers are rendered with own colour/pattern.</p>
         
         <div class="table-container">
-            <table class="sortable">
-                <tr>
-                    <th>Landcover</th>
-                    <th>Original OSM tags</th>
-                    <th>Size Score</th>
-                    <th>Area Score</th>
-                </tr>
+            <table class="sortable"><tr><th>Landcover</th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>
                 <tr><td>allotments</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dallotments">landuse=allotments</a></td> <td>8.9</td> <td>517</td></tr>
                 <tr><td>arctic_desert</td><td>natural=arctic_desert</td> <td>10.9</td> <td>141</td></tr>
                 <tr><td>bare_earth</td><td>natural=bare_earth<br />natural=ground</td> <td>9.1</td> <td>35</td></tr>
                 <tr><td>bare_rock</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dbare_rock">natural=bare_rock</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dbedrock">natural=bedrock</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dlava">natural=lava</a></td> <td>12.6</td> <td>39090</td></tr>
-                <tr><td>beach</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dbeach">natural=beach</a></td> <td>10.1</極> <td>1904</td></tr>
+                <tr><td>beach</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dbeach">natural=beach</a></td> <td>10.1</td> <td>1904</td></tr>
                 <tr><td>blockfield</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dblockfield">natural=blockfield</a></td> <td>9.0</td> <td>10</td></tr>
-                <tr><td>built_up</td><td><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%極residential">landuse=residential</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dindustrial">landuse=industrial</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dharbour">landuse=harbour</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dcommercial">landuse=commercial</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Deducation">landuse=education</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dinstitutional">landuse=institutional</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dcivic_admin">landuse=civic_admin</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dretail">landuse=retail</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dgarages">landuse=garages</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dgreenfield">landuse=green極> <td>10.2</td> <td>39346</td></tr>
-                <!-- Остальные строки таблицы -->
+                <tr><td>built_up</td><td><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dresidential">landuse=residential</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dindustrial">landuse=industrial</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dharbour">landuse=harbour</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dcommercial">landuse=commercial</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Deducation">landuse=education</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dinstitutional">landuse=institutional</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dcivic_admin">landuse=civic_admin</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dretail">landuse=retail</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dgarages">landuse=garages</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dgreenfield">landuse=greenfield</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dconstruction">landuse=construction</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dbrownfield">landuse=brownfield</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dvillage_green">landuse=village_green</a></td> <td>10.2</td> <td>39346</td></tr>
+                <tr><td>cemetery</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dcemetery">landuse=cemetery</a></td> <td>8.5</td> <td>232</td></tr>
+                <tr><td>desert</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Ddesert">natural=desert</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Ddry_lake">natural=dry_lake</a></td> <td>12.6</td> <td>126540</td></tr>
+                <tr><td>farmland</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dfarmland">landuse=farmland</a></td> <td>12.1</td> <td>151971</td></tr>
+                <tr><td>farmyard</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dfarmyard">landuse=farmyard</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Danimal_keeping">landuse=animal_keeping</a></td> <td>9.8</td> <td>1772</td></tr>
+                <tr><td>fell</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dfell">natural=fell</a></td> <td>10.7</td> <td>804</td></tr>
+                <tr><td>glacier</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dglacier">natural=glacier</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dnaled">natural=naled</a><br />natural=ice</td> <td>13.5</td> <td>122241</td></tr>
+                <tr><td>grassland</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dgrassland">natural=grassland</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dgrass">landuse=grass</a></td> <td>10.6</td> <td>13689</td></tr>
+                <tr><td>greenhouse_horticulture</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dgreenhouse_horticulture">landuse=greenhouse_horticulture</a></td> <td>9.1</td> <td>264</td></tr>
+                <tr><td>heath</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dheath">natural=heath</a></td> <td>11.0</td> <td>10133</td></tr>
+                <tr><td>landfill</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dlandfill">landuse=landfill</a></td> <td>9.5</td> <td>1048</td></tr>
+                <tr><td>logging</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dlogging">landuse=logging</a></td> <td>10.6</td> <td>1630</td></tr>
+                <tr><td>meadow</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dmeadow">landuse=meadow</a></td> <td>11.0</td> <td>15559</td></tr>
+                <tr><td>moor</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dmoor">natural=moor</a></td> <td>9.2</td> <td>51</td></tr>
+                <tr><td>mud</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dmud">natural=mud</a></td> <td>9.7</td> <td>1149</td></tr>
+                <tr><td>observatory</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dobservatory">landuse=observatory</a></td> <td>8.8</td> <td>28</td></tr>
+                <tr><td>orchard</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dorchard">landuse=orchard</a></td> <td>10.0</td> <td>13102</td></tr>
+                <tr><td>paddy</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dpaddy">landuse=paddy</a></td> <td>9.1</td> <td>187</td></tr>
+                <tr><td>peat_cutting</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dpeat_cutting">landuse=peat_cutting</a></td> <td>8.8</td> <td>22</td></tr>
+                <tr><td>plant_nursery</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dplant_nursery">landuse=plant_nursery</a></td> <td>8.7</td> <td>141</td></tr>
+                <tr><td>quarry</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dquarry">landuse=quarry</a></td> <td>9.8</td> <td>8393</td></tr>
+                <tr><td>railway</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Drailway">landuse=railway</a></td> <td>8.2</td> <td>309</td></tr>
+                <tr><td>salt_pond</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dsalt_pond">landuse=salt_pond</a></td> <td>8.9</td> <td>324</td></tr>
+                <tr><td>sand</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dsand">natural=sand</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Ddune">natural=dune</a><br />natural=dunes</td> <td>12.0</td> <td>111729</td></tr>
+                <tr><td>scree</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dscree">natural=scree</a></td> <td>10.2</td> <td>2054</td></tr>
+                <tr><td>scrub</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dscrub">natural=scrub</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dshrubbery">natural=shrubbery</a></td> <td>10.9</td> <td>36551</td></tr>
+                <tr><td>shingle</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dshingle">natural=shingle</a></td> <td>9.8</td> <td>855</td></tr>
+                <tr><td>tundra</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dtundra">natural=tundra</a></td> <td>11.6</td> <td>1233</td></tr>
+                <tr><td>vineyard</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dvineyard">landuse=vineyard</a></td> <td>9.9</td> <td>2033</td></tr>
+                <tr><td>wetland</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dwetland">natural=wetland</a></td> <td>11.2</td> <td>78672</td></tr>
+                <tr><td>wood</td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dwood">natural=wood</a><br /><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dforest">landuse=forest</a><br />natural=woodland</td> <td>13.1</td> <td>699669</td></tr>
             </table>
         </div>
         
@@ -271,17 +79,40 @@
         
         <div class="table-container">
             <table class="sortable">
-                <tr>
-                    <th>Landcover</th>
-                    <th>wiki described</th>
-                    <th>Original OSM tags</th>
-                    <th>Size Score</th>
-                    <th>Area Score</th>
-                </tr>
+                <tr><th>Landcover</th><th>wiki described </th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>
                 <tr><td>boundary</td><td> </td><td>natural=boundary</td> <td>8.6</td> <td>6</td></tr>
                 <tr><td>boundary</td><td> </td><td>landuse=boundary</td> <td>8.6</td> <td>6</td></tr>
                 <tr><td>government</td><td> </td><td>landuse=government</td> <td>7.9</td> <td>6</td></tr>
-                <!-- Остальные строки таблицы -->
+                <tr><td>human</td><td> </td><td>landuse=human</td> <td>8.5</td> <td>7</td></tr>
+                <tr><td>inlet</td><td> </td><td>natural=inlet</td> <td>8.3</td> <td>5</td></tr>
+                <tr><td>irrigation_district</td><td> </td><td>landuse=irrigation_district</td> <td>9.0</td> <td>18</td></tr>
+                <tr><td>lake</td><td>&#10004 </td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dlake">natural=lake</a></td> <td>8.5</td> <td>4</td></tr>
+                <tr><td>landslide</td><td>&#10004 </td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:natural%3Dlandslide">natural=landslide</a></td> <td>8.1</td> <td>7</td></tr>
+                <tr><td>logistics</td><td> </td><td>landuse=logistics</td> <td>7.8</td> <td>8</td></tr>
+                <tr><td>mine</td><td> </td><td>landuse=mine</td> <td>8.3</td> <td>5</td></tr>
+                <tr><td>oil_field</td><td> </td><td>landuse=oil_field</td> <td>9.9</td> <td>163</td></tr>
+                <tr><td>oilfield</td><td> </td><td>landuse=oilfield</td> <td>9.0</td> <td>25</td></tr>
+                <tr><td>ownership</td><td> </td><td>landuse=ownership</td> <td>8.5</td> <td>7</td></tr>
+                <tr><td>playa</td><td> </td><td>natural=playa</td> <td>8.3</td> <td>6</td></tr>
+                <tr><td>rangeland</td><td> </td><td>landuse=rangeland</td> <td>8.7</td> <td>10</td></tr>
+                <tr><td>recreation</td><td> </td><td>landuse=recreation</td> <td>8.8</td> <td>11</td></tr>
+                <tr><td>reserve</td><td> </td><td>natural=reserve</td> <td>8.3</td> <td>5</td></tr>
+                <tr><td>rocket_range</td><td> </td><td>landuse=rocket_range</td> <td>8.9</td> <td>4</td></tr>
+                <tr><td>sandbank</td><td> </td><td>natural=sandbank</td> <td>8.1</td> <td>4</td></tr>
+                <tr><td>sediment</td><td> </td><td>natural=sediment</td> <td>8.6</td> <td>5</td></tr>
+                <tr><td>spoils</td><td> </td><td>landuse=spoils</td> <td>8.8</td> <td>14</td></tr>
+                <tr><td>storage</td><td> </td><td>landuse=storage</td> <td>8.0</td> <td>4</td></tr>
+                <tr><td>terminal</td><td> </td><td>landuse=terminal</td> <td>8.2</td> <td>5</td></tr>
+                <tr><td>tidalflat</td><td> </td><td>natural=tidalflat</td> <td>8.3</td> <td>5</td></tr>
+                <tr><td>till</td><td> </td><td>natural=till</td> <td>9.2</td> <td>13</td></tr>
+                <tr><td>wadi</td><td> </td><td>natural=wadi</td> <td>8.1</td> <td>4</td></tr>
+                <tr><td>wash</td><td> </td><td>natural=wash</td> <td>8.8</td> <td>10</td></tr>
+                <tr><td>well_site</td><td> </td><td>landuse=well_site</td> <td>8.3</td> <td>4</td></tr>
+                <tr><td>wellsite</td><td>&#10004 </td><td><a href="https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dwellsite">landuse=wellsite</a></td> <td>9.0</td> <td>7</td></tr>
+                <tr><td>wetland;wood</td><td> </td><td>natural=wetland;wood</td> <td>8.3</td> <td>4</td></tr>
+                <tr><td>wind</td><td> </td><td>landuse=wind</td> <td>8.5</td> <td>5</td></tr>
+                <tr><td>wind_farm</td><td> </td><td>landuse=wind_farm</td> <td>8.6</td> <td>8</td></tr>
+                <tr><td>windfarm</td><td> </td><td>landuse=windfarm</td> <td>8.9</td> <td>69</td></tr>
             </table>
         </div>
     </main>
