@@ -103,8 +103,8 @@ Combined naturals and landuses which imply landcovers
     polygon-pattern-file: url('patterns/scrub.png')
   }    
   //this is dwarf-shrub habitat
-  [feature='heath']
-    {polygon-fill:#90C090;}    
+  [feature='heath']{
+    polygon-fill:#90C090;}    
 
   /*=======================================================================================
     == special -- Wetlands  ==
