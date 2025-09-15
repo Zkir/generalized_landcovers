@@ -1,5 +1,4 @@
-
-        :root {
+:root {
             --primary-color: #1a1a1a;
             --secondary-color: #2c2c2c;
             --accent-color: #4CAF50;
@@ -217,6 +216,59 @@
         
         .map-attribution a:hover {
             text-decoration: underline;
+        }
+
+        /* Legend Styles */
+        .legend-container {
+            position: absolute;
+            bottom: 40px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.75);
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+            max-width: 220px;
+        }
+
+        .legend-container h5 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .toggle-legend {
+            cursor: pointer;
+            float: right;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .toggle-legend:hover {
+            color: var(--accent-color);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend-swatch {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--border-color);
+            margin-right: 10px;
+            flex-shrink: 0;
+            vertical-align: middle;
+        }
+
+        .legend-label {
+            font-size: 0.9rem;
         }
         
         /* Responsive design */

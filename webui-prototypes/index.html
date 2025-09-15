@@ -30,6 +30,48 @@
 
     <div id="map-container">
         <div id="map"></div>
+        <div class="legend-container" id="mapLegend">
+            <h5>Map Legend <span class="toggle-legend" id="toggleLegend">[hide]</span></h5>
+            <div class="legend-items" id="legendItems">
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #B0E0A0; background-image: url(../patterns/allotments.png);"></span><span class="legend-label">allotments</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #AAAAFF; opacity: 0.5;"></span><span class="legend-label">arctic desert</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #777777;"></span><span class="legend-label">bare earth</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #A0A0A0; background-image: url(../patterns/rock_overlay.png);"></span><span class="legend-label">bare rock</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #FFFF00; background-image: url(../patterns/beach.png);"></span><span class="legend-label">beach</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #A0A0A0; background-image: url(../patterns/rock_overlay.png);"></span><span class="legend-label">blockfield</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #F05050;"></span><span class="legend-label">built up</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #908090; background-image: url(../patterns/grave_yard_generic.svg);"></span><span class="legend-label">cemetery</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #FFFF00; background-image: url(../patterns/beach.png); opacity: 0.5;"></span><span class="legend-label">desert</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #a6d0a6;"></span><span class="legend-label">farmland</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #a6d0a6;"></span><span class="legend-label">farmyard</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #AAFFAA; opacity: 0.5;"></span><span class="legend-label">fell</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #BBBBFF;"></span><span class="legend-label">glacier</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #90B070;"></span><span class="legend-label">grassland</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #a6d0a6;"></span><span class="legend-label">greenhouse horticulture</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #90C090;"></span><span class="legend-label">heath</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #F06050;"></span><span class="legend-label">landfill</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #598D4A;"></span><span class="legend-label">logging</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #a6d0a6;"></span><span class="legend-label">meadow</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #90B070;"></span><span class="legend-label">moor</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #777777; background-image: url(../patterns/wetland.png);"></span><span class="legend-label">mud</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #806060;"></span><span class="legend-label">observatory</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #9ab676;"></span><span class="legend-label">orchard</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #a6d0a6;"></span><span class="legend-label">paddy</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #70A040; background-image: url(../patterns/peat_cutting1.png);"></span><span class="legend-label">peat cutting</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #9ab676; background-image: url(../patterns/plant_nursery.svg);"></span><span class="legend-label">plant nursery</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #DDDD77; background-image: url(../patterns/quarry.png);"></span><span class="legend-label">quarry</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #806060;"></span><span class="legend-label">railway</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #e0e0b0; background-image: url(../patterns/salt_pond.png);"></span><span class="legend-label">salt pond</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #FFFF00; background-image: url(../patterns/beach.png);"></span><span class="legend-label">sand</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #A0A0A0; background-image: url(../patterns/rock_overlay.png);"></span><span class="legend-label">scree</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #90C090; background-image: url(../patterns/scrub.png);"></span><span class="legend-label">scrub</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #A0A0A0; background-image: url(../patterns/rock_overlay.png);"></span><span class="legend-label">shingle</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #AAFFAA; opacity: 0.5;"></span><span class="legend-label">tundra</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #f0e050; background-image: url(../patterns/vineyard.png);"></span><span class="legend-label">vineyard</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #70A040; background-image: url(../patterns/wetland.png);"></span><span class="legend-label">wetland</span></div>
+                <div class="legend-item"><span class="legend-swatch" style="background-color: #A1C672; background-image: url(../patterns/leaftype_unknown.png);"></span><span class="legend-label">wood</span></div>
+            </div>
+        </div>
         <!-- This is commented out, because for some reason map script displays copyright notice byitsef. DO NOT UNKOMMENT, it will duplicate!
         <div class="map-attribution">
             Generalized map tiles © Zkir, based on original map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>
@@ -61,6 +103,15 @@
             center: [25.0, 0],
             zoom: 3,
             hash: true
+        });
+
+        // Legend functionality
+        const toggleButton = document.getElementById('toggleLegend');
+        const legendItems = document.getElementById('legendItems');
+        toggleButton.addEventListener('click', () => {
+            const isHidden = legendItems.style.display === 'none';
+            legendItems.style.display = isHidden ? 'block' : 'none';
+            toggleButton.textContent = isHidden ? '[hide]' : '[show]';
         });
     </script>
 </body>
