@@ -259,8 +259,8 @@
 
         .legend-swatch {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             border: 1px solid var(--border-color);
             margin-right: 10px;
             flex-shrink: 0;
