@@ -6,7 +6,7 @@ This is an attempt to create properly generalized map, to see at least something
 
 Currently, the online map is accessible here: 
 
-**http://openlandcovermap.zkir.ru**
+**https://openlandcovermap.org**
 
 ## Ideas
 What can be drawn on zooms z0-z8? 
