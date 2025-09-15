@@ -262,7 +262,11 @@ footer {
     margin-bottom: 5px;
 }
 
-.legend-swatch {
+        .legend-items.legend-hidden {
+            display: none;
+        }
+
+        .legend-swatch {
     display: inline-block;
     width: 30px;
     height: 30px;
@@ -308,5 +312,16 @@ footer {
     th, td {
         padding: 0.5rem 0.6rem;
         font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .legend-container {
+        max-width: 450px;
+    }
+    .legend-items {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0 15px;
     }
 }

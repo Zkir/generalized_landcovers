@@ -109,9 +109,8 @@
         const toggleButton = document.getElementById('toggleLegend');
         const legendItems = document.getElementById('legendItems');
         toggleButton.addEventListener('click', () => {
-            const isHidden = legendItems.style.display === 'none';
-            legendItems.style.display = isHidden ? 'block' : 'none';
-            toggleButton.textContent = isHidden ? '[hide]' : '[show]';
+            const isHidden = legendItems.classList.toggle('legend-hidden');
+            toggleButton.textContent = isHidden ? '[show]' : '[hide]';
         });
     </script>
 </body>
