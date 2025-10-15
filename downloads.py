@@ -10,7 +10,7 @@ LANDCOVERS_ZIP = "landcovers.zip"
 PEAKS_ZIP = "peaks.zip"
 PLACES_ZIP= "places.zip"
 
-files=[[LANDCOVERS_ZIP,"Generalized landcovers polygons in shape format"],
+files=[[LANDCOVERS_ZIP,"Generalized landcover polygons in shape format"],
          [PEAKS_ZIP," Mountain peak points with cartographic importance calculated  <br />using the Discrete Isolation method."],
          [PLACES_ZIP,"City and town points with cartographic importance calculated <br />using the Grid Cell method."] ]
 
@@ -33,6 +33,7 @@ last_known_edit=str(records[0][0])
 
 page = ZWebPage("downloads.html", "OpenLandcoverMap Downloads")
 page.print("""<h1>OpenLandcoverMap downloads</h1>
+    <p>You can download generalized OSM data in shape format (.shp) and use it in the tool of your fancy, e.g. QGIS.</p>
     <table class="sortable" >
     <tr>
     <th>File</th>
