@@ -26,7 +26,7 @@ rank:
 
 For more information and author contacts check  
 the project page:
-http://openlandcovermap.zkir.ru
+http://openlandcovermap.org
 
 Github repository:
 https://github.com/Zkir/generalized_landcovers

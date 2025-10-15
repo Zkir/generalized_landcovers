@@ -20,7 +20,7 @@ score: the cartographic importance value, calculated using Discrete Isolation me
 
 
 For more information and author contacts check  
-The project page: http://openlandcovermap.zkir.ru
+The project page: http://openlandcovermap.org
 Github repository: https://github.com/Zkir/generalized_landcovers
 
 

@@ -10,7 +10,7 @@ Those generalized polygons can be displayed on zoom levels z0-z8 (scales approxi
  where standard OSM tiles (known also as  osm-carto style) are boring and empty.
 
 For more information and author contacts check  
-1. the project page: http://openlandcovermap.zkir.ru
+1. the project page: http://openlandcovermap.org
 2. github repository: https://github.com/Zkir/generalized_landcovers
 
 
