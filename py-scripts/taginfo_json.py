@@ -27,7 +27,7 @@ rendered_tags_html = ""
 unrendered_tags_html = ""
 
 #get rendered tag list from cartocss
-regex = re.compile("\[feature='(.*?)'\]")
+regex = re.compile(r"\[feature='(.*?)'\]")
 with open("landcovers.mss") as f:
     text = f.read()
 rendered_tags = [match.group(1) for match in regex.finditer(text)]
