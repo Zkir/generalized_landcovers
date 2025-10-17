@@ -19,3 +19,4 @@ fonts
 __pycache__/*.*
 
 presentation_notes_ru.txt
+/py-scripts/__pycache__

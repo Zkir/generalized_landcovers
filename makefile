@@ -21,16 +21,16 @@ upload: data/export/landcovers.mbtiles
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
 
 data/export/country_stats.html: data/tables/country_stats
-	python3 country_stats.py
+	python3 py-scripts/country_stats.py
 
 data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip 
-	python3 downloads.py
+	python3 py-scripts/downloads.py
 
 data/export/landcovers.mbtiles: data/shapes  | data/export
 	node ../tilemill/index.js export generalized_landcovers  data/export/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet
 
 taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats | data/export
-	python3 taginfo_json.py
+	python3 py-scripts/taginfo_json.py
 	check-jsonschema "taginfo.json" --schemafile "taginfo-project-schema.json" || echo ERROR: taginfo.json does not validate against JSON schema 
 
 mapnik_carto_generated.xml: *.mml *.mss

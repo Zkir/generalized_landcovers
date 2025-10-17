@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20240131T031405Z",
+    "data_updated": "20251017T140600Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -24,6 +24,14 @@
                 "area"
             ],
             "value": "arctic_desert"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "arete"
         },
         {
             "description": "Rendered as landcover.",
@@ -72,6 +80,22 @@
                 "area"
             ],
             "value": "desert"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "drainage basin"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "drainage_basin"
         },
         {
             "description": "Rendered as landcover.",
@@ -130,14 +154,6 @@
             "value": "heath"
         },
         {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "lake"
-        },
-        {
             "description": "Rendered as landcover.",
             "key": "landuse",
             "object_types": [
@@ -176,6 +192,14 @@
                 "area"
             ],
             "value": "moor"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "moraine"
         },
         {
             "description": "Rendered as landcover.",
@@ -242,6 +266,14 @@
             "value": "plant_nursery"
         },
         {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "posidonia"
+        },
+        {
             "description": "Rendered as landcover.",
             "key": "landuse",
             "object_types": [
@@ -298,6 +330,14 @@
             "value": "shingle"
         },
         {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "tree_row"
+        },
+        {
             "description": "Rendered as landcover.",
             "key": "natural",
             "object_types": [
@@ -312,14 +352,6 @@
                 "area"
             ],
             "value": "vineyard"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "wellsite"
         },
         {
             "description": "Rendered as landcover.",
