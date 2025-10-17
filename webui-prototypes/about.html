@@ -106,6 +106,18 @@
                 mobileMenu.classList.remove('active');
             }
         });
+
+        // Fullscreen image functionality
+        document.querySelectorAll('main img').forEach(img => {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', () => {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                } else {
+                    img.requestFullscreen();
+                }
+            });
+        });
     </script>
 </body>
 </html>
