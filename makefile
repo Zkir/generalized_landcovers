@@ -6,7 +6,8 @@ all: data/tables/landcover_quality_metrics \
       data/export/landcovers.mbtiles \
       data/export/downloads.html \
       data/export/country_stats.html \
-      data/export/about.html
+      data/export/about.html \
+      data/export/index.html
 
 
 .PHONY: upload
@@ -21,6 +22,9 @@ upload: data/export/landcovers.mbtiles
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ country_stats.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
+
+data/export/index.html: | data/export
+	cp webui-prototypes/index.html data/export/index.html
 
 data/export/about.html: | data/export
 	cp webui-prototypes/about.html data/export/about.html
