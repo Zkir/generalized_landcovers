@@ -6,6 +6,7 @@ all: data/tables/landcover_quality_metrics \
       data/export/landcovers.mbtiles \
       data/export/downloads.html \
       data/export/country_stats.html \
+      data/export/renderedtags.html \
       data/export/about.html \
       data/export/index.html
 
@@ -38,7 +39,7 @@ data/export/downloads.html:      data/export/downloads/landcovers.zip  data/expo
 data/export/landcovers.mbtiles: data/shapes  | data/export
 	node ../tilemill/index.js export generalized_landcovers  data/export/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet
 
-taginfo.json: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats | data/export
+taginfo.json data/export/renderedtags.html: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats | data/export
 	python3 py-scripts/taginfo_json.py
 	check-jsonschema "taginfo.json" --schemafile "taginfo-project-schema.json" || echo ERROR: taginfo.json does not validate against JSON schema 
 
