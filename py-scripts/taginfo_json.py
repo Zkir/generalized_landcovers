@@ -14,6 +14,22 @@ import requests
 import os
 from datetime import datetime
 from zwebpage import ZWebPage
+from generate_legend import parse_mss_styles
+
+try:
+    with open('style.mss', 'r', encoding='utf-8') as f:
+        style_content = f.read()
+except FileNotFoundError:
+    style_content = ''
+
+try:
+    with open('landcovers.mss', 'r', encoding='utf-8') as f:
+        landcover_content = f.read()
+except FileNotFoundError:
+    print("Error: landcovers.mss not found.")
+    exit(1)
+
+landcover_styles = parse_mss_styles(style_content, landcover_content)
 
 db_user_name = os.environ.get("PGUSER")
 db_user_password = os.environ.get("PGPASSWORD")
@@ -91,7 +107,23 @@ for record in records:
                 wiki_described=requests.head(wiki_url).ok
                 orig_tags_descr= orig_tags_descr+'<br />' +(('<a href="'+wiki_url+'">'+tag_synonym[0]+'='+tag_synonym[1]+'</a>') if wiki_described else (tag_synonym[0]+'='+tag_synonym[1]))
 
+        swatch_html = ''
+        style = landcover_styles.get(record[1])
+        if style and 'color' in style:
+            color = style['color']
+            pattern = style['pattern']
+            opacity = style['opacity']
+            
+            background_style = f'background-color: {color};'
+            if pattern:
+                web_pattern_path = pattern.replace(r'\\', '/')
+                background_style += f' background-image: url(../../{web_pattern_path}); background-repeat: repeat;'
+            
+            swatch_html = f'<span class="legend-swatch" style="{background_style} opacity: {opacity};"></span>'
+
+
         rendered_tags_html = rendered_tags_html + '<tr>' + \
+                                                 '<td>' + swatch_html + '</td>' + \
                                                  '<td>' +record[1]+ '</td>' + \
                                                  '<td>'+ orig_tags_descr +'</td>'+ \
                                                  ' <td>'+str(record[3])+'</td>'+ \
@@ -141,13 +173,13 @@ page = ZWebPage("renderedtags.html", "Used Tags statistics")
 
 page.print( '<h2>Rendered Landcovers</h2>' \
                   + '<p>Those landcovers are rendered with own colour/pattern. </p>' \
-                  + '<table class="sortable">'  \
-                  + '<tr><th>Landcover</th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>'  \
-                  + rendered_tags_html + '</table>' \
+                  + '<table class="sortable">' \
+                    + '<tr><th>Swatch</th><th>Landcover</th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>' \
+                    + rendered_tags_html + '</table>' \
                   + '<h2>Not rendered Landcovers</h2>' \
                   + '<p>Those landcovers are strong enough to appear on the generalized map but are rendered in black. <p>' \
                   + '<table class="sortable">' \
-                  + '<tr><th>Landcover</th><th>wiki described </th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>'  \
-                  + unrendered_tags_html + '</table>' )
+                   + '<tr><th>Landcover</th><th>wiki described </th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>' \
+                    + unrendered_tags_html + '</table>' )
 
 page.write()
