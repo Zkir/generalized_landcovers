@@ -36,7 +36,7 @@ CREATE TABLE h3.landcovers AS
                 'islet','island','atoll','archipelago',
                 'plateau','mesa',  
                 'massif', 'mountain', 'mountain_range', 'mountains', 'hill', 'hills', 'peak', 'saddle', 'ridge', 'cliff', 
-                'volcano', 'crater', 'caldera', 'crater_rim', 'sinkhole', 'gorge', 
+                'volcano', 'crater', 'caldera', 'crater_rim', 'sinkhole', 'gorge', 'arete',
                 
                 /* natural=oasis is rather geographical feature, with other actual landcovers */
                 'oasis',
@@ -47,6 +47,7 @@ CREATE TABLE h3.landcovers AS
                 'tree', /* natural=tree is standalone tree, not a landcover like natural=wood */
                 'stone', 'rock', /* rock, stone  -- is just a single notable rock/stone, not a landcover like 'blockfield.*/ 
                 'shrub', /* unclike scrub, natural=shrub is just a single plant!*/ 
+                'tree_row', /*tree row is a LINEAR feature and cannot be dominant by definition*/
 
                 /*
                   various types of natural reserves, that can be anything
@@ -149,18 +150,20 @@ CREATE TABLE h3.tag_synonyms(
 
 INSERT INTO h3.tag_synonyms ("key", "tag", "feature")
 VALUES 
-	('landuse', 'forest', 'wood'),   --landuse=forest is a synonym for natural=wood 
+	('landuse', 'forest', 'wood'),       /* For our purposes landuse=forest is just a synonym for natural=wood */ 
     ('natural', 'woodland', 'wood'),
-    ('landuse', 'basin', 'water'),  -- landuse=basin is a synonym for natural=water + water=basin
-    ('landuse', 'reservoir', 'water'), --landuse=reservoir is a [deprecated] synonym of natural=water + water=reservoir
+    ('landuse', 'basin', 'water'),       /* landuse=basin is a synonym for natural=water + water=basin */
+    ('landuse', 'reservoir', 'water'),   /* landuse=reservoir is a [deprecated] synonym of natural=water + water=reservoir */
     ('natural', 'bedrock', 'bare_rock'), /* natural=bedrock is deprecated synonim of  natural=bare_rock */
-    ('natural', 'lava', 'bare_rock'), /* natural=lava is a strange tag, can be considered as a synonim of  natural=bare_rock*/
-    ('natural', 'dune', 'sand'),  /*  dune, dunes -->sand.   Arguable: according to wiki, dunes should be subtracted(!) from the sands. */
+    ('natural', 'moraine', 'bare_rock'),
+    ('natural', 'lava', 'bare_rock'),    /* natural=lava is a strange tag, can be considered as a synonim of  natural=bare_rock*/
+    ('natural', 'dune', 'sand'),         /* dune, dunes --> sand. Arguable: according to wiki, dunes should be subtracted(!) from the sands. */
     ('natural', 'dunes', 'sand'),
     ('natural', 'shrubbery', 'scrub'),  
     ('natural', 'naled', 'glacier'),  
     ('natural', 'ice', 'glacier'),  
     ('natural', 'ground', 'bare_earth'),  
+    ('natural', 'landslide', 'bare_earth'),  
     ('natural', 'dry_lake', 'desert'),  
     ('landuse', 'grass', 'grassland'),  /*  landuse=grass should be considered to be a synonim of grassland for the purposes of generalization. There are no lawns kilomers long! */
     ('landuse', 'animal_keeping', 'farmyard'),  
