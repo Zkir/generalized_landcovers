@@ -111,13 +111,17 @@ main {
     margin: 0 auto;
 }
 
-h1, h2 {
+h1, h2, h3 {
     color: var(--accent-color);
     margin-bottom: 1rem;
 }
 
-p {
-    margin-bottom: 1.5rem;
+p, ul, ol {
+    margin-bottom: 1rem;
+}
+
+li {
+	margin-left: 2rem;
 }
 
 /* Table styles */

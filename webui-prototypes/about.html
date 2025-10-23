@@ -47,26 +47,80 @@
 
     <main class="content-page">
         <h1>About OpenLandcoverMap</h1>
-        <p>The official map on <a href="https://www.openstreetmap.org/">OpenStreetMap.org</a> can often appear empty and devoid of character at lower zoom levels (z0-z8). This project, <strong>OpenLandcoverMap</strong>, serves as an alternative rendering to demonstrate how cartographic generalization can create a much richer and more informative map.</p>
+        <p>The official map on <a href="https://www.openstreetmap.org/">OpenStreetMap.org</a> appears empty and devoid of character at lower zoom levels (z0-z8). This project, <strong>OpenLandcoverMap</strong>, serves as an alternative rendering to demonstrate how cartographic generalization can create a much richer and more informative map.</p>
         
         <h2>The Problem with Raw Data</h2>
-        <p><img src="img/pic01_empty_osm.png" alt="Blank OSM map" class="about-image">Why does the map look so empty? OpenStreetMap contains over 10 billion objects, and it's simply impossible for any rendering engine to display all of them at once. The real challenge lies in <strong>selection and simplification</strong>, an area where the standard renderer struggles.</p>
+        <img src="img/pic01_empty_osm.png" alt="Blank OSM map" class="about-image">
+        <p><i>Other maps are such shapes, with their islands and capes! <br />
+           But we've got our brave captain to thank," <br />
+           (So the crew would protest) "that he's bought us the best — <br />
+           A perfect and absolute blank!" </i></p>
+        <p>Why does the map look so empty? OpenStreetMap contains over 10 billion objects, and it's simply impossible for any rendering engine to display all of them at once. The real challenge lies in <strong>selection and simplification</strong>, an area where the standard renderer struggles.</p>
         <p>For example, you cannot simply select cities to display based on population size. A small village in a sparsely populated region is often more locally significant than a large city in a densely populated area like Europe. Similarly, for mountains, absolute elevation is not as important as relative prominence. The most interesting peaks are those that are the tallest within a certain vicinity.</p>
         <p>Furthermore, many polygonal features like forests, fields, and swamps are mapped as countless small, fragmented pieces. Without a generalization process, they are too small to be visible on a world map.</p>
-
-        <h2>Our Generalization Approach</h2>
+        <p>Note: what you see on z0-z4, is not even OpenStreetMap data, despite copyright notice: it's actually <a href="https://www.naturalearthdata.com/">Natural Earth</a> -- public domain <strong>generalized</strong> continents' outlines and national borders. </p>
+        <h2>Generalization</h2>
         <img src="img/pic03_cities.png" alt="Hexes and Cities" class="about-image-2">
-        <p>We use Uber's H3 hexagonal grid system to process and generalize OSM data before rendering. Our method focuses on four key areas:<br />
+        <p>In this project we use traditional, well-known approaches to cartographic generalization: </p>
+        <ol>
+            <li>Inhabited Places — <strong>Constant data density</strong>;</li>
+            <li>Mountain Peaks — <strong>Discrete Isolation</strong>;</li>
+            <li>Landcovers — <strong>Dominant feature per hexagon</strong>;</li>
+            <li>Water Bodies — <strong>Buffer & merge</strong>.</li>
+        </ol>
+
+        <p>Also, to help us out, we use Uber's <a href="https://h3geo.org">H3 hexagonal grid system</a>. </p>
+
+        <h3>Inhabited Places (cities and towns)</h3>
+        <p>For the inhabited places, the most simple generalization method — display constant number of elements per area unit —  works pretty well. 
+        Instead of actual square inch, we use H3 hexagons of resolution 1.
+        Then we rank each populated place by its population relative to other places within the same hexagon.
+        This ensures that the most significant settlements in a large region are shown first.<p>
+
+        <p>Benefits:</p> 
         <ul>
-            <li><strong>Landcover Generalization:</strong> For each 6-km H3 hexagon (resolution 6), we identify the dominant landcover type (e.g., <code>landuse=*</code> or <code>natural=*</code>) based on the largest area covered. Before this, we normalize tags, for example, converting <code>landuse=forest</code> to <code>natural=wood</code>. A feature must cover at least 1% of the hexagon's area (10% for built-up areas) to be considered. These hexagons are then merged to form large, cohesive landcover polygons. See the full list of supported landcover tags on our <a href="renderedtags.html">Tag Usage</a> page.</li>
-            <li><strong>Water Body Generalization:</strong> Large water bodies are generalized separately. We select water bodies larger than 20 sq. km, buffer them to merge nearby water bodies, and then shrink them back. This process simplifies complex coastlines and merges groups of lakes.</li>
-            <li><strong>Place Generalization:</strong> To decide which cities and towns to display, we use a very large H3 hexagon grid (resolution 1). We then rank each populated place by its population relative to other places within the same hexagon. This ensures that the most significant settlements in a large region are shown first.</li>
-            <li><strong>Peak Generalization:</strong> For mountains, we calculate their prominence using the <a href="https://link.springer.com/article/10.1007/s42489-021-00079-y">Discrete Isolation</a> method, which measures the distance to the nearest higher peak. This ensures that only the most significant peaks are rendered at lower zoom levels.</li>
+            <li> even small cities in a sparsely populated region are displayed; </li>
+            <li> if there are several big cities nearby, they are still visible. </li>
         </ul>
-		</p>
+
+        <p><i>Note: each place can still be shown with a symbol corresponding to its population and administrative status.</i></p>
+
+        <h3>Mountain Peaks</h3>
+        <img src="img/pic04_peaks.png" alt="Hexes and Cities" class="about-image">
+        <p>For mountain peaks the generalization method described above does not really work. There are lots of "subsidiary" peaks nearby "main" peaks, 
+        which should be  rather suppressed on a generalized map. 
+        <i>For example, South Peak is located approximately 130 meters from the main Everest summit, and only 100 meters below it, 
+        and is definetly not worth of showing on z0-z8</i>. </p>
+ 
+        <p>So for mountain peaks we use another generalization method: <a href="https://link.springer.com/article/10.1007/s42489-021-00079-y">Discrete Isolation</a>. 
+        Put simply, Discrete Isolation is the distance from the given point to the nearest higher point.
+        This computationally intensive process is optimized using a hierarchical approach. 
+        We first process peaks within each resolution 1 hexagon separately before calculating discrete isolation for the highest peaks across hexagons. </p>
+
+        <p>This algorithm produces quite good results: not only major global peaks like Everest (8848 m) or Mont Blanc (4805 m) are highlighted, 
+           but also significant local summits, such as Dzyarzhynskaya Hara (345 m), the highest point in Belarus.</p>
+
+
+        <h3>Landcovers</h3>
+        
+        <img src="img/pic05_h3grid.png" alt="Hexes and features" class="about-image-2">
+        <p>The idea for landcovers generalization is that we can find a dominant feature (or landcover type) for certain area.</p>
+
+        <p>For each 6-km H3 hexagon (resolution 6), we identify the dominant landcover type (e.g., landuse=* or natural=*) based on the largest area covered.
+        Before this, we normalize tags, for example, converting landuse=forest to natural=wood. A feature must cover at least 1% of the hexagon's area 
+        (10% for built-up areas) to be considered. These hexagons are then merged to form large, cohesive landcover polygons. </p>
+
+        <p>Note that we do not have any predefined classification of landcovers, but we find features that are actually used is OSM.  
+           See the full list of supported landcover tags on the <a href="renderedtags.html">Tag Usage</a> page. </p>
+
+        <h3> Water Bodies </h3>
+        <p>For waterbodies another traditional method is used. We select water bodies larger than 20 sq. km, buffer them to merge nearby water bodies,
+           and then shrink them back. This process simplifies complex coastlines and merges groups of lakes/reservoirs and wide rivers, 
+           taged in OSM with <i>natural=water</i>. </p>
+
 
         <h2>Technology Stack</h2>
-		<img src="img/pic04_peaks.png" alt="Hexes and Cities" class="about-image">
+		
         <p>This project is built on a foundation of powerful open-source tools: 
         <ul>
             <li><strong>PostgreSQL</strong> with <strong>PostGIS</strong> for spatial data storage and analysis.</li>
@@ -78,16 +132,23 @@
             <li><strong>Make</strong> to orchestrate the entire data processing and build pipeline.</li>
         </ul>
 		</p>
-
+        <div style="clear:both;"></div>
         <h2>License and Data Availability</h2>
         <p>The source code for the entire generalization process is available under the permissive MIT license. You can find the repository on <a href="https://github.com/Zkir/generalized_landcovers">GitHub</a>.</p>
         <p>The generalized landcover data generated by this project is also available for download. Please visit the <a href="downloads.html">Downloads</a> page to access the data.</p>
 
         <h2>A Final Thought</h2>
-		<img src="img/pic02_landcovers_vs_mapnik.png"  alt="Blank OSM map"  width="100%">
-        <p>We hope that the wonderful people responsible for the slippy map at <a href="https://www.openstreetmap.org/">openstreetmap.org</a> will look at our map, see what's possible, and think hard about the future of cartographic representation in the project.</p>
-        
+		
+        <p>We hope that the awesome people responsible for the slippy map at <a href="https://www.openstreetmap.org/">openstreetmap.org</a> will look at our map, see what's possible, and think hard about the future of cartographic representation in the project.
+            <img src="img/pic02_landcovers_vs_mapnik.png"  alt="Blank OSM map" width="100%"> <!-- style="float:right;"  width="100%"  class="about-image"-->
+        </p>
+	
+		<h2>Discussion</h2>
+	    <p>All questions can be asked in the <a href="https://community.openstreetmap.org/t/announcement-openlandcovermap">Openstreet Community forum</a>. Any feedback is welcome!</p>
     </main>
+    <footer>
+        <small>Page created 2025-10-15 12:38:50</small>
+    </footer>
 
     <script>
         // Mobile menu functionality
