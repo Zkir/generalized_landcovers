@@ -122,21 +122,22 @@ for record in records:
             swatch_html = f'<span class="legend-swatch" style="{background_style} opacity: {opacity};"></span>'
 
 
-        rendered_tags_html = rendered_tags_html + '<tr>' + \
+        rendered_tags_html = rendered_tags_html + '          <tr>' + \
                                                  '<td>' + swatch_html + '</td>' + \
                                                  '<td>' +record[1]+ '</td>' + \
                                                  '<td>'+ orig_tags_descr +'</td>'+ \
                                                  ' <td>'+str(record[3])+'</td>'+ \
-                                                 ' <td>'+str(record[4])+'</td></tr>'
+                                                 ' <td>'+str(record[4])+'</td></tr>\n'
     else:
         #page for not rendered tags
         if record[4]>=4:
-            unrendered_tags_html = unrendered_tags_html + '<tr>'+ \
+            unrendered_tags_html = unrendered_tags_html + '          <tr>'+ \
+                                                 '<td><span class="legend-swatch" style="background-color: #000000;"></span></td>' + \
                                                  '<td>' +record[1]+ '</td>'+ \
                                                  '<td>'+('&#10004' if wiki_described else '')+ ' </td>'   + \
                                                  '<td>'+(('<a href="'+wiki_url+'">'+record[0]+'='+record[1]+'</a>') if wiki_described else (record[0]+'='+record[1])) +'</td>'+ \
                                                  ' <td>'+str(record[3])+'</td>'+ \
-                                                 ' <td>'+str(record[4])+'</td></tr>'
+                                                 ' <td>'+str(record[4])+'</td></tr>\n'
 
 
 for record in tag_synonyms:
@@ -171,15 +172,18 @@ with open('taginfo.json', 'w') as f:
 
 page = ZWebPage("renderedtags.html", "Used Tags statistics")
 
-page.print( '<h2>Rendered Landcovers</h2>' \
-                  + '<p>Those landcovers are rendered with own colour/pattern. </p>' \
-                  + '<table class="sortable">' \
-                    + '<tr><th>Swatch</th><th>Landcover</th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>' \
-                    + rendered_tags_html + '</table>' \
-                  + '<h2>Not rendered Landcovers</h2>' \
-                  + '<p>Those landcovers are strong enough to appear on the generalized map but are rendered in black. <p>' \
-                  + '<table class="sortable">' \
-                   + '<tr><th>Landcover</th><th>wiki described </th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>' \
-                    + unrendered_tags_html + '</table>' )
+page.print( '<h2>Rendered Landcovers</h2>\n' \
+                  + '        <p>Those landcovers are rendered with own colour/pattern. </p>\n' \
+                  + '        <table class="sortable">\n' \
+                  + '          <tr><th>Swatch</th><th>Landcover</th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>' \
+                  + rendered_tags_html + '        </table>' \
+                  + '<p></p>\n' \
+                  + '        <h2>Not rendered Landcovers</h2>\n' \
+                  + '        <p>Those landcovers are strong enough to appear on the generalized map but are rendered in black. <p>\n' \
+                  + '        <table class="sortable">' \
+                  + '<tr><th>Swatch</th><th>Landcover</th><th>wiki described </th> <th>Original OSM tags</th> <th>Size Score</th> <th>Area Score</th></tr>' \
+                  + unrendered_tags_html + '        </table>\n' \
+                  + '        <p>If a tag is not described in the <a href="https://wiki.openstreetmap.org/wiki/Creating_a_page_describing_key_or_value">osm wiki</a>, we do not really know what to do with it.</p>\n'
+          )
 
 page.write()
