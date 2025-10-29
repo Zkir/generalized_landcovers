@@ -61,24 +61,18 @@ Combined naturals and landuses which imply landcovers
   /*=======================================================================================
     == Sparce vegetation, deserts ==
     ======================================================================================= */
-
-
-  //transparency will not help, for the obvious reason :( 
   //Notes: fell and tundra are mere synonyms. 
   //all those are not landcovers, but natural zones. 
   [feature='tundra'],[feature='fell']{
     polygon-fill:#afa;
-    polygon-opacity:0.5;
   } 
 
   [feature='arctic_desert']{
     polygon-fill:#aaf;
-    polygon-opacity:0.5;
   }    
 
   [feature='desert']{
     polygon-fill:yellow;
-    polygon-opacity:0.5;
     polygon-pattern-file: url('patterns/beach.png');
   } 
 
