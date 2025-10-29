@@ -4,6 +4,7 @@ all: data/tables/landcover_quality_metrics \
       mapnik_carto_generated.xml \
       taginfo.json \
       data/export/landcovers.mbtiles \
+	  data/export/unrendered_landcovers.osm \
       data/export/downloads.html \
       data/export/country_stats.html \
       data/export/renderedtags.html \
@@ -35,11 +36,14 @@ data/export/country_stats.html: data/tables/country_stats
 
 data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip 
 	python3 py-scripts/downloads.py
+	
+data/export/unrendered_landcovers.osm: taginfo.json data/source/planet-latest-updated.osm.pbf
+	python3 py-scripts/extract_unrendered.py
 
 data/export/landcovers.mbtiles: data/shapes  | data/export
 	node ../tilemill/index.js export generalized_landcovers  data/export/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet
 
-taginfo.json data/export/renderedtags.html: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats | data/export
+taginfo.json data/export/renderedtags.html &: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats | data/export
 	python3 py-scripts/taginfo_json.py
 	check-jsonschema "taginfo.json" --schemafile "taginfo-project-schema.json" || echo ERROR: taginfo.json does not validate against JSON schema 
 

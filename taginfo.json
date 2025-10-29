@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20251026T164955Z",
+    "data_updated": "20251029T073924Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -24,6 +24,14 @@
                 "area"
             ],
             "value": "arctic_desert"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "bare__earth"
         },
         {
             "description": "Rendered as landcover.",
@@ -90,6 +98,14 @@
             "value": "drainage_basin"
         },
         {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "drainagge basin"
+        },
+        {
             "description": "Rendered as landcover.",
             "key": "landuse",
             "object_types": [
@@ -122,6 +138,14 @@
             "value": "glacier"
         },
         {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "government"
+        },
+        {
             "description": "Rendered as landcover.",
             "key": "natural",
             "object_types": [
@@ -146,6 +170,38 @@
             "value": "heath"
         },
         {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "human"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "inlet"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "inundation_area"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "irrigation_district"
+        },
+        {
             "description": "Rendered as landcover.",
             "key": "landuse",
             "object_types": [
@@ -162,12 +218,28 @@
             "value": "logging"
         },
         {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "logistics"
+        },
+        {
             "description": "Rendered as landcover.",
             "key": "landuse",
             "object_types": [
                 "area"
             ],
             "value": "meadow"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "mine"
         },
         {
             "description": "Rendered as landcover.",
@@ -184,6 +256,14 @@
                 "area"
             ],
             "value": "mud"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "national_park"
         },
         {
             "description": "Rendered as landcover.",
@@ -247,7 +327,7 @@
             "object_types": [
                 "area"
             ],
-            "value": "posidonia"
+            "value": "playa"
         },
         {
             "description": "Rendered as landcover.",
@@ -266,6 +346,22 @@
             "value": "railway"
         },
         {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "rangeland"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "rocket_range"
+        },
+        {
             "description": "Rendered as landcover.",
             "key": "landuse",
             "object_types": [
@@ -280,6 +376,14 @@
                 "area"
             ],
             "value": "sand"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "sandbank"
         },
         {
             "description": "Rendered as landcover.",
@@ -298,12 +402,36 @@
             "value": "scrub"
         },
         {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "sediment"
+        },
+        {
             "description": "Rendered as landcover.",
             "key": "natural",
             "object_types": [
                 "area"
             ],
             "value": "shingle"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "spoils"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "till"
         },
         {
             "description": "Rendered as landcover.",
@@ -322,12 +450,44 @@
             "value": "vineyard"
         },
         {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "wash"
+        },
+        {
             "description": "Rendered as landcover.",
             "key": "natural",
             "object_types": [
                 "area"
             ],
             "value": "wetland"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "wetland;wood"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "wind"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "wind_farm"
         },
         {
             "description": "Accepted as landcover, but not rendered.",
@@ -344,6 +504,14 @@
                 "area"
             ],
             "value": "wood"
+        },
+        {
+            "description": "Accepted as landcover, but not rendered.",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "wwood"
         },
         {
             "description": "Considered to be a synonym of natural=wood",
@@ -584,6 +752,14 @@
                 "area"
             ],
             "value": "village_green"
+        },
+        {
+            "description": "Considered to be a synonym of built_up for the purposes of generalization",
+            "key": "landuse",
+            "object_types": [
+                "area"
+            ],
+            "value": "fairground"
         }
     ]
 }

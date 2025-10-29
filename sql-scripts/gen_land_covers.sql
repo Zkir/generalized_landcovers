@@ -35,17 +35,22 @@ CREATE TABLE h3.landcovers AS
                 'sea','isthmus', 'strait', 'gulf', 'bay', 'coastline',
                 'islet','island','atoll','archipelago',
                 'plateau','mesa',  
-                'massif', 'mountain', 'mountain_range', 'mountains', 'hill', 'hills', 'peak', 'saddle', 'ridge', 'cliff', 
-                'volcano', 'crater', 'caldera', 'crater_rim', 'sinkhole', 'gorge', 'arete',
+                'massif', 'mountain', 'mountain_range', 'mountains', 'hill', 'hills', 'peak', 'saddle', 'ridge', 'cliff', 'earth_bank',
+                'volcano', 'crater', 'caldera', 'crater_rim', 'sinkhole', 'gorge', 'arete', 'crevasse',
+				'cave_entrance',
+				'butte','esker', /* those are rare types of hills*/
                 
                 /* natural=oasis is rather geographical feature, with other actual landcovers */
                 'oasis',
+				
+				/* natural=hotspring is often water, not a land*/
+				'hot_spring',
                 
                 /*
                   Standalone features
                 */
                 'tree', /* natural=tree is standalone tree, not a landcover like natural=wood */
-                'stone', 'rock', /* rock, stone  -- is just a single notable rock/stone, not a landcover like 'blockfield.*/ 
+                'stone', 'rock',  /* rock, stone  -- is just a single notable rock/stone, not a landcover like 'blockfield.*/ 
                 'shrub', /* unclike scrub, natural=shrub is just a single plant!*/ 
                 'tree_row', /*tree row is a LINEAR feature and cannot be dominant by definition*/
 
@@ -78,7 +83,10 @@ CREATE TABLE h3.landcovers AS
                 'reef',
                 
                 /*  natural=shoal is rather an  underwater feature */
-               'shoal', 
+                'shoal', 
+				
+				/*natural=posidonia is underwater feature, not a landcover */
+				'posidonia',
                 
                 /*  landuse=aquaculture is water feature, not a landcover. */
                 'aquaculture',
@@ -98,8 +106,19 @@ CREATE TABLE h3.landcovers AS
                 /* natural=land is deprecated, used to map islands */                 
                 'land',
                 
-                /* landuse=farm and landuse=field are deprecated, let's ignore them*/
+                /* landuse=farm and landuse=field are deprecated as not cleary defined */
                 'farm', 'field', 'agriculture', 'agricultural', 'pasture',
+				
+				/* some deprecated features*/
+                'plantation',      -- landuse=plantation is deprecated as not specific.
+                'livestock',       -- landuse=livestock is deprecated as not specific.
+                'prison',          -- landuse=prison is deprecated 
+                'radio',           -- landuse=radio  is deprecated 
+                'research',        -- landuse=research is deprecated    
+                'school',          -- landuse=school is deprecated 
+                'greenery',        -- landuse=greenery is not recomended as not clearly defined
+                'public_works',    -- landuse=public_works is not recomended as not clearly defined
+				'wellsite',        -- landuse=wellsite is deprecated. landuse=industrial is recomended instead.
                 
                 /* landuse=forestry is a strange tag. it's neither forest not clearcut nor logging nor parking etc.*/
                 'forestry'
@@ -113,7 +132,7 @@ CREATE TABLE h3.landcovers AS
                 'old_coastline',
                 'fishing_bank',
                 'resource_extraction',
-                'epicentre', /* natural=epicenter is not event proposed feature*/
+                'epicentre', /* natural=epicenter is not even a proposed feature*/
                 'objectiv',
                 'project',
                 'survey_area',
@@ -129,7 +148,8 @@ CREATE TABLE h3.landcovers AS
             AND feature NOT IN (
                 'Peninsula',
                 'peninsular',
-                'moutain_range');
+                'moutain_range',
+			    'rocks');
 
 CREATE INDEX gix_h3_landcovers ON h3.landcovers USING GIST (geom);
 CREATE INDEX feat_h3_landcovers ON h3.landcovers(feature);
@@ -179,7 +199,8 @@ VALUES
     ('landuse', 'greenfield', 'built_up'),
     ('landuse', 'construction','built_up'),
     ('landuse', 'brownfield','built_up'),
-    ('landuse', 'village_green','built_up')    
+    ('landuse', 'village_green','built_up'),    
+	('landuse', 'fairground','built_up')    
     ;
 
 

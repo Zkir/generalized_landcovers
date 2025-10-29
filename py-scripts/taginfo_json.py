@@ -85,7 +85,7 @@ for record in records:
             description = "Accepted as landcover, but not rendered." # Strength: "+ str(record[3]) +", Total count: " + str(record[4]) 
         
         # we may exclude strange occurences from statisitics for taginfo, but we still need to report rare tags included in rendering     
-        if (record[1] in rendered_tags) or (record[4]>=20) or (wiki_described and (record[4]>=4)):
+        if (record[1] in rendered_tags) or (record[4]>=4) or (wiki_described and record[4]>=4):
             tags.append({"key":record[0],
                                   "value":record[1], 
                                   "description": description,
