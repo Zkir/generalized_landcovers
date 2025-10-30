@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20251029T073924Z",
+    "data_updated": "20251030T041218Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -24,14 +24,6 @@
                 "area"
             ],
             "value": "arctic_desert"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "bare__earth"
         },
         {
             "description": "Rendered as landcover.",
@@ -87,23 +79,7 @@
             "object_types": [
                 "area"
             ],
-            "value": "drainage basin"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
             "value": "drainage_basin"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "drainagge basin"
         },
         {
             "description": "Rendered as landcover.",
@@ -504,14 +480,6 @@
                 "area"
             ],
             "value": "wood"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "wwood"
         },
         {
             "description": "Considered to be a synonym of natural=wood",
