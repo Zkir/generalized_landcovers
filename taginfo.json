@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20251030T041218Z",
+    "data_updated": "20251031T132908Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -103,14 +103,6 @@
             "object_types": [
                 "area"
             ],
-            "value": "fell"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
             "value": "glacier"
         },
         {
@@ -144,22 +136,6 @@
                 "area"
             ],
             "value": "heath"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "human"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "inlet"
         },
         {
             "description": "Accepted as landcover, but not rendered.",
@@ -232,22 +208,6 @@
                 "area"
             ],
             "value": "mud"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "national_park"
-        },
-        {
-            "description": "Rendered as landcover.",
-            "key": "landuse",
-            "object_types": [
-                "area"
-            ],
-            "value": "observatory"
         },
         {
             "description": "Accepted as landcover, but not rendered.",
@@ -352,14 +312,6 @@
                 "area"
             ],
             "value": "sand"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "sandbank"
         },
         {
             "description": "Rendered as landcover.",
@@ -600,6 +552,14 @@
                 "area"
             ],
             "value": "dry_lake"
+        },
+        {
+            "description": "Considered to be a synonym of natural=tundra",
+            "key": "natural",
+            "object_types": [
+                "area"
+            ],
+            "value": "fell"
         },
         {
             "description": "Considered to be a synonym of natural=grassland",

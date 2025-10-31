@@ -25,7 +25,7 @@ def parse_mss_styles(style_content, landcover_content):
         
         if in_block:
             fill_match = re.search(r'polygon-fill:\s*([^;]+);', line)
-            pattern_match = re.search(r'polygon-pattern-file:\s*url\([\'\\]?(.+?)[\'\\]?\);', line)
+            pattern_match = re.search(r'polygon-pattern-file:\s*url\([\'\\]?(.+?)[\'\\]?\)[;]?', line)
             opacity_match = re.search(r'polygon-opacity:\s*([\d\.]+);', line)
 
             if fill_match:

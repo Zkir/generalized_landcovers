@@ -9,7 +9,8 @@ all: data/tables/landcover_quality_metrics \
       data/export/country_stats.html \
       data/export/renderedtags.html \
       data/export/about.html \
-      data/export/index.html
+      data/export/index.html \
+	  data/export/style.css
 
 
 .PHONY: upload
@@ -30,6 +31,9 @@ data/export/index.html: | data/export
 
 data/export/about.html: | data/export
 	cp webui-prototypes/about.html data/export/about.html
+
+data/export/style.css: | data/export
+	cp webui-prototypes/style.css data/export/style.css
 
 data/export/country_stats.html: data/tables/country_stats
 	python3 py-scripts/country_stats.py

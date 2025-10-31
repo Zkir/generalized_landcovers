@@ -32,7 +32,7 @@ CREATE TABLE h3.landcovers AS
                   first of all some natural geography 
                 */
                 'region', 'peninsula', 'cape', 'flat', 'valley', 'plain',
-                'sea','isthmus', 'strait', 'gulf', 'bay', 'coastline',
+                'sea','isthmus', 'strait', 'gulf', 'bay', 'coastline', 'inlet',
                 'islet','island','atoll','archipelago',
                 'plateau','mesa',  
                 'massif', 'mountain', 'mountain_range', 'mountains', 'hill', 'hills', 'peak', 'saddle', 'ridge', 'cliff', 'earth_bank',
@@ -43,7 +43,7 @@ CREATE TABLE h3.landcovers AS
                 /* natural=oasis is rather geographical feature, with other actual landcovers */
                 'oasis',
 				
-				/* natural=hotspring is often water, not a land*/
+				/* natural=hot_spring is often water, not a land*/
 				'hot_spring',
                 
                 /*
@@ -76,7 +76,8 @@ CREATE TABLE h3.landcovers AS
                 /* especially wasteland. area is not just used for anything! but it does not imply any landcover*/
                 'wasteland',
                   
-                /* landuse=religious does not imply any landcover type. In Europe it is usually build up (e.g. monastery), but it can be a sacred orchard as well. */
+                /* landuse=religious does not imply any landcover type. 
+				   In Europe it is usually built-up area (e.g. monastery), but it can be a sacred orchard as well. */
                 'religious',  
                 
                 /*  natural=reef is underwater feature, not a landcover. */
@@ -84,6 +85,9 @@ CREATE TABLE h3.landcovers AS
                 
                 /*  natural=shoal is rather an  underwater feature */
                 'shoal', 
+				
+				/*  natural=sandbank is rather an  underwater feature */
+				'sandbank',
 				
 				/*natural=posidonia is underwater feature, not a landcover */
 				'posidonia',
@@ -116,9 +120,10 @@ CREATE TABLE h3.landcovers AS
                 'radio',           -- landuse=radio  is deprecated 
                 'research',        -- landuse=research is deprecated    
                 'school',          -- landuse=school is deprecated 
+				'observatory',     -- landuse=observatory is deprecated 
                 'greenery',        -- landuse=greenery is not recomended as not clearly defined
                 'public_works',    -- landuse=public_works is not recomended as not clearly defined
-				'wellsite',        -- landuse=wellsite is deprecated. landuse=industrial is recomended instead.
+				'wellsite',        -- landuse=wellsite is deprecated. landuse=industrial is recommended instead.
                 
                 /* landuse=forestry is a strange tag. it's neither forest not clearcut nor logging nor parking etc.*/
                 'forestry'
@@ -185,7 +190,8 @@ VALUES
     ('natural', 'ground', 'bare_earth'),  
     ('natural', 'landslide', 'bare_earth'),  
     ('natural', 'dry_lake', 'desert'),  
-    ('landuse', 'grass', 'grassland'),  /*  landuse=grass should be considered to be a synonim of grassland for the purposes of generalization. There are no lawns kilomers long! */
+	('natural', 'fell', 'tundra'),       /* lets consider 'fell' to be a synonym of 'tundra' for the purposes of generalization */
+    ('landuse', 'grass', 'grassland'),   /* landuse=grass should be considered to be a synonim of grassland for the purposes of generalization. There are no lawns kilomers long! */
     ('landuse', 'animal_keeping', 'farmyard'),  
     ('landuse', 'residential', 'built_up'), /*built up areas has to be groupped*/
     ('landuse', 'industrial', 'built_up'),
