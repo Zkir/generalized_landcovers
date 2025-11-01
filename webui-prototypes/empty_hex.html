@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empty Hex Inspector</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body { font-family: sans-serif; display: flex; height: 100vh; margin: 0; }
+        #info-panel { width: 30%; padding: 1em; overflow-y: auto; }
+        #map { width: 70%; height: 100%; }
+        h1, h2 { border-bottom: 1px solid #ccc; padding-bottom: 0.5em; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .edit-links a { margin-right: 1em; }
+    </style>
+</head>
+<body>
+
+    <div id="info-panel">
+        <h1>Empty Hex Inspector</h1>
+        <p>This page displays a random hexagon that contained landcover features but was ultimately left empty because no single feature met the generalization threshold (e.g., >1% of the hex area).</p>
+
+        <h2 id="hex-id">Hex: ...</h2>
+        <div id="stats">
+            <p>Loading statistics...</p>
+        </div>
+
+        <h2>Edit in OSM</h2>
+        <div id="edit-links">
+            <p>Loading edit links...</p>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize map
+            const map = L.map('map').setView([0, 0], 2);
+
+            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            const bingSatellite = L.tileLayer(
+                'https://t.ssl.ak.dynamic.tiles.virtualearth.net/comp/ch/{q}?mkt=en-us&it=A,G,L&shading=hill&og=18&n=z',
+                {
+                    subdomains: ['0', '1', '2', '3', '4'],
+                    attribution: '&copy; <a href="https://www.microsoft.com/maps">Microsoft (Bing Maps)</a>'
+                }
+            );
+            
+            const baseMaps = {
+                "OpenStreetMap": osmLayer,
+                "Bing Satellite": bingSatellite
+            };
+
+            L.control.layers(baseMaps).addTo(map);
+
+            // Fetch and display data
+            fetch('empty_hex_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('hex-id').innerText = "Error";
+                        document.getElementById('stats').innerHTML = `<p>${data.error}</p>`;
+                        return;
+                    }
+
+                    // --- Update Info Panel ---
+                    document.getElementById('hex-id').innerText = `Hex: ${data.hex_id}`;
+
+                    // Display stats
+                    const statsContainer = document.getElementById('stats');
+                    if (data.stats && data.stats.length > 0) {
+                        let statsTable = '<table><tr><th>Landcover</th><th>Area (m²)</th><th>Coverage</th></tr>';
+                        data.stats.forEach(stat => {
+                            statsTable += `<tr>
+                                <td>${stat.feature}</td>
+                                <td>${Math.round(stat.area)}</td>
+                                <td>${stat.percentage.toFixed(2)}%</td>
+                            </tr>`;
+                        });
+                        statsTable += '</table>';
+                        statsContainer.innerHTML = statsTable;
+                    } else {
+                        statsContainer.innerHTML = '<p>No landcover statistics found for this hex.</p>';
+                    }
+
+                    // --- Update Map ---
+                    const hexGeometry = L.geoJSON(data.geometry, {
+                        style: {
+                            color: "#ff0000",
+                            weight: 2,
+                            opacity: 0.8,
+                            fillOpacity: 0.1
+                        }
+                    }).addTo(map);
+
+                    map.fitBounds(hexGeometry.getBounds());
+
+                    // --- Generate Edit Links ---
+                    const bounds = hexGeometry.getBounds();
+                    const bbox = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`;
+                    
+                    const idUrl = `https://www.openstreetmap.org/edit?editor=id#map=${map.getZoom()}/${map.getCenter().lat}/${map.getCenter().lng}`;
+                    const josmUrl = `http://127.0.0.1:8111/load_and_zoom?left=${bounds.getWest()}&right=${bounds.getEast()}&top=${bounds.getNorth()}&bottom=${bounds.getSouth()}`;
+
+                    document.getElementById('edit-links').innerHTML = `
+                        <a href="${idUrl}" target="_blank">Edit with iD</a>
+                        <a href="${josmUrl}" target="_blank">Edit with JOSM</a>
+                    `;
+
+                })
+                .catch(error => {
+                    console.error('Error fetching or processing data:', error);
+                    document.getElementById('stats').innerHTML = '<p>Could not load data. Run the python script first.</p>';
+                });
+        });
+    </script>
+</body>
+</html>
