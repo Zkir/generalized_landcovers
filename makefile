@@ -219,11 +219,6 @@ data/source/planet-latest-updated.osm.pbf: data/source/planet-latest.osm.pbf
 test: 
 	python3 test.py
 
-.PHONY: show_empty_hex
-show_empty_hex:
-	python3 py-scripts/get_random_empty_hex.py
-	xdg-open webui-prototypes/empty_hex.html
-
 
 .PHONY: import_planet
 import_planet: data/source/planet-latest-updated.osm.pbf | data
