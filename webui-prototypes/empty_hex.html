@@ -4,58 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Empty Hex Inspector</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/v3.3.1/mapbox.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <style>
-        body { font-family: sans-serif; display: flex; height: 100vh; margin: 0; }
-        #info-panel { width: 30%; padding: 1em; overflow-y: auto; }
-        #map { width: 70%; height: 100%; }
-        h1, h2 { border-bottom: 1px solid #ccc; padding-bottom: 0.5em; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        /* Additional styles for this page */
+        body.map-page {
+            display: flex;
+            flex-direction: column;
+        }
+        #main-content {
+            display: flex;
+            flex-grow: 1;
+            height: calc(100vh - 60px); /* Height minus header */
+        }
+        #info-panel {
+            width: 30%;
+            padding: 1em;
+            overflow-y: auto;
+            background-color: var(--secondary-color);
+            border-right: 1px solid var(--border-color);
+        }
+        #map-container {
+            width: 70%;
+            position: relative; /* Needed for mapbox child elements */
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+        #info-panel h1, #info-panel h2 {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5em;
+        }
         .edit-links a { margin-right: 1em; }
     </style>
 </head>
-<body>
+<body class="map-page">
 
-    <div id="info-panel">
-        <h1>Empty Hex Inspector</h1>
-        <p>This page displays a random hexagon that contained landcover features but was ultimately left empty because no single feature met the generalization threshold (e.g., >1% of the hex area).</p>
+    <header>
+        <a href="index.html" class="logo">OpenLandcoverMap :)</a>
+        <nav class="desktop-menu">
+            <a href="about.html">About</a>
+            <a href="renderedtags.html">Tag Usage</a>
+            <a href="country_stats.html">Country Stats</a>
+            <a href="downloads.html">Downloads</a>
+            <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
+        </nav>
+    </header>
 
-        <h2 id="hex-id">Hex: ...</h2>
-        <div id="stats">
-            <p>Loading statistics...</p>
+    <div id="main-content">
+        <div id="info-panel">
+            <h1>Empty Hex Inspector</h1>
+            <p>This page displays a hexagon that contained landcover features but was ultimately left empty because no single feature met the generalization threshold.</p>
+
+            <h2 id="hex-id">Hex: ...</h2>
+            <div id="stats">
+                <p>Loading statistics...</p>
+            </div>
+
+            <h2>Edit in OSM</h2>
+            <div id="edit-links">
+                <p>Loading edit links...</p>
+            </div>
         </div>
 
-        <h2>Edit in OSM</h2>
-        <div id="edit-links">
-            <p>Loading edit links...</p>
+        <div id="map-container">
+            <div id="map"></div>
         </div>
     </div>
 
-    <div id="map"></div>
-
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/v3.3.1/mapbox.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize map
-            const map = L.map('map').setView([0, 0], 2);
+            // Initialize an empty map
+            const map = L.mapbox.map('map', null, { // Initialize with null layer
+                center: [0, 0],
+                zoom: 2,
+                hash: true
+            });
 
+            // Create the project layer and add it
+            const projectLayer = L.mapbox.tileLayer('server/landcovers.tilejson').addTo(map);
+
+            // Create the OSM layer
             const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
+            });
 
-            const bingSatellite = L.tileLayer(
-                'https://t.ssl.ak.dynamic.tiles.virtualearth.net/comp/ch/{q}?mkt=en-us&it=A,G,L&shading=hill&og=18&n=z',
-                {
-                    subdomains: ['0', '1', '2', '3', '4'],
-                    attribution: '&copy; <a href="https://www.microsoft.com/maps">Microsoft (Bing Maps)</a>'
-                }
-            );
-            
             const baseMaps = {
-                "OpenStreetMap": osmLayer,
-                "Bing Satellite": bingSatellite
+                "Project Map": projectLayer, // Now we have a direct reference
+                "OpenStreetMap": osmLayer
             };
 
             L.control.layers(baseMaps).addTo(map);

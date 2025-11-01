@@ -36,6 +36,7 @@ def get_random_empty_hex(conn):
                 h.resolution = 6
                 AND h.ix IN (SELECT DISTINCT ix FROM h3.landcovers_clipped) 
                 AND CAST(h.ix AS VARCHAR(16)) NOT IN (SELECT DISTINCT ix FROM h3.landcovers_h3)
+                AND ST_Y(ST_Centroid(h.geom)) > -60 -- Exclude Antarctica (south of 60 degrees South latitude)
             LIMIT 1;
         """)
         empty_hex = cur.fetchone()
