@@ -81,7 +81,8 @@
             const map = L.mapbox.map('map', null, { // Initialize with null layer
                 center: [0, 0],
                 zoom: 2,
-                hash: true
+                hash: true,
+                maxZoom: 8 // Set max zoom for the map
             });
 
             // Create the project layer and add it
@@ -139,7 +140,7 @@
                         }
                     }).addTo(map);
 
-                    map.fitBounds(hexGeometry.getBounds());
+                    map.fitBounds(hexGeometry.getBounds(), { maxZoom: 8 }); // Respect max zoom when fitting bounds
 
                     // --- Generate Edit Links ---
                     const bounds = hexGeometry.getBounds();
