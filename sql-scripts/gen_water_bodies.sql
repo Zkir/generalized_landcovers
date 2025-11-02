@@ -28,6 +28,8 @@ CREATE TABLE h3.water_bodies_aggr AS
 	SELECT 'water' as feature,
 		     (ST_dump(  ST_Union(f.geom)  )).geom  as geom  	    
 		 FROM h3.water_bodies As f;
+		 
+CREATE INDEX gix_h3_water_bodies_aggr ON h3.water_bodies_aggr USING GIST (geom);		 
 
 
 UPDATE h3.water_bodies_aggr  SET geom=ST_Buffer(geom,-500);

@@ -143,10 +143,6 @@ data/tables/ne_10m_admin_0_countries: data/ne_10m_admin_0_countries.shp
                       -progress -overwrite 
 	touch $@
 
-
-#ogr2ogr -f PostgreSQL PG:"dbname='shape' host='127.0.0.1' port='5434' user='geosolutions' password='Geos'" ../data/user_data/Mainrd.shp -lco #GEOMETRY_NAME=geom -lco FID=gid -lco SPATIAL_INDEX=GIST -nlt PROMOTE_TO_MULTI -nln main_roads_2 -overwrite
-
-
 data/ne_10m_admin_0_boundary_lines_land.shp: data/downloads/ne_10m_admin_0_boundary_lines_land.zip
 	unzip -o -d data $<
 	touch $@
@@ -171,14 +167,18 @@ data/tables/peaks: data/tables/h3_hexes | data/tables
 data/tables/places: data/tables/h3_hexes | data/tables
 	psql -d gis -f "sql-scripts/places.sql" -v ON_ERROR_STOP=1
 	touch $@
+	
+data/tables/landcover_quality_metrics: data/tables/landcovers_aggr data/tables/hex_land | data/tables
+	psql -d gis -f "sql-scripts/landcover_quality_metrics.sql" -v ON_ERROR_STOP=1
+	touch $@
+	
+	
+data/tables/hex_land: data/tables/h3_hexes data/tables/water_bodies_aggr | data/tables
+	psql -d gis -f "sql-scripts/find_almost_land_hexes.sql" -v ON_ERROR_STOP=1
+	touch $@
 
 data/tables/water_bodies_aggr: data/tables/h3_hexes | data/tables
 	psql -d gis -f "sql-scripts/gen_water_bodies.sql" -v ON_ERROR_STOP=1
-	touch $@
-
-
-data/tables/landcover_quality_metrics: data/tables/landcovers_aggr | data/tables
-	psql -d gis -f "sql-scripts/landcover_quality_metrics.sql" -v ON_ERROR_STOP=1
 	touch $@
 
 data/tables/landcovers_aggr: data/tables/h3_hexes | data/tables
