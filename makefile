@@ -3,8 +3,10 @@ all: data/tables/landcover_quality_metrics \
       data/shapes \
       mapnik_carto_generated.xml \
       taginfo.json \
-      data/export/landcovers.mbtiles \
-	  data/export/unrendered_landcovers.osm \
+      data/export/server/landcovers.mbtiles \
+	  data/export/server/.htaccess \
+	  data/export/server/tileserver.php \
+	  data/export/downloads/unrendered_landcovers.osm \
       data/export/downloads.html \
       data/export/country_stats.html \
       data/export/renderedtags.html \
@@ -16,7 +18,7 @@ all: data/tables/landcover_quality_metrics \
 
 
 .PHONY: upload
-upload: data/export/landcovers.mbtiles
+upload: data/export/server/landcovers.mbtiles
 	if [ -z "$(FTPUSER)" ] ; then   echo "FTPUSER env variable is not defined" ; exit 1; fi
 	if [ -z "$(FTPPASSWORD)" ] ; then   echo "FTPPASSWORD env variable is not defined" ; exit 1; fi
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/landcovers.zip
@@ -27,22 +29,22 @@ upload: data/export/landcovers.mbtiles
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ renderedtags.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ country_stats.html
-	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ server/landcovers.mbtiles
 
-data/export/index.html: | data/export
+data/export/index.html: webui-prototypes/index.html | data/export
 	cp webui-prototypes/index.html data/export/index.html
 
-data/export/about.html: | data/export
+data/export/about.html: webui-prototypes/about.html | data/export
 	cp webui-prototypes/about.html data/export/about.html
 
-data/export/style.css: | data/export
+data/export/style.css:  webui-prototypes/style.css | data/export
 	cp webui-prototypes/style.css data/export/style.css
 
 data/export/empty_hex.html: webui-prototypes/empty_hex.html | data/export
 	cp webui-prototypes/empty_hex.html data/export/empty_hex.html
 
-data/export/empty_hex_api.py: py-scripts/empty_hex_api.py | data/export
-	cp py-scripts/empty_hex_api.py data/export/empty_hex_api.py
+data/export/empty_hex_api.py: misc/empty_hex_api.py | data/export
+	cp misc/empty_hex_api.py data/export/empty_hex_api.py
 	chmod +x data/export/empty_hex_api.py
 
 data/export/country_stats.html: data/tables/country_stats
@@ -51,11 +53,17 @@ data/export/country_stats.html: data/tables/country_stats
 data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip 
 	python3 py-scripts/downloads.py
 	
-data/export/unrendered_landcovers.osm: taginfo.json data/source/planet-latest-updated.osm.pbf
+data/export/downloads/unrendered_landcovers.osm: taginfo.json data/source/planet-latest-updated.osm.pbf
 	python3 py-scripts/extract_unrendered.py
 
-data/export/landcovers.mbtiles: data/shapes  | data/export
-	node ../tilemill/index.js export generalized_landcovers  data/export/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet
+data/export/server/.htaccess : | data/export/server
+	cp misc/tileserver/.htaccess data/export/server/.htaccess
+	
+data/export/server/tileserver.php : | data/export/server
+	cp misc/tileserver/tileserver.php data/export/server/tileserver.php
+
+data/export/server/landcovers.mbtiles: data/shapes  | data/export/server
+	node ../tilemill/index.js export generalized_landcovers  data/export/server/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet
 
 taginfo.json data/export/renderedtags.html &: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats | data/export
 	python3 py-scripts/taginfo_json.py
@@ -203,7 +211,11 @@ data/downloads: | data
 
 data/export/downloads: | data/export
 	mkdir $@
-
+	
+	
+data/export/server: | data/export
+	mkdir $@
+	
 data/export: | data
 	mkdir $@
 
