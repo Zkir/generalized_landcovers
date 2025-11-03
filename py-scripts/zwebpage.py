@@ -23,6 +23,7 @@ page_template ="""<!DOCTYPE html>
             <a href="renderedtags.html">Tag Usage</a>
             <a href="country_stats.html">Country Stats</a>
             <a href="downloads.html">Downloads</a>
+            <a href="empty_hex.html">Hex Inspector</a>
             <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
         </nav>
         <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -33,6 +34,7 @@ page_template ="""<!DOCTYPE html>
             <a href="renderedtags.html">Tag Usage</a>
             <a href="country_stats.html">Country Stats</a>
             <a href="downloads.html">Downloads</a>
+            <a href="empty_hex.html">Hex Inspector</a>
             <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
         </nav>
     </header>
