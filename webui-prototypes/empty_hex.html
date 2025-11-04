@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="style.css">
     <style>
         /* Additional styles for this page */
+        :root {
+            --light-gray: #ecf0f1;
+        }    
         body.map-page {
             display: flex;
             flex-direction: column;
@@ -33,11 +36,66 @@
             height: 100%;
             width: 100%;
         }
-        #info-panel h1, #info-panel h2 {
+        #info-panel h1 {
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 0.5em;
         }
-        .edit-links a { margin-right: 1em; }
+		#info-panel h2 {
+            color: var(--accent-color);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.4rem;
+        }
+        
+        .editor-link {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 0.8rem;
+            margin: 0.2rem 0.2rem;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #353535 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .editor-link:hover {
+            background: linear-gradient(135deg, var(--hover-color) 0%, #404040 100%);
+            border-color: var(--accent-color);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+            text-decoration: none;
+        }
+        
+        .editor-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            display: inline;
+            background: var(--light-gray);
+            margin-right: 0.6rem;
+        }
+        #show-another-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, var(--accent-color) 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0.4rem 0;
+        }
+        #show-another-btn:hover {
+            background: linear-gradient(135deg, #45a049 0%, var(--accent-color) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
+        }
     </style>
 </head>
 <body class="map-page">
@@ -49,7 +107,7 @@
             <a href="renderedtags.html">Tag Usage</a>
             <a href="country_stats.html">Country Stats</a>
             <a href="downloads.html">Downloads</a>
-            <a href="empty_hex.html">Hex Inspector</a>
+            <strong>Hex Inspector</strong>
             <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
         </nav>
     </header>
@@ -57,19 +115,29 @@
     <div id="main-content">
         <div id="info-panel">
             <h1>Empty Hex Inspector</h1>
-            <p>This page displays a hexagon that contained landcover features but was ultimately left empty because no single feature met the generalization threshold.</p>
+            <p>This page displays hexagons which do not contain enough landcover data for generalization and desperaterly require some improvement.</p>
 
-            <h2 id="hex-id">Hex: ...</h2>
-            <div id="stats">
-                <p>Loading statistics...</p>
+            <div id="country-selector-container" style="margin-bottom: 1em;">
+                <label for="country-selector">Country:</label>
+                <select id="country-selector" style="width: 100%; padding: 0.5em;">
+                    <option value="">All Countries</option>
+                </select>
             </div>
 
-            <button id="show-another-btn" style="margin-top: 1em; padding: 0.5em 1em; cursor: pointer;">Show Another</button>
-
-            <h2>Edit in OSM</h2>
+            <h2 id="hex-id">Hex: ...</h2>
             <div id="edit-links">
                 <p>Loading edit links...</p>
             </div>
+			<button id="show-another-btn">
+            <i class="fas fa-sync-alt" style="margin-right: 0.5rem;"></i>
+                    Show Another Empty Hex
+            </button>
+			<p></p>
+			<h2>Landcover Statistics</h2>
+			<div id="stats">
+                <p>Loading statistics...</p>
+            </div>
+
         </div>
 
         <div id="map-container">
@@ -105,6 +173,38 @@
 
             L.control.layers(baseMaps).addTo(map);
 
+            const countrySelector = document.getElementById('country-selector');
+
+            // Fetch and populate countries
+            async function populateCountries() {
+                try {
+                    const response = await fetch('get_countries.py');
+                    const countries = await response.json();
+                    if (countries && !countries.error) {
+                        countries.forEach(country => {
+                            const option = document.createElement('option');
+                            option.value = country;
+                            option.textContent = country;
+                            countrySelector.appendChild(option);
+                        });
+                    }
+                    // Load saved country from local storage
+                    const savedCountry = localStorage.getItem('selectedCountry');
+                    if (savedCountry) {
+                        countrySelector.value = savedCountry;
+                    }
+                } catch (error) {
+                    console.error('Error fetching countries:', error);
+                }
+            }
+
+            populateCountries();
+
+            // Save selection to local storage
+            countrySelector.addEventListener('change', () => {
+                localStorage.setItem('selectedCountry', countrySelector.value);
+            });
+
             // Function to fetch and display hex data
             async function fetchAndDisplayHex() {
                 // Clear previous hex layer if it exists
@@ -117,8 +217,11 @@
                 document.getElementById('edit-links').innerHTML = '<p>Loading edit links...</p>';
                 document.getElementById('show-another-btn').disabled = true; // Disable button during fetch
 
+                const selectedCountry = countrySelector.value;
+                const apiUrl = `empty_hex_api.py?country=${encodeURIComponent(selectedCountry)}`;
+
                 try {
-                    const response = await fetch('empty_hex_api.py'); // Fetch from the CGI script
+                    const response = await fetch(apiUrl); // Fetch from the CGI script
                     const data = await response.json();
 
                     if (data.error) {
@@ -145,7 +248,7 @@
                         statsTable += '</table>';
                         statsContainer.innerHTML = statsTable;
                     } else {
-                        statsContainer.innerHTML = '<p>No landcover statistics found for this hex.</p>';
+                        statsContainer.innerHTML = '<p>No landcovers on this hex! :( <br /> But you can fix it! </p>';
                     }
 
                     // --- Update Map ---
@@ -166,8 +269,8 @@
                     const josmUrl = `http://127.0.0.1:8111/load_and_zoom?left=${bounds.getWest()}&right=${bounds.getEast()}&top=${bounds.getNorth()}&bottom=${bounds.getSouth()}`;
 
                     document.getElementById('edit-links').innerHTML = `
-                        <a href="${idUrl}" target="_blank">Edit with iD</a>
-                        <a href="${josmUrl}" target="_blank">Edit with JOSM</a>
+                        <a href="${idUrl}" target="_blank" class="editor-link"><img src="/img/id_editor_logo.svg" alt="iD" class="editor-icon"></img>Edit with iD</a>
+                        <a href="${josmUrl}" target="_blank" class="editor-link"><img src="/img/josm_editor_logo.png" alt="JOSM" class="editor-icon"></img>Edit with JOSM</a>
                     `;
 
                 } catch (error) {

@@ -4,6 +4,7 @@ import os
 import time
 import psycopg2
 import psycopg2.extras
+import cgi
 
 def get_db_connection():
     """Establishes a connection to the PostgreSQL database."""
@@ -19,20 +20,32 @@ def get_db_connection():
     except psycopg2.OperationalError:
         return None
 
-def get_random_empty_hex(conn):
+import cgi
+
+def get_random_empty_hex(conn, country=None):
     """
-    Selects a random hex from the pre-calculated candidates table and fetches its geometry.
+    Selects a random hex, optionally filtered by country.
     """
     with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
-        cur.execute("""
+        sql_query = """
             SELECT 
-                ix,
-                ST_AsGeoJSON(ST_Transform(geom, 4326)) AS hex_geometry,
-                ST_AsGeoJSON(ST_Transform(ST_Centroid(geom), 4326)) as hex_center
-                FROM h3.no_landcover 
-  	            ORDER BY RANDOM() 
-	            LIMIT 1;
-        """)
+                h3.no_landcover.ix,
+                ST_AsGeoJSON(ST_Transform(h3.no_landcover.geom, 4326)) AS hex_geometry,
+                ST_AsGeoJSON(ST_Transform(ST_Centroid(h3.no_landcover.geom), 4326)) as hex_center
+            FROM h3.no_landcover
+        """
+        params = {}
+        if country:
+            sql_query += """
+                JOIN h3.hex ON h3.no_landcover.ix = h3.hex.ix
+                JOIN h3.country_polygons ON ST_Intersects(h3.hex.geom, h3.country_polygons.geom)
+                WHERE h3.country_polygons.name_en = %(country)s
+            """
+            params['country'] = country
+        
+        sql_query += " ORDER BY RANDOM() LIMIT 1;"
+        
+        cur.execute(sql_query, params)
         return cur.fetchone()
 
 def get_hex_stats(conn, hex_id):
@@ -69,8 +82,13 @@ def main():
 
     output_data = {}
     start_time = time.perf_counter()
+
+    # Parse query parameters
+    form = cgi.FieldStorage()
+    country = form.getvalue('country')
+
     try:
-        empty_hex = get_random_empty_hex(conn)
+        empty_hex = get_random_empty_hex(conn, country)
         get_random_empty_hex_time = time.perf_counter() - start_time
         if not empty_hex:
             output_data = {"error": "No empty hexes found that meet the criteria."}

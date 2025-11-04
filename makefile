@@ -14,6 +14,7 @@ all: data/tables/landcover_quality_metrics \
       data/export/index.html \
       data/export/empty_hex.html \
       data/export/empty_hex_api.py \
+      data/export/get_countries.py \
 	  data/export/style.css
 
 
@@ -46,6 +47,10 @@ data/export/empty_hex.html: webui-prototypes/empty_hex.html | data/export
 data/export/empty_hex_api.py: misc/empty_hex_api.py | data/export
 	cp misc/empty_hex_api.py data/export/empty_hex_api.py
 	chmod +x data/export/empty_hex_api.py
+
+data/export/get_countries.py: misc/get_countries.py | data/export
+	cp misc/get_countries.py data/export/get_countries.py
+	chmod +x data/export/get_countries.py
 
 data/export/country_stats.html: data/tables/country_stats
 	python3 py-scripts/country_stats.py
