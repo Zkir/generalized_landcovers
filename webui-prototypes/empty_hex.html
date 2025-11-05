@@ -137,111 +137,119 @@
                     Show Another Empty Hex
             </button>
 			<p></p>
-			<h2>Hex Statistics</h2>
-			<div id="stats">
-                <p>Loading statistics...</p>
-            </div>
-
-        </div>
-
-        <div id="map-container">
-            <div id="map"></div>
-        </div>
-    </div>
-
-    <script src="https://api.tiles.mapbox.com/mapbox.js/v3.3.1/mapbox.js"></script>
-    <script>
-        let currentHexLayer = null; // To keep track of the current hex layer
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Initialize an empty map
-            const map = L.mapbox.map('map', null, { // Initialize with null layer
-                center: [0, 0],
-                zoom: 2,
-                hash: true,
-                maxZoom: 8 // Set max zoom for the map
-            });
-
-            // Create the project layer and add it
-            const projectLayer = L.mapbox.tileLayer('server/landcovers.tilejson').addTo(map);
-
-            // Create the OSM layer
-            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            });
-
-            const baseMaps = {
-				"Generalized Landcovers": projectLayer,
-                "OSM Standard": osmLayer
-            };
-
-            L.control.layers(baseMaps).addTo(map);
-
-            const countrySelector = document.getElementById('country-selector');
-
-            // Fetch and populate countries
-            async function populateCountries() {
-                try {
-                    const response = await fetch('get_countries.py');
-                    const countries = await response.json();
-                    if (countries && !countries.error) {
-                        countries.forEach(country => {
-                            const option = document.createElement('option');
-                            option.value = country;
-                            option.textContent = country;
-                            countrySelector.appendChild(option);
-                        });
-                    }
-                    // Load saved country from local storage
-                    const savedCountry = localStorage.getItem('selectedCountry');
-                    if (savedCountry) {
-                        countrySelector.value = savedCountry;
-                    }
-                    fetchAndDisplayCountryStats(countrySelector.value); // Initial fetch
-                } catch (error) {
-                    console.error('Error fetching countries:', error);
-                }
-            }
-
-            populateCountries();
-
-            // Save selection to local storage and fetch stats
-            countrySelector.addEventListener('change', () => {
-                const selectedCountry = countrySelector.value;
-                localStorage.setItem('selectedCountry', selectedCountry);
-                fetchAndDisplayCountryStats(selectedCountry);
-                fetchAndDisplayHex();
-            });
-
-            // Function to fetch and display country stats
-            async function fetchAndDisplayCountryStats(country) {
-                const statsContainer = document.getElementById('country-stats');
-                statsContainer.innerHTML = '<p>Loading country statistics...</p>';
-                const apiUrl = `get_precomputed_country_stats.py?country=${encodeURIComponent(country)}`;
-
-                try {
-                    const response = await fetch(apiUrl);
-                    const data = await response.json();
-
-                    if (data.error || !data.total_hexes) {
-                        statsContainer.innerHTML = `<p>Statistics not available for this region.</p>`;
-                        return;
-                    }
-
-                    const emptyHexes = data.empty_hexes;
-                    const totalHexes = data.total_hexes;
-                    const coveragePercent = (data.total_hexes - data.empty_hexes)/data.total_hexes * 100;
-
-                    statsContainer.innerHTML = `
-                        <p style="margin: 0;">There are <strong>${emptyHexes.toLocaleString()}</strong> empty hexes, out of <strong>${totalHexes.toLocaleString()}</strong> (${coveragePercent.toFixed(1)}% coverage).</p>
-                    `;
-
-                } catch (error) {
-                    console.error('Error fetching country stats:', error);
-                    statsContainer.innerHTML = '<p>Could not load country statistics.</p>';
-                }
-            }
-
+			            <h2>Landcover Statistics</h2>
+						<div id="stats">
+			                <p>Loading statistics...</p>
+			            </div>
+			
+			        </div>
+			
+			        <div id="map-container">
+			            <div id="map"></div>
+			        </div>
+			    </div>
+			
+			    <script src="https://api.tiles.mapbox.com/mapbox.js/v3.3.1/mapbox.js"></script>
+			    <script>
+			        let currentHexLayer = null; // To keep track of the current hex layer
+			        let countryStats = {};
+			
+			        document.addEventListener('DOMContentLoaded', function () {
+			            // Initialize an empty map
+			            const map = L.mapbox.map('map', null, { // Initialize with null layer
+			                center: [0, 0],
+			                zoom: 2,
+			                hash: true,
+			                maxZoom: 8 // Set max zoom for the map
+			            });
+			
+			            // Create the project layer and add it
+			            const projectLayer = L.mapbox.tileLayer('server/landcovers.tilejson').addTo(map);
+			
+			            // Create the OSM layer
+			            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			            });
+			
+			            const baseMaps = {
+							"Generalized Landcovers": projectLayer,
+			                "OSM Standard": osmLayer
+			            };
+			
+			            L.control.layers(baseMaps).addTo(map);
+			
+			            const countrySelector = document.getElementById('country-selector');
+			
+			            // Fetch and populate countries
+			            async function populateCountries() {
+			                try {
+			                    const response = await fetch('country_api.py');
+			                    const countries = await response.json();
+			                    if (countries && !countries.error) {
+			                        countries.forEach(country => {
+			                            const option = document.createElement('option');
+			                            option.value = country.name_en;
+			                            option.textContent = country.name_en;
+			                            countrySelector.appendChild(option);
+			                            countryStats[country.name_en] = country;
+			                        });
+			                    }
+			                    // Load saved country from local storage
+			                    const savedCountry = localStorage.getItem('selectedCountry');
+			                    if (savedCountry) {
+			                        countrySelector.value = savedCountry;
+			                    }
+			                    fetchAndDisplayCountryStats(countrySelector.value); // Initial fetch
+			                } catch (error) {
+			                    console.error('Error fetching countries:', error);
+			                }
+			            }
+			
+			            populateCountries();
+			
+			            // Save selection to local storage and fetch stats
+			            countrySelector.addEventListener('change', () => {
+			                const selectedCountry = countrySelector.value;
+			                localStorage.setItem('selectedCountry', selectedCountry);
+			                fetchAndDisplayCountryStats(selectedCountry);
+			                fetchAndDisplayHex();
+			            });
+			
+			            // Function to fetch and display country stats
+			            async function fetchAndDisplayCountryStats(country) {
+			                const statsContainer = document.getElementById('country-stats');
+			                statsContainer.innerHTML = '<p>Loading country statistics...</p>';
+			
+			                const displayStats = (data) => {
+			                    if (!data || data.error || !data.total_hexes) {
+			                        statsContainer.innerHTML = `<p>Statistics not available for this region.</p>`;
+			                        return;
+			                    }
+			
+			                    const emptyHexes = data.empty_hexes;
+			                    const totalHexes = data.total_hexes;
+			                    const coveragePercent = data.pcover * 100;
+			
+			                    statsContainer.innerHTML = `
+			                        <p style="margin: 0;">There are <strong>${emptyHexes.toLocaleString()}</strong> empty hexes, out of <strong>${totalHexes.toLocaleString()}</strong> (${coveragePercent.toFixed(1)}% coverage).</p>
+			                    `;
+			                };
+			
+			                if (country && country !== 'All Countries') {
+			                    displayStats(countryStats[country]);
+			                } else {
+			                    // Fetch world stats
+			                    const apiUrl = `country_api.py?country=All%20Countries`;
+			                    try {
+			                        const response = await fetch(apiUrl);
+			                        const data = await response.json();
+			                        displayStats(data);
+			                    } catch (error) {
+			                        console.error('Error fetching country stats:', error);
+			                        statsContainer.innerHTML = '<p>Could not load country statistics.</p>';
+			                    }
+			                }
+			            }
 
             // Function to fetch and display hex data
             async function fetchAndDisplayHex() {
