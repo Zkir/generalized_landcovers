@@ -15,7 +15,7 @@ conn = psycopg2.connect(dbname='gis', user=db_user_name,
                         password=db_user_password, host='localhost')
 cursor = conn.cursor()
 
-cursor.execute("SELECT * FROM h3.country_stats  ORDER BY 1 ASC;") 
+cursor.execute("SELECT * FROM h3.country_stats WHERE total_hexes>0 ORDER BY 1 ASC;") 
 records = cursor.fetchall()
 
 cursor.close()
@@ -29,8 +29,8 @@ page.print("""<p>This table shows what percentage of a country's territory is co
                      <small>The table is sortable. Just click on the column header.</small></p>
                  """)
 page.print('<table class="sortable">')
-page.print('<tr><th>Country or territory</th><th>Landcover % </th></tr> ')
+page.print('<tr><th>Country or territory</th><th>Hexes totally</th><th>Hexes with landcover</th> <th>Landcover % </th></tr> ')
 for record in records:
-    page.print(f'<tr><td>{record[0]}</td><td>{round(float(record[3])*100)}</td></tr> ')
+    page.print(f'<tr><td>{record[0]}</td><td>{record[1]}</td><td>{record[1]-record[2]}</td><td></td<td>{round(float((record[1]-record[2])/record[1])*100,1)}</td></tr> ')
 page.print('</table>')
 page.write()
