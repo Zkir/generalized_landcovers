@@ -28,23 +28,19 @@ def get_random_empty_hex(conn, country=None):
     """
     with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
         sql_query = """
-            SELECT 
-                h3.no_landcover.ix,
-                ST_AsGeoJSON(ST_Transform(h3.no_landcover.geom, 4326)) AS hex_geometry,
-                ST_AsGeoJSON(ST_Transform(ST_Centroid(h3.no_landcover.geom), 4326)) as hex_center
-            FROM h3.no_landcover
+            SELECT
+                ix,
+                ST_AsGeoJSON(ST_Transform(geom, 4326)) AS hex_geometry,
+                ST_AsGeoJSON(ST_Transform(ST_Centroid(geom), 4326)) as hex_center
+            FROM h3.no_landcover_per_country
         """
         params = {}
         if country:
-            sql_query += """
-                JOIN h3.hex ON h3.no_landcover.ix = h3.hex.ix
-                JOIN h3.country_polygons ON ST_Intersects(h3.hex.geom, h3.country_polygons.geom)
-                WHERE h3.country_polygons.name_en = %(country)s
-            """
+            sql_query += " WHERE country_name = %(country)s"
             params['country'] = country
-        
+
         sql_query += " ORDER BY RANDOM() LIMIT 1;"
-        
+
         cur.execute(sql_query, params)
         return cur.fetchone()
 
