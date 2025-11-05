@@ -15,6 +15,7 @@ all: data/tables/landcover_quality_metrics \
       data/export/empty_hex.html \
       data/export/empty_hex_api.py \
       data/export/get_countries.py \
+      data/export/get_precomputed_country_stats.py \
 	  data/export/style.css
 
 
@@ -51,6 +52,10 @@ data/export/empty_hex_api.py: misc/empty_hex_api.py | data/export
 data/export/get_countries.py: misc/get_countries.py | data/export
 	cp misc/get_countries.py data/export/get_countries.py
 	chmod +x data/export/get_countries.py
+
+data/export/get_precomputed_country_stats.py: misc/get_precomputed_country_stats.py | data/export
+	cp misc/get_precomputed_country_stats.py data/export/get_precomputed_country_stats.py
+	chmod +x data/export/get_precomputed_country_stats.py
 
 data/export/country_stats.html: data/tables/country_stats
 	python3 py-scripts/country_stats.py
@@ -143,7 +148,7 @@ data/ocean_lz.shp:
   -sql "SELECT * FROM simplified_water_polygons" \
   -lco ENCODING=UTF-8
 
-data/tables/country_stats:  data/tables/ne_10m_admin_0_countries data/tables/landcovers_aggr
+data/tables/country_stats: data/tables/ne_10m_admin_0_countries data/tables/landcovers_aggr data/tables/hex_land
 	psql -d gis -f "sql-scripts/country_stats.sql" -v ON_ERROR_STOP=1
 	touch $@
 

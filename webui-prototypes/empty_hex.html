@@ -124,6 +124,10 @@
                 </select>
             </div>
 
+            <div id="country-stats" style="margin-bottom: 1em; padding: 0.5em; background-color: #333; border-radius: 4px;">
+                <p>Loading country statistics...</p>
+            </div>
+
             <h2 id="hex-id">Hex: ...</h2>
             <div id="edit-links">
                 <p>Loading edit links...</p>
@@ -193,6 +197,7 @@
                     if (savedCountry) {
                         countrySelector.value = savedCountry;
                     }
+                    fetchAndDisplayCountryStats(countrySelector.value); // Initial fetch
                 } catch (error) {
                     console.error('Error fetching countries:', error);
                 }
@@ -200,10 +205,42 @@
 
             populateCountries();
 
-            // Save selection to local storage
+            // Save selection to local storage and fetch stats
             countrySelector.addEventListener('change', () => {
-                localStorage.setItem('selectedCountry', countrySelector.value);
+                const selectedCountry = countrySelector.value;
+                localStorage.setItem('selectedCountry', selectedCountry);
+                fetchAndDisplayCountryStats(selectedCountry);
             });
+
+            // Function to fetch and display country stats
+            async function fetchAndDisplayCountryStats(country) {
+                const statsContainer = document.getElementById('country-stats');
+                statsContainer.innerHTML = '<p>Loading country statistics...</p>';
+                const apiUrl = `get_precomputed_country_stats.py?country=${encodeURIComponent(country)}`;
+
+                try {
+                    const response = await fetch(apiUrl);
+                    const data = await response.json();
+
+                    if (data.error || !data.total_hexes) {
+                        statsContainer.innerHTML = `<p>Statistics not available for this region.</p>`;
+                        return;
+                    }
+
+                    const emptyHexes = data.empty_hexes;
+                    const totalHexes = data.total_hexes;
+                    const coveragePercent = data.pcover * 100;
+
+                    statsContainer.innerHTML = `
+                        <p style="margin: 0;">There are <strong>${emptyHexes.toLocaleString()}</strong> empty hexes, out of <strong>${totalHexes.toLocaleString()}</strong> (${coveragePercent.toFixed(1)}% coverage).</p>
+                    `;
+
+                } catch (error) {
+                    console.error('Error fetching country stats:', error);
+                    statsContainer.innerHTML = '<p>Could not load country statistics.</p>';
+                }
+            }
+
 
             // Function to fetch and display hex data
             async function fetchAndDisplayHex() {

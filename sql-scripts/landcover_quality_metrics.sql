@@ -59,7 +59,5 @@ CREATE TABLE h3.no_landcover AS
 	           WHERE cast(hl.ix AS VARCHAR(16)) = lh3.ix)
 	   AND ST_Y(ST_Transform(ST_Centroid(geom), 4326)) > -60;      
 
-
-SELECT min(ST_Y(ST_Centroid(geom))) FROM h3.no_landcover;
    
 	   

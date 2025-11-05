@@ -13,6 +13,8 @@ CREATE TABLE h3.country_polygons AS
         
 --SELECT * FROM   h3.ne_10m_admin_0_countries ORDER BY admin;      
 
+DROP TABLE IF EXISTS h3.country_polygons;
+
 CREATE TABLE h3.country_polygons AS         
     SELECT 
         name_en AS name_en, adm0_a3 AS ISO3166,
@@ -21,21 +23,64 @@ CREATE TABLE h3.country_polygons AS
         ST_Transform(wkb_geometry,3857) AS geom
         FROM h3.ne_10m_admin_0_countries
         ORDER BY name_en;        
-        
---SELECT * FROM    h3.country_polygons ORDER BY status;      
-        
 
-CREATE TABLE h3.country_stats AS 
-    SELECT countries.name_en, ST_AREA(ST_INTERSECTION(countries.geom, landcovers.geom)) / ST_AREA(countries.geom) as pcover, countries.geom --ST_INTERSECTION(foo.geom, bar.geom) AS geom, bar.feature
-    FROM (
-            SELECT name_en, ST_UNION(geom) as geom
-            FROM h3.country_polygons
-            GROUP BY name_en
-         ) as countries, (
-            SELECT ST_UNION(geom) as geom
-            FROM h3.landcovers_aggr
-         ) as landcovers
-    WHERE ST_INTERSECTS(countries.geom, landcovers.geom) ;
+CREATE INDEX ix_country_polygons  ON h3.country_polygons (name_en);
+CREATE INDEX gix_country_polygons ON h3.country_polygons USING GIST (geom);
+
+DROP TABLE IF EXISTS h3.country_stats;
+
+CREATE TABLE h3.country_stats AS
+    SELECT
+      cp.name_en,
+      COALESCE(th.total_hexes, 0) AS total_hexes,
+      COALESCE(eh.empty_hexes, 0) AS empty_hexes,
+      COALESCE(cov.pcover, 0) AS pcover
+    FROM
+      h3.country_polygons cp
+      LEFT JOIN (
+            SELECT
+              c.name_en,
+              count(h.ix) AS total_hexes
+            FROM
+              h3.hex_land h
+              JOIN h3.country_polygons c ON ST_Intersects (h.geom, c.geom)
+            GROUP BY
+              c.name_en
+          ) as th ON cp.name_en = th.name_en
+      LEFT JOIN(
+            SELECT
+              c.name_en,
+              count(n.ix) AS empty_hexes
+            FROM
+              h3.no_landcover n
+              JOIN h3.country_polygons c ON ST_Intersects (n.geom, c.geom)
+            GROUP BY
+              c.name_en
+          ) as eh ON cp.name_en = eh.name_en
+      LEFT JOIN (
+            SELECT
+              countries.name_en,
+              ST_AREA (ST_INTERSECTION (countries.geom, landcovers.geom)) / ST_AREA (countries.geom) AS pcover
+            FROM
+              (
+                SELECT
+                  name_en,
+                  ST_UNION (geom) AS geom
+                FROM
+                  h3.country_polygons
+                GROUP BY
+                  name_en
+              ) AS countries,
+              (
+                SELECT
+                  ST_UNION (geom) AS geom
+                FROM
+                  h3.landcovers_aggr
+              ) AS landcovers
+            WHERE
+              ST_INTERSECTS (countries.geom, landcovers.geom)
+          ) as cov ON cp.name_en = cov.name_en;
+
 
 
 -- SELECT * FROM h3.country_stats  ORDER BY 2 DESC;

@@ -31,6 +31,6 @@ page.print("""<p>This table shows what percentage of a country's territory is co
 page.print('<table class="sortable">')
 page.print('<tr><th>Country or territory</th><th>Landcover % </th></tr> ')
 for record in records:
-    page.print(f'<tr><td>{record[0]}</td><td>{round(float(record[1])*100)}</td></tr> ')
+    page.print(f'<tr><td>{record[0]}</td><td>{round(float(record[3])*100)}</td></tr> ')
 page.print('</table>')
 page.write()
