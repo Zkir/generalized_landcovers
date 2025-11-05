@@ -137,7 +137,7 @@
                     Show Another Empty Hex
             </button>
 			<p></p>
-			<h2>Landcover Statistics</h2>
+			<h2>Hex Statistics</h2>
 			<div id="stats">
                 <p>Loading statistics...</p>
             </div>
@@ -210,6 +210,7 @@
                 const selectedCountry = countrySelector.value;
                 localStorage.setItem('selectedCountry', selectedCountry);
                 fetchAndDisplayCountryStats(selectedCountry);
+                fetchAndDisplayHex();
             });
 
             // Function to fetch and display country stats
@@ -229,7 +230,7 @@
 
                     const emptyHexes = data.empty_hexes;
                     const totalHexes = data.total_hexes;
-                    const coveragePercent = data.pcover * 100;
+                    const coveragePercent = (data.total_hexes - data.empty_hexes)/data.total_hexes * 100;
 
                     statsContainer.innerHTML = `
                         <p style="margin: 0;">There are <strong>${emptyHexes.toLocaleString()}</strong> empty hexes, out of <strong>${totalHexes.toLocaleString()}</strong> (${coveragePercent.toFixed(1)}% coverage).</p>
@@ -249,6 +250,14 @@
                     map.removeLayer(currentHexLayer);
                 }
 
+                // Reset visibility of elements
+                document.getElementById('hex-id').style.display = 'block';
+                document.getElementById('edit-links').style.display = 'block';
+                document.getElementById('show-another-btn').style.display = 'block';
+                const landcoverStatsTitle = document.querySelector('#info-panel h2:last-of-type');
+                if(landcoverStatsTitle) landcoverStatsTitle.style.display = 'block';
+                document.getElementById('stats').style.display = 'block';
+
                 document.getElementById('hex-id').innerText = "Hex: Loading...";
                 document.getElementById('stats').innerHTML = '<p>Loading statistics...</p>';
                 document.getElementById('edit-links').innerHTML = '<p>Loading edit links...</p>';
@@ -262,9 +271,22 @@
                     const data = await response.json();
 
                     if (data.error) {
-                        document.getElementById('hex-id').innerText = "Error";
-                        document.getElementById('stats').innerHTML = `<p>${data.error}</p>`;
-                        document.getElementById('edit-links').innerHTML = '<p>Error loading links.</p>';
+                        if (data.error === "No empty hexes found that meet the criteria.") {
+                            const selectedCountryName = countrySelector.options[countrySelector.selectedIndex].text;
+                            document.getElementById('hex-id').innerHTML = `<h2>Congratulations!</h2><p>All the hexes in <b>${selectedCountryName}</b> are filled in.</p>`;
+                            document.getElementById('edit-links').style.display = 'none';
+                            document.getElementById('show-another-btn').style.display = 'none';
+                            if(landcoverStatsTitle) landcoverStatsTitle.style.display = 'none';
+                            document.getElementById('stats').style.display = 'none';
+                            if (currentHexLayer) {
+                                map.removeLayer(currentHexLayer);
+                            }
+                            map.setView([0, 0], 2);
+                        } else {
+                            document.getElementById('hex-id').innerText = "Error";
+                            document.getElementById('stats').innerHTML = `<p>${data.error}</p>`;
+                            document.getElementById('edit-links').innerHTML = '<p>Error loading links.</p>';
+                        }
                         return;
                     }
 
