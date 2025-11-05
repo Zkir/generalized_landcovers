@@ -41,7 +41,7 @@ CREATE TABLE h3.no_landcover_per_country AS
       h3.no_landcover n
       JOIN h3.country_polygons c ON ST_Intersects (n.geom, c.geom);
 
-CREATE INDEX ix_no_landcover_per_country  ON h3.country_polygons (ix, country_name);
+CREATE INDEX ix_no_landcover_per_country  ON h3.no_landcover_per_country (ix, country_name);
 
 /*------------------------------------------------------------------------------
  *  h3.country_stats
