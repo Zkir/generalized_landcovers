@@ -70,7 +70,7 @@ data/export/server/tileserver.php : | data/export/server
 	cp misc/tileserver/tileserver.php data/export/server/tileserver.php
 
 data/export/server/landcovers.mbtiles: data/shapes  | data/export/server
-	node ../tilemill/index.js export generalized_landcovers  data/export/server/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet
+	(. ~/.nvm/nvm.sh && nvm use v8.15.0 && node ../tilemill/index.js export generalized_landcovers  data/export/server/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet)
 
 taginfo.json data/export/renderedtags.html &: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats | data/export
 	python3 py-scripts/taginfo_json.py
