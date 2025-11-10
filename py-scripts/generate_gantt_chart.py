@@ -182,7 +182,7 @@ def parse_profiling_log(log_path):
     with open(log_path, 'r') as f:
         for line in f:
             parts = line.split()
-            # Expected format: START_TIMESTAMP-PID-SOME_ID END_TIMESTAMP DURATION STATUS TARGET_NAME [DESCRIPTION]
+            # Expected format: BUILD_TIMESTAMP-PID-SOME_ID START_TIMESTAMP DURATION STATUS TARGET_NAME(S) [DESCRIPTION]
             if len(parts) >= 5:
                 try:
                     duration_s = int(parts[2])
@@ -234,8 +234,13 @@ def calculate_task_timings(dependencies, durations):
             if prereq in task_info:
                 graph[prereq].append(task_name)
                 in_degree[task_name] += 1
-
+    
+    
     queue = collections.deque([task for task, degree in in_degree.items() if degree == 0])
+    
+    
+    
+    
     
     processed_tasks_order = []
     while queue:
@@ -287,7 +292,7 @@ def calculate_task_timings(dependencies, durations):
     gantt_data = []
     for task_name, info in task_info.items():
         # Only include tasks that actually ran (duration > 0) or are significant
-        if info['duration'] > 0 or info['prerequisites']:
+        if info['duration'] > 0 or info['is_critical']:  # or info['prerequisites']: #
             gantt_data.append({
                 'name': task_name,
                 'start_s': info['earliest_start'], # Use earliest start for Gantt chart
@@ -296,10 +301,69 @@ def calculate_task_timings(dependencies, durations):
                 'is_critical': info['is_critical']
             })
     
-    # Sort by start time for better visualization
-    gantt_data.sort(key=lambda x: x['start_s'])
+    # The data is already sorted topologically, no need for further sorting by start_s
+    # gantt_data.sort(key=lambda x: x['start_s'])
     
-    return gantt_data
+    return gantt_data, task_info
+
+from heapq import heappush, heappop
+
+def sort_gantt_data_topologically(gantt_data: List[Dict[str, Any]], task_info: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """
+    Sorts gantt_data topologically, prioritizing tasks with earlier end times
+    when topological criteria are equal.
+    """
+    # Build graph and in-degrees
+    graph = collections.defaultdict(list) # graph[prereq] = [task_that_depends_on_prereq]
+    in_degree = collections.defaultdict(int)
+    
+    # Initialize in_degree for all tasks in gantt_data
+    for task in gantt_data:
+        in_degree[task['name']] = 0
+
+    # Populate graph and in_degree based on task_info (which has prerequisites)
+    for task_name, info in task_info.items():
+        for prereq in info['prerequisites']:
+            if prereq in in_degree and task_name in in_degree: # Ensure both exist in the current gantt_data set
+                graph[prereq].append(task_name)
+                in_degree[task_name] += 1
+
+    # Priority queue: (end_time, task_name)
+    # We use negative end_time to simulate max-heap for end_time,
+    # but since we want earlier end times first, we use positive end_time.
+    # The example used (end, id) for min-heap, which means earlier end times first.
+    heap = []
+    task_map = {task['name']: task for task in gantt_data} # Map for quick lookup
+
+    for task_name, degree in in_degree.items():
+        if degree == 0:
+            task = task_map[task_name]
+            heappush(heap, (task['end_s'], task['name']))
+
+    sorted_result = []
+    while heap:
+        end_time, task_name = heappop(heap)
+        task = task_map[task_name]
+        sorted_result.append(task)
+        
+        # Update dependencies for neighbors
+        for neighbor_name in graph[task_name]:
+            in_degree[neighbor_name] -= 1
+            if in_degree[neighbor_name] == 0:
+                neighbor_task = task_map[neighbor_name]
+                heappush(heap, (neighbor_task['end_s'], neighbor_name))
+
+    # Check for cycles (if any task still has in_degree > 0)
+    if len(sorted_result) != len(gantt_data):
+        # This indicates a cycle or some tasks were not reachable from initial queue
+        # For now, we'll just return the partial result, but a real implementation
+        # might raise an error or handle it differently.
+        print("Warning: Cycle detected or some tasks not processed in topological sort.")
+        # Fallback to sorting by start_s if topological sort fails to process all
+        gantt_data.sort(key=lambda x: (x['start_s'], x['end_s']))
+        return gantt_data
+    
+    return sorted_result
 
 def format_time(seconds):
     t=int(seconds)
@@ -485,8 +549,11 @@ if __name__ == "__main__":
     print(f"Parsed {len(durations)} task durations from profiling log.")
 
     # Calculate task timings
-    gantt_data = calculate_task_timings(dependencies, durations)
+    gantt_data, task_info = calculate_task_timings(dependencies, durations)
     print(f"Calculated timings for {len(gantt_data)} tasks.")
+
+    # Sort gantt_data topologically with end_s as secondary criterion
+    gantt_data = sort_gantt_data_topologically(gantt_data, task_info)
 
     # Generate HTML
     generate_gantt_html(gantt_data, OUTPUT_HTML_PATH)
