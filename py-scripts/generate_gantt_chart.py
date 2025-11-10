@@ -398,6 +398,13 @@ def generate_gantt_html(gantt_data, output_path):
     max_end_time = max(task['end_s'] for task in gantt_data)
     min_start_time = min(task['start_s'] for task in gantt_data)
     total_chart_duration = max_end_time - min_start_time
+
+    total_tasks_duration   = 0.0
+    critical_path_duration = 0.0
+    for task in gantt_data:
+        total_tasks_duration += task['duration_s']
+        if task['is_critical']:
+            critical_path_duration += task['duration_s']
     
     # Scale factor for width (e.g., 100px per second, adjust as needed)
     chart_width_px = 1000 # Max chart width in pixels
@@ -521,6 +528,21 @@ def generate_gantt_html(gantt_data, output_path):
             font-size: 10px;
             margin-left: 5px;
         }}
+        .summary-statistics {{
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: {chart_width_px + 350}px;
+        }}
+        .summary-statistics h2 {{
+            margin-top: 0;
+            color: #333;
+        }}
+        .summary-statistics p {{
+            margin-bottom: 5px;
+        }}
     </style>
 </head>
 <body>
@@ -538,6 +560,13 @@ def generate_gantt_html(gantt_data, output_path):
         </div>
         <div style="clear:both;"></div>
     </div>
+
+    <div class="summary-statistics">
+        <h2>Summary Statistics</h2>
+        <p><strong>Total duration of all tasks:</strong> {format_time(total_tasks_duration)}</p>
+        <p><strong>Critical path duration:</strong> {format_time(critical_path_duration)}</p>
+    </div>
+
 </body>
 </html>    """
 	
