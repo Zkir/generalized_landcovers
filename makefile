@@ -15,8 +15,7 @@ all: data/tables/landcover_quality_metrics \
       data/export/empty_hex.html \
       data/export/empty_hex_api.py \
       data/export/country_api.py \
-	  data/export/style.css \
-	  data/export/gantt_chart.html ## Do generalization and create web-ui image, including downloadable files
+	  data/export/style.css ## Do generalization and create web-ui image, including downloadable files
 
 
 .PHONY: upload
@@ -53,8 +52,8 @@ data/export/country_api.py: misc/country_api.py | data/export
 	cp misc/country_api.py data/export/country_api.py
 	chmod +x data/export/country_api.py
 
-data/export/gantt_chart.html: py-scripts/generate_gantt_chart.py makefile makefile-profiling.log | data/export
-	python3 $<
+data/export/gantt_chart.html: makefile makefile-profiling.log | data/export
+	python3 py-scripts/generate_gantt_chart.py
 
 
 
@@ -108,14 +107,6 @@ data/landcovers_aggr.shp: data/tables/landcovers_aggr
   "PG:dbname=gis host=localhost port=5432 user=$(PGUSER)  password=$(PGPASSWORD)" \
   -sql "SELECT * FROM h3.landcovers_aggr" \
   -lco ENCODING=UTF-8
-
-data/landcovers.gpkg: data/tables/landcovers_aggr
-	ogr2ogr -f "GPKG" \
-  -progress -overwrite \
-  data/landcovers.gpkg \
-  "PG:dbname=gis host=localhost port=5432 user=$(PGUSER)  password=$(PGPASSWORD)" \
-  -nln landcovers \
-  -sql "SELECT * FROM h3.landcovers" 
 
 data/waterbodies_aggr.shp: data/tables/water_bodies_aggr
 	ogr2ogr -f "ESRI Shapefile" \

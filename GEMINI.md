@@ -177,3 +177,6 @@ The goal is to create a web page that visualizes the `makefile` build process as
     *   Add `data/export/gantt_chart.html` to the `all` target or a new `profile` target to ensure it's generated during the build process.
 
 This plan ensures that the Gantt chart visualization is generated as part of the build process, providing insights into task durations and dependencies.
+## Recent Accomplishments
+- Fixed a bug in the Gantt chart generation script (`py-scripts/generate_gantt_chart.py`). The script now correctly parses makefiles with multiple targets per rule (e.g., `target1 target2 &: ...`) and profiling logs where multiple targets are comma-separated. This resolves issues with incorrect dependency resolution and "hanging tasks" in the generated chart.
+- Corrected the interpretation of task durations in `py-scripts/generate_gantt_chart.py`, ensuring they are read as seconds as intended, rather than being incorrectly divided by 1000.

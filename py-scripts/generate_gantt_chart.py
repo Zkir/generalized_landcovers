@@ -78,8 +78,9 @@ def parse_makefile_content(makefile_content: str, is_check_loop: bool = True, lo
     def parse_target(token: Tuple[Tokens, str]):
         line = token[1]
         # Regex adapted to be more robust and handle cases where deps/order_deps might be empty
+        # Handle '&:' for grouped targets
         match = re.match(
-            r'(.+?):\s*(?:([^|#]+?)\s*)?(?:\|\s*([^#]+?)\s*)?\s*(?:##(.+))?$',
+            r'(.+?)\s*(?:&\s*)?:\s*(?:([^|#]+?)\s*)?(?:\|\s*([^#]+?)\s*)?\s*(?:##(.+))?$',
             line
         )
         if not match:
@@ -88,7 +89,7 @@ def parse_makefile_content(makefile_content: str, is_check_loop: bool = True, lo
             if not match:
                 return # Skip if not a valid target line
 
-        target_name = match.group(1).strip()
+        targets_str = match.group(1).strip()
         deps_str = match.group(2) if match.group(2) else ''
         order_deps_str = match.group(3) if match.group(3) else ''
         docstring = match.group(4) if match.group(4) else ''
@@ -97,15 +98,18 @@ def parse_makefile_content(makefile_content: str, is_check_loop: bool = True, lo
         order_deps = [p.strip() for p in order_deps_str.split()] if order_deps_str else []
 
         body = parse_body()
-        ast.append((
-            token[0],
-            {
-                'target': target_name,
-                'deps': [deps, order_deps],
-                'docs': docstring.strip(),
-                'body': body
-            })
-        )
+        
+        # Split targets string into individual targets
+        for target_name in targets_str.split():
+            ast.append((
+                token[0],
+                {
+                    'target': target_name,
+                    'deps': [deps, order_deps],
+                    'docs': docstring.strip(),
+                    'body': body
+                })
+            )
 
     def next_belongs_to_target() -> bool:
         try:
@@ -181,15 +185,24 @@ def parse_profiling_log(log_path):
     durations = {}
     with open(log_path, 'r') as f:
         for line in f:
-            parts = line.split()
-            # Expected format: BUILD_TIMESTAMP-PID-SOME_ID START_TIMESTAMP DURATION STATUS TARGET_NAME(S) [DESCRIPTION]
-            if len(parts) >= 5:
+            # Split into max 5 parts: BUILD_ID, START_TS, DURATION, STATUS, and the rest is TARGET
+            parts = line.strip().split(maxsplit=4)
+            if len(parts) == 5:
                 try:
                     duration_s = int(parts[2])
-                    target_name = parts[4]
-                    durations[target_name] = duration_s
-                except ValueError:
-                    continue # Skip lines where duration is not an integer
+                    targets_line = parts[4]
+                    
+                    # The log can have comma-separated targets for one rule
+                    for target_name in targets_line.split(','):
+                        target_name = target_name.strip()
+                        # The log for 'help' target includes its description.
+                        # The makefile parser gets only 'help'.
+                        # We need to match what the makefile parser gets.
+                        # Let's assume target names don't contain spaces.
+                        actual_target = target_name.split()[0]
+                        durations[actual_target] = duration_s
+                except (ValueError, IndexError):
+                    continue # Skip malformed lines
     return durations
 
 def calculate_task_timings(dependencies, durations):
