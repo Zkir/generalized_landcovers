@@ -455,11 +455,14 @@ def generate_gantt_html(gantt_data, output_path):
         }}
         .gantt-labels {{
             float: left;
-            width: 280px; /* Width for task names on the left */
+            width: 350px; /* Increased width for task names + duration */
             padding-right: 10px;
             box-sizing: border-box;
         }}
         .gantt-label-item {{
+            display: flex;
+            justify-content: space-between; /* Distribute name and duration */
+            align-items: center;
             height: 30px;
             line-height: 30px;
             font-size: 12px;
@@ -469,12 +472,24 @@ def generate_gantt_html(gantt_data, output_path):
             white-space: nowrap;
             text-align: right;
         }}
-        .gantt-label-item.critical-task-label {{
+        .gantt-label-name {{
+            flex-grow: 1;
+            text-align: right;
+            padding-right: 5px;
+        }}
+        .gantt-label-duration {{
+            width: 60px; /* Fixed width for duration */
+            text-align: right;
+            font-size: 10px;
+            color: #777;
+        }}
+        .gantt-label-item.critical-task-label .gantt-label-name,
+        .gantt-label-item.critical-task-label .gantt-label-duration {{
             font-weight: bold;
             color: #D32F2F; /* Darker red for critical path labels */
         }}
         .gantt-timeline {{
-            margin-left: 290px; /* Offset for labels + padding */
+            margin-left: 360px; /* Offset for labels + padding */
             position: relative;
             min-height: {len(gantt_data) * 30}px; /* Total height based on tasks */
             width: {chart_width_px}px;
@@ -512,7 +527,11 @@ def generate_gantt_html(gantt_data, output_path):
     <h1>Makefile Build Gantt Chart</h1>
     <div class="gantt-chart-container">
         <div class="gantt-labels">
-            {''.join([f'<div class="gantt-label-item {"critical-task-label" if task["is_critical"] else ""}">{remove_data_prefix(task["name"])}</div>' for task in gantt_data])}
+            {''.join([f'''
+            <div class="gantt-label-item {"critical-task-label" if task["is_critical"] else ""}">
+                <span class="gantt-label-name">{remove_data_prefix(task["name"])}</span>
+                <span class="gantt-label-duration">{format_time(task["duration_s"])}</span>
+            </div>''' for task in gantt_data])}
         </div>
         <div class="gantt-timeline">
             {''.join(tasks_html)}
