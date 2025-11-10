@@ -319,7 +319,7 @@ def calculate_task_timings(dependencies, durations):
     
     hanging_tasks = []
     for task_name, info in task_info.items():
-        if task_name not in reachable_tasks and (info['duration'] > 0 or info['prerequisites']):
+        if task_name not in reachable_tasks: # and (info['duration'] > 0 or info['prerequisites']):
             hanging_tasks.append({
                 'name': task_name,
                 'duration_s': info['duration']
@@ -328,7 +328,7 @@ def calculate_task_timings(dependencies, durations):
     gantt_data = []
     for task_name, info in task_info.items():
         # Only include tasks that actually ran (duration > 0) or are significant
-        if (info['duration'] > 0 or info['is_critical']) and task_name in reachable_tasks:
+        if (task_name in reachable_tasks) and (info['duration'] > 0 or info['prerequisites'] ) : #or info['is_critical'] 
             gantt_data.append({
                 'name': task_name,
                 'start_s': info['earliest_start'], # Use earliest start for Gantt chart

@@ -1,6 +1,5 @@
 .PHONY: all
-all: data/tables/landcover_quality_metrics \
-      data/shapes \
+all:  data/shapes \
       mapnik_carto_generated.xml \
       taginfo.json \
       data/export/server/landcovers.mbtiles \
@@ -15,7 +14,8 @@ all: data/tables/landcover_quality_metrics \
       data/export/empty_hex_api.py \
       data/export/country_api.py \
 	  data/export/style.css ## Do generalization and create web-ui image, including downloadable files
-	  
+
+#     data/tables/landcover_quality_metrics \
 #	  data/export/downloads/unrendered_landcovers.osm \
 
 .PHONY: upload
@@ -140,7 +140,7 @@ data/ocean_lz.shp:
   -sql "SELECT * FROM simplified_water_polygons" \
   -lco ENCODING=UTF-8
 
-data/tables/country_stats: data/tables/ne_10m_admin_0_countries data/tables/landcovers_aggr data/tables/hex_land data/tables/landcover_quality_metrics
+data/tables/country_stats: data/tables/ne_10m_admin_0_countries data/tables/landcovers_aggr data/tables/hex_land data/tables/no_landcover
 	psql -d gis -f "sql-scripts/country_stats.sql" -v ON_ERROR_STOP=1
 	touch $@
 
@@ -181,6 +181,10 @@ data/tables/places: data/tables/h3_hexes | data/tables
 data/tables/landcover_quality_metrics: data/tables/landcovers_aggr data/tables/hex_land | data/tables
 	psql -d gis -f "sql-scripts/landcover_quality_metrics.sql" -v ON_ERROR_STOP=1
 	touch $@
+	
+data/tables/no_landcover: data/tables/landcovers_aggr data/tables/hex_land | data/tables
+	psql -d gis -f "sql-scripts/no_landcover.sql" -v ON_ERROR_STOP=1
+	touch $@	
 	
 	
 data/tables/hex_land: data/tables/h3_hexes data/tables/water_bodies_aggr | data/tables
