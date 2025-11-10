@@ -74,7 +74,7 @@ CREATE TABLE h3.country_stats AS
             FROM
               h3.no_landcover_per_country n
             GROUP BY
-              c.country_name
+              n.country_name
           ) as eh ON cp.name_en = eh.name_en
       LEFT JOIN (
             SELECT
