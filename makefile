@@ -6,7 +6,6 @@ all: data/tables/landcover_quality_metrics \
       data/export/server/landcovers.mbtiles \
 	  data/export/server/.htaccess \
 	  data/export/server/tileserver.php \
-	  data/export/downloads/unrendered_landcovers.osm \
       data/export/downloads.html \
       data/export/country_stats.html \
       data/export/renderedtags.html \
@@ -16,7 +15,8 @@ all: data/tables/landcover_quality_metrics \
       data/export/empty_hex_api.py \
       data/export/country_api.py \
 	  data/export/style.css ## Do generalization and create web-ui image, including downloadable files
-
+	  
+#	  data/export/downloads/unrendered_landcovers.osm \
 
 .PHONY: upload
 upload: data/export/server/landcovers.mbtiles ## Upload downloadable files and generated htmls to the web-ui

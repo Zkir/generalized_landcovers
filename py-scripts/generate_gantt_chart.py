@@ -442,43 +442,36 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
         if task['is_critical']:
             critical_path_duration += task['duration_s']
     
-    # Scale factor for width (e.g., 100px per second, adjust as needed)
-    chart_width_px = 1000 # Max chart width in pixels
-    scale_factor =0.75* chart_width_px / total_chart_duration if total_chart_duration > 0 else 0
-
     tasks_html = []
     # Assign a row index to each task for vertical positioning
-    # A simple approach: just assign them sequentially
     task_row_map = {task['name']: i for i, task in enumerate(gantt_data)}
 
     for i, task in enumerate(gantt_data):
-        # Calculate position and width
-        start_offset = (task['start_s'] - min_start_time) * scale_factor
-        duration_width = task['duration_s'] * scale_factor
+        # Calculate position and width in percentages
+        start_percent = ((task['start_s'] - min_start_time) / total_chart_duration) * 100 if total_chart_duration > 0 else 0
+        duration_percent = (task['duration_s'] / total_chart_duration) * 100 if total_chart_duration > 0 else 0
         
-        # Ensure minimum width for visibility
-        if duration_width < 1: duration_width = 1 
+        # Ensure minimum width for visibility of very short tasks
+        if duration_percent > 0 and duration_percent < 0.1:
+            duration_percent = 0.1
 
         # Vertical position based on index
         top_offset = i * 30 # 30px per row
 
         tasks_html.append(f"""
-            <div class=\"gantt-task {'critical-task' if task['is_critical'] else ''}\" style=\"left: {start_offset}px; width: {duration_width}px; top: {top_offset}px;\">
-                <!-- <span class=\"task-name\">{task['name']}</span> -->
-                <span class=\"task-duration\">{format_time(task['duration_s'])}</span>
+            <div class="gantt-task {'critical-task' if task['is_critical'] else ''}" style="left: {start_percent}%; width: {duration_percent}%; top: {top_offset}px;">
+                <!-- <span class="task-name">{task['name']}</span> -->
+                <span class="task-duration">{format_time(task['duration_s'])}</span>
             </div>
         """)
 
     hanging_tasks_html = ""
     if hanging_tasks:
-        hanging_tasks_html = """
+        hanging_tasks_html = f"""
         <div class="hanging-tasks-section">
             <h2>Hanging Tasks (not reachable from 'all')</h2>
             <ul>
-        """
-        for task in hanging_tasks:
-            hanging_tasks_html += f"<li>{remove_data_prefix(task['name'])} ({format_time(task['duration_s'])})</li>"
-        hanging_tasks_html += """
+        {''.join([f"<li>{remove_data_prefix(task['name'])} ({format_time(task['duration_s'])})</li>" for task in hanging_tasks])}
             </ul>
         </div>
         """
@@ -500,19 +493,15 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
             color: #333;
         }}
         .gantt-chart-container {{
-            position: relative;
-            width: 100%;
-            max-width: {chart_width_px + 350}px; /* Adjust based on chart_width_px + labels */
+            display: flex;
             border: 1px solid #ccc;
             background-color: #fff;
             padding: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            overflow-x: auto;
             min-height: {len(gantt_data) * 30 + 20}px; /* Total height based on tasks + padding */
         }}
         .gantt-labels {{
-            float: left;
-            width: 350px; /* Increased width for task names + duration */
+            flex: 0 0 350px; /* Do not grow or shrink, fixed width */
             padding-right: 10px;
             box-sizing: border-box;
         }}
@@ -546,10 +535,10 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
             color: #D32F2F; /* Darker red for critical path labels */
         }}
         .gantt-timeline {{
-            margin-left: 360px; /* Offset for labels + padding */
+            flex-grow: 1;
             position: relative;
             min-height: {len(gantt_data) * 30}px; /* Total height based on tasks */
-            width: {chart_width_px}px;
+			margin-right: 20px;
         }}
         .gantt-task {{
             position: absolute;
@@ -565,6 +554,7 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
             box-sizing: border-box;
             padding: 0 5px;
             margin-top: 5px; /* Center vertically within 30px row */
+            min-width: 1px; /* Ensure visibility for very short tasks */
         }}
         .gantt-task.critical-task {{
             background-color: #F44336; /* Red for critical path tasks */
@@ -584,7 +574,6 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
             border: 1px solid #ccc;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            max-width: {chart_width_px + 350}px;
         }}
         .summary-statistics h2, .hanging-tasks-section h2 {{
             margin-top: 0;
@@ -616,7 +605,6 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
         <div class="gantt-timeline">
             {''.join(tasks_html)}
         </div>
-        <div style="clear:both;"></div>
     </div>
 
     <div class="summary-statistics">
@@ -627,7 +615,8 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
     {hanging_tasks_html}
 
 </body>
-</html>    """
+</html>
+"""
 	
     with open(output_path, 'w') as f:
         f.write(html_content)

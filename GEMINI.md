@@ -180,3 +180,4 @@ This plan ensures that the Gantt chart visualization is generated as part of the
 ## Recent Accomplishments
 - Fixed a bug in the Gantt chart generation script (`py-scripts/generate_gantt_chart.py`). The script now correctly parses makefiles with multiple targets per rule (e.g., `target1 target2 &: ...`) and profiling logs where multiple targets are comma-separated. This resolves issues with incorrect dependency resolution and "hanging tasks" in the generated chart.
 - Corrected the interpretation of task durations in `py-scripts/generate_gantt_chart.py`, ensuring they are read as seconds as intended, rather than being incorrectly divided by 1000.
+- Made the Gantt chart (`gantt_chart.html`) responsive by switching from pixel-based widths to percentages and using a flexbox layout. This ensures the chart displays correctly on various screen sizes.
