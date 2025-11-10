@@ -15,7 +15,8 @@ all: data/tables/landcover_quality_metrics \
       data/export/empty_hex.html \
       data/export/empty_hex_api.py \
       data/export/country_api.py \
-	  data/export/style.css ## Do generalization and create web-ui image, including downloadable files
+	  data/export/style.css \
+	  data/export/gantt_chart.html ## Do generalization and create web-ui image, including downloadable files
 
 
 .PHONY: upload
@@ -51,6 +52,9 @@ data/export/empty_hex_api.py: misc/empty_hex_api.py | data/export
 data/export/country_api.py: misc/country_api.py | data/export
 	cp misc/country_api.py data/export/country_api.py
 	chmod +x data/export/country_api.py
+
+data/export/gantt_chart.html: py-scripts/generate_gantt_chart.py makefile makefile-profiling.log | data/export
+	python3 $<
 
 
 

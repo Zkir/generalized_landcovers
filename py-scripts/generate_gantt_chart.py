@@ -289,10 +289,33 @@ def calculate_task_timings(dependencies, durations):
         # Determine if task is critical
         task_info[u]['is_critical'] = (abs(task_info[u]['earliest_start'] - task_info[u]['latest_start']) < 1e-9) # Using a small epsilon for float comparison
 
+    # --- Identify reachable tasks from 'all' target ---
+    reachable_tasks = set()
+    queue_reachable = collections.deque(['all']) # Start from the 'all' target
+
+    while queue_reachable:
+        u = queue_reachable.popleft()
+        if u in reachable_tasks:
+            continue
+        reachable_tasks.add(u)
+        
+        # Add its prerequisites to the queue
+        if u in task_info:
+            for prereq in task_info[u]['prerequisites']:
+                queue_reachable.append(prereq)
+    
+    hanging_tasks = []
+    for task_name, info in task_info.items():
+        if task_name not in reachable_tasks and (info['duration'] > 0 or info['prerequisites']):
+            hanging_tasks.append({
+                'name': task_name,
+                'duration_s': info['duration']
+            })
+
     gantt_data = []
     for task_name, info in task_info.items():
         # Only include tasks that actually ran (duration > 0) or are significant
-        if info['duration'] > 0 or info['is_critical']:  # or info['prerequisites']: #
+        if (info['duration'] > 0 or info['is_critical']) and task_name in reachable_tasks:
             gantt_data.append({
                 'name': task_name,
                 'start_s': info['earliest_start'], # Use earliest start for Gantt chart
@@ -304,7 +327,7 @@ def calculate_task_timings(dependencies, durations):
     # The data is already sorted topologically, no need for further sorting by start_s
     # gantt_data.sort(key=lambda x: x['start_s'])
     
-    return gantt_data, task_info
+    return gantt_data, task_info, hanging_tasks
 
 from heapq import heappush, heappop
 
@@ -384,7 +407,7 @@ def remove_data_prefix(path):
     return path    
     
     
-def generate_gantt_html(gantt_data, output_path):
+def generate_gantt_html(gantt_data, output_path, hanging_tasks):
     """
     Generates an HTML file with a simple Gantt chart using HTML/CSS.
     """
@@ -395,8 +418,8 @@ def generate_gantt_html(gantt_data, output_path):
         return
 
     # Find the total duration to scale the chart
-    max_end_time = max(task['end_s'] for task in gantt_data)
-    min_start_time = min(task['start_s'] for task in gantt_data)
+    max_end_time = max(task['end_s'] for task in gantt_data) if gantt_data else 0
+    min_start_time = min(task['start_s'] for task in gantt_data) if gantt_data else 0
     total_chart_duration = max_end_time - min_start_time
 
     total_tasks_duration   = 0.0
@@ -432,6 +455,20 @@ def generate_gantt_html(gantt_data, output_path):
                 <span class=\"task-duration\">{format_time(task['duration_s'])}</span>
             </div>
         """)
+
+    hanging_tasks_html = ""
+    if hanging_tasks:
+        hanging_tasks_html = """
+        <div class="hanging-tasks-section">
+            <h2>Hanging Tasks (not reachable from 'all')</h2>
+            <ul>
+        """
+        for task in hanging_tasks:
+            hanging_tasks_html += f"<li>{remove_data_prefix(task['name'])} ({format_time(task['duration_s'])})</li>"
+        hanging_tasks_html += """
+            </ul>
+        </div>
+        """
 
     html_content = f"""
 <!DOCTYPE html>
@@ -528,7 +565,7 @@ def generate_gantt_html(gantt_data, output_path):
             font-size: 10px;
             margin-left: 5px;
         }}
-        .summary-statistics {{
+        .summary-statistics, .hanging-tasks-section {{
             margin-top: 20px;
             padding: 15px;
             border: 1px solid #ccc;
@@ -536,12 +573,20 @@ def generate_gantt_html(gantt_data, output_path):
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             max-width: {chart_width_px + 350}px;
         }}
-        .summary-statistics h2 {{
+        .summary-statistics h2, .hanging-tasks-section h2 {{
             margin-top: 0;
             color: #333;
         }}
-        .summary-statistics p {{
+        .summary-statistics p, .hanging-tasks-section ul {{
             margin-bottom: 5px;
+        }}
+        .hanging-tasks-section ul {{
+            list-style-type: none;
+            padding-left: 0;
+        }}
+        .hanging-tasks-section li {{
+            margin-bottom: 3px;
+            color: #555;
         }}
     </style>
 </head>
@@ -566,6 +611,7 @@ def generate_gantt_html(gantt_data, output_path):
         <p><strong>Total duration of all tasks:</strong> {format_time(total_tasks_duration)}</p>
         <p><strong>Critical path duration:</strong> {format_time(critical_path_duration)}</p>
     </div>
+    {hanging_tasks_html}
 
 </body>
 </html>    """
@@ -597,11 +643,11 @@ if __name__ == "__main__":
     print(f"Parsed {len(durations)} task durations from profiling log.")
 
     # Calculate task timings
-    gantt_data, task_info = calculate_task_timings(dependencies, durations)
+    gantt_data, task_info, hanging_tasks = calculate_task_timings(dependencies, durations)
     print(f"Calculated timings for {len(gantt_data)} tasks.")
 
     # Sort gantt_data topologically with end_s as secondary criterion
     gantt_data = sort_gantt_data_topologically(gantt_data, task_info)
 
     # Generate HTML
-    generate_gantt_html(gantt_data, OUTPUT_HTML_PATH)
+    generate_gantt_html(gantt_data, OUTPUT_HTML_PATH, hanging_tasks)
