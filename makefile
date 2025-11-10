@@ -15,11 +15,11 @@ all: data/tables/landcover_quality_metrics \
       data/export/empty_hex.html \
       data/export/empty_hex_api.py \
       data/export/country_api.py \
-	  data/export/style.css
+	  data/export/style.css ## Do generalization and create web-ui image, including downloadable files
 
 
 .PHONY: upload
-upload: data/export/server/landcovers.mbtiles
+upload: data/export/server/landcovers.mbtiles ## Upload downloadable files and generated htmls to the web-ui
 	if [ -z "$(FTPUSER)" ] ; then   echo "FTPUSER env variable is not defined" ; exit 1; fi
 	if [ -z "$(FTPPASSWORD)" ] ; then   echo "FTPPASSWORD env variable is not defined" ; exit 1; fi
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/landcovers.zip
@@ -145,7 +145,7 @@ data/ocean_lz.shp:
   -sql "SELECT * FROM simplified_water_polygons" \
   -lco ENCODING=UTF-8
 
-data/tables/country_stats: data/tables/ne_10m_admin_0_countries data/tables/landcovers_aggr data/tables/hex_land
+data/tables/country_stats: data/tables/ne_10m_admin_0_countries data/tables/landcovers_aggr data/tables/hex_land data/tables/landcover_quality_metrics
 	psql -d gis -f "sql-scripts/country_stats.sql" -v ON_ERROR_STOP=1
 	touch $@
 
@@ -249,17 +249,22 @@ test:
 
 
 .PHONY: import_planet
-import_planet: data/source/planet-latest-updated.osm.pbf | data
+import_planet: data/source/planet-latest-updated.osm.pbf | data ## import data into DB from planet.osm.pbf
 	osm2pgsql -d gis -U $(USER) --create --slim  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes data/nodes.bin --number-processes 16 -S ~/src/openstreetmap-carto/openstreetmap-carto.style -r pbf data/source/planet-latest-updated.osm.pbf
 	osm2pgsql-replication init -d gis --server https://planet.openstreetmap.org/replication/hour
 
 .PHONY: update_db
-update_db: 
+update_db: ## Update DB via OSM hour diffs
 	osm2pgsql-replication update -d gis  --max-diff-size 100 --  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes data/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style
 
 .PHONY: clean
-clean:
+clean: ## Delete all the *generalized* map data in DB and the files in the work folder. Raw planed data imported via osm2pgsql remains intact!
 	psql -d gis -c "DROP SCHEMA IF EXISTS  h3 CASCADE" -v ON_ERROR_STOP=1
 	rm -rf data/* 
 	mkdir data/downloads
 	mkdir data/tables
+
+
+.PHONY: help
+help: ## Print descriptions for tasks
+	@grep -E '^[a-zA-Z][^:]*:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = " *&?:.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'	
