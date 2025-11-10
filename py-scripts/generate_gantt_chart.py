@@ -202,63 +202,98 @@ def calculate_task_timings(dependencies, durations):
     # Initialize task_info with all known targets and their durations
     for target, deps_list in dependencies.items():
         task_info[target] = {
-            'start': 0.0, 
-            'end': 0.0, 
-            'duration': durations.get(target, 0.0), # Use 0.0 if duration not found
-            'prerequisites': deps_list[0] + deps_list[1] # Combine normal and order-only prereqs
+            'duration': durations.get(target, 0.0),
+            'prerequisites': deps_list[0] + deps_list[1],
+            'earliest_start': 0.0,
+            'earliest_finish': 0.0,
+            'latest_start': float('inf'),
+            'latest_finish': float('inf'),
+            'is_critical': False
         }
     
     # Add any tasks from durations that are not in dependencies (e.g., phony targets not explicitly listed)
     for target, duration in durations.items():
         if target not in task_info:
             task_info[target] = {
-                'start': 0.0, 
-                'end': 0.0, 
                 'duration': duration,
-                'prerequisites': []
+                'prerequisites': [],
+                'earliest_start': 0.0,
+                'earliest_finish': 0.0,
+                'latest_start': float('inf'),
+                'latest_finish': float('inf'),
+                'is_critical': False
             }
 
-    # Topological sort to determine execution order and calculate times
-    # Using Kahn's algorithm
+    # --- Forward Pass (Calculate Earliest Start and Finish Times) ---
+    # Create a graph for topological sort
+    graph = collections.defaultdict(list)
     in_degree = {task: 0 for task in task_info}
-    for task, info in task_info.items():
+    
+    for task_name, info in task_info.items():
         for prereq in info['prerequisites']:
-            if prereq in in_degree:
-                in_degree[prereq] += 1 # This is actually out-degree for Kahn's, but we're using it to count incoming edges
-            # If prereq is not in task_info, it means it's not a target we care about or it's an external dependency
-            # For simplicity, we'll ignore its impact on in_degree for now.
+            if prereq in task_info:
+                graph[prereq].append(task_name)
+                in_degree[task_name] += 1
 
-    # Let's use a simpler approach for now: iterative calculation until no changes
-    # This might not be strictly topological sort but will converge for acyclic graphs
+    queue = collections.deque([task for task, degree in in_degree.items() if degree == 0])
     
-    # Initialize all tasks to start at 0
-    for task in task_info:
-        task_info[task]['start'] = 0.0
-        task_info[task]['end'] = task_info[task]['duration']
+    processed_tasks_order = []
+    while queue:
+        u = queue.popleft()
+        processed_tasks_order.append(u)
 
-    changed = True
-    while changed:
-        changed = False
-        for task_name, info in task_info.items():
-            earliest_start = 0.0
-            for prereq in info['prerequisites']:
-                if prereq in task_info:
-                    earliest_start = max(earliest_start, task_info[prereq]['end'])
-            
-            if earliest_start > info['start']:
-                info['start'] = earliest_start
-                info['end'] = info['start'] + info['duration']
-                changed = True
-    
+        # Calculate earliest start and finish for u
+        # If u has no prerequisites, earliest_start is 0.0
+        # Otherwise, it's the max earliest_finish of its prerequisites.
+        max_prereq_ef = 0.0
+        for prereq in task_info[u]['prerequisites']:
+            if prereq in task_info:
+                max_prereq_ef = max(max_prereq_ef, task_info[prereq]['earliest_finish'])
+        
+        task_info[u]['earliest_start'] = max_prereq_ef
+        task_info[u]['earliest_finish'] = task_info[u]['earliest_start'] + task_info[u]['duration']
+
+        for v in graph[u]:
+            in_degree[v] -= 1
+            if in_degree[v] == 0:
+                queue.append(v)
+
+    # --- Backward Pass (Calculate Latest Start and Finish Times) ---
+    project_finish_time = max(info['earliest_finish'] for info in task_info.values())
+
+    # Initialize latest_finish for all tasks to project_finish_time
+    for task_name, info in task_info.items():
+        info['latest_finish'] = project_finish_time
+        info['latest_start'] = project_finish_time - info['duration'] # Initial calculation
+
+    # Process tasks in reverse topological order
+    for u in reversed(processed_tasks_order):
+        # If u has successors, its latest_finish is the min latest_start of its successors
+        # Otherwise, it's the project_finish_time (already set)
+        
+        min_successor_ls = float('inf')
+        has_successor = False
+        for v in graph[u]: # v is a successor of u
+            min_successor_ls = min(min_successor_ls, task_info[v]['latest_start'])
+            has_successor = True
+        
+        if has_successor:
+            task_info[u]['latest_finish'] = min_successor_ls
+            task_info[u]['latest_start'] = task_info[u]['latest_finish'] - task_info[u]['duration']
+        
+        # Determine if task is critical
+        task_info[u]['is_critical'] = (abs(task_info[u]['earliest_start'] - task_info[u]['latest_start']) < 1e-9) # Using a small epsilon for float comparison
+
     gantt_data = []
     for task_name, info in task_info.items():
         # Only include tasks that actually ran (duration > 0) or are significant
-        if info['duration'] > 0 or info['prerequisites']: # Include tasks with duration or explicit dependencies
+        if info['duration'] > 0 or info['prerequisites']:
             gantt_data.append({
                 'name': task_name,
-                'start_s': info['start'],
-                'end_s': info['end'],
-                'duration_s': info['duration']
+                'start_s': info['earliest_start'], # Use earliest start for Gantt chart
+                'end_s': info['earliest_finish'],
+                'duration_s': info['duration'],
+                'is_critical': info['is_critical']
             })
     
     # Sort by start time for better visualization
@@ -321,7 +356,7 @@ def generate_gantt_html(gantt_data, output_path):
         top_offset = i * 30 # 30px per row
 
         tasks_html.append(f"""
-            <div class=\"gantt-task\" style=\"left: {start_offset}px; width: {duration_width}px; top: {top_offset}px;\">
+            <div class=\"gantt-task {'critical-task' if task['is_critical'] else ''}\" style=\"left: {start_offset}px; width: {duration_width}px; top: {top_offset}px;\">
                 <!-- <span class=\"task-name\">{task['name']}</span> -->
                 <span class=\"task-duration\">{format_time(task['duration_s'])}</span>
             </div>
@@ -370,6 +405,10 @@ def generate_gantt_html(gantt_data, output_path):
             white-space: nowrap;
             text-align: right;
         }}
+        .gantt-label-item.critical-task-label {{
+            font-weight: bold;
+            color: #D32F2F; /* Darker red for critical path labels */
+        }}
         .gantt-timeline {{
             margin-left: 290px; /* Offset for labels + padding */
             position: relative;
@@ -391,6 +430,10 @@ def generate_gantt_html(gantt_data, output_path):
             padding: 0 5px;
             margin-top: 5px; /* Center vertically within 30px row */
         }}
+        .gantt-task.critical-task {{
+            background-color: #F44336; /* Red for critical path tasks */
+            font-weight: bold;
+        }}
         .task-name {{
             font-size: 12px;
             font-weight: bold;
@@ -405,7 +448,7 @@ def generate_gantt_html(gantt_data, output_path):
     <h1>Makefile Build Gantt Chart</h1>
     <div class="gantt-chart-container">
         <div class="gantt-labels">
-            {''.join([f'<div class="gantt-label-item">{remove_data_prefix(task["name"])}</div>' for task in gantt_data])}
+            {''.join([f'<div class="gantt-label-item {"critical-task-label" if task["is_critical"] else ""}">{remove_data_prefix(task["name"])}</div>' for task in gantt_data])}
         </div>
         <div class="gantt-timeline">
             {''.join(tasks_html)}
