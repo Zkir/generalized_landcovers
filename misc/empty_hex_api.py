@@ -2,65 +2,55 @@
 import json
 import os
 import time
-import psycopg2
-import psycopg2.extras
+import sqlite3
 import cgi
 
-def get_db_connection():
-    """Establishes a connection to the PostgreSQL database."""
+SQLITE_DB_PATH = 'landcover_stats.sqlite'
+
+def get_sqlite_connection():
+    """Establishes a connection to the SQLite database."""
     try:
-        conn = psycopg2.connect(
-            dbname=os.getenv("PGDATABASE", "gis"),
-            user=os.getenv("PGUSER", "gis"),
-            password=os.getenv("PGPASSWORD", "gis"),
-            host=os.getenv("PGHOST", "localhost"),
-            port=os.getenv("PGPORT", "5432")
-        )
+        conn = sqlite3.connect(SQLITE_DB_PATH)
+        conn.row_factory = sqlite3.Row
         return conn
-    except psycopg2.OperationalError:
+    except sqlite3.Error:
         return None
-
-import cgi
 
 def get_random_empty_hex(conn, country=None):
     """
-    Selects a random hex, optionally filtered by country.
+    Selects a random hex with its geometry and center from the SQLite database,
+    optionally filtered by country.
     """
-    with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
-        sql_query = """
-            SELECT
-                ix,
-                ST_AsGeoJSON(ST_Transform(geom, 4326)) AS hex_geometry,
-                ST_AsGeoJSON(ST_Transform(ST_Centroid(geom), 4326)) as hex_center
-            FROM h3.no_landcover_per_country
-        """
-        params = {}
+    with conn:
+        cur = conn.cursor()
+        sql_query = "SELECT ix, hex_geometry, hex_center FROM no_landcover_per_country"
+        params = []
         if country:
-            sql_query += " WHERE country_name = %(country)s"
-            params['country'] = country
+            sql_query += " WHERE country_name = ?"
+            params.append(country)
 
         sql_query += " ORDER BY RANDOM() LIMIT 1;"
-
         cur.execute(sql_query, params)
-        return cur.fetchone()
+        row = cur.fetchone()
+        return dict(row) if row else None
 
 def get_hex_stats(conn, hex_id):
     """
-    Calculates the landcover statistics for a given hexagon ID.
+    Calculates the landcover statistics for a given hexagon ID from SQLite.
     """
     if not hex_id:
         return []
-    with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+    with conn:
+        cur = conn.cursor()
         cur.execute("""
             SELECT
                 feature,
-                SUM(ST_Area(clipped_geom)) AS area,
-                (SUM(ST_Area(clipped_geom)) / (SELECT ST_Area(geom) FROM h3.hex WHERE ix = %(hex_id)s)) * 100 AS percentage
-            FROM h3.landcovers_clipped
-            WHERE ix = %(hex_id)s
-            GROUP BY feature
+                area,
+                percentage
+            FROM hex_features_stats
+            WHERE ix = ?
             ORDER BY percentage DESC;
-        """, {'hex_id': hex_id})
+        """, (hex_id,))
         stats = cur.fetchall()
         return [dict(row) for row in stats]
 
@@ -71,9 +61,9 @@ def main():
     print("Content-Type: application/json")
     print() # Important: blank line separating headers from body
 
-    conn = get_db_connection()
-    if not conn:
-        print(json.dumps({"error": "Database connection failed"}))
+    sqlite_conn = get_sqlite_connection()
+    if not sqlite_conn:
+        print(json.dumps({"error": "SQLite database connection failed"}))
         return
 
     output_data = {}
@@ -84,14 +74,18 @@ def main():
     country = form.getvalue('country')
 
     try:
-        empty_hex = get_random_empty_hex(conn, country)
+        # 1. Get a random hex ID and its geometry from SQLite
+        empty_hex = get_random_empty_hex(sqlite_conn, country)
         get_random_empty_hex_time = time.perf_counter() - start_time
+
         if not empty_hex:
             output_data = {"error": "No empty hexes found that meet the criteria."}
         else:
-            start_time = time.perf_counter()
-            stats = get_hex_stats(conn, empty_hex['ix'])
-            get_hex_stats_time = time.perf_counter() - start_time
+            # 2. Get detailed stats from SQLite
+            start_time_sqlite_stats = time.perf_counter()
+            stats = get_hex_stats(sqlite_conn, empty_hex['ix'])
+            get_hex_stats_time = time.perf_counter() - start_time_sqlite_stats
+
             output_data = {
                 "hex_id": empty_hex['ix'],
                 "geometry": json.loads(empty_hex['hex_geometry']),
@@ -100,12 +94,13 @@ def main():
                 "profiling": {
                     "get_random_empty_hex_seconds": round(get_random_empty_hex_time, 3),
                     "get_hex_stats_seconds": round(get_hex_stats_time, 3)
-                    }}
-    except psycopg2.Error as e:
+                }
+            }
+    except (sqlite3.Error, KeyError) as e:
         output_data = {"error": "A database error occurred.", "details": str(e)}
     finally:
-        if conn:
-            conn.close()
+        if sqlite_conn:
+            sqlite_conn.close()
 
     print(json.dumps(output_data, indent=2))
 

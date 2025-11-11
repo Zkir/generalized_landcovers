@@ -13,6 +13,8 @@ all:  data/shapes \
       data/export/empty_hex.html \
       data/export/empty_hex_api.py \
       data/export/country_api.py \
+      data/export/landcover_stats.sqlite \
+	  data/export/img \
 	  data/export/style.css ## Do generalization and create web-ui image, including downloadable files
 
 #     data/tables/landcover_quality_metrics \
@@ -32,6 +34,7 @@ upload: data/export/server/landcovers.mbtiles ## Upload downloadable files and g
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ country_stats.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ server/landcovers.mbtiles
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ landcover_stats.sqlite
 
 data/export/index.html: webui-prototypes/index.html | data/export
 	cp webui-prototypes/index.html data/export/index.html
@@ -56,7 +59,8 @@ data/export/country_api.py: misc/country_api.py | data/export
 data/export/gantt_chart.html: makefile makefile-profiling.log | data/export
 	python3 py-scripts/generate_gantt_chart.py
 
-
+data/export/landcover_stats.sqlite: data/tables/features_stats2 data/tables/country_stats | data/export
+	python3 py-scripts/export_stats_to_sqlite.py
 
 data/export/country_stats.html: data/tables/country_stats
 	python3 py-scripts/country_stats.py
@@ -94,6 +98,13 @@ data/export/downloads/places.zip: data/places.shp | data/export/downloads
 
 data/export/downloads/waterbodies.zip: data/waterbodies_aggr.shp | data/export/downloads
 	zip -j $@ data/waterbodies_aggr.* misc/waterbodies.readme.txt
+	
+data/export/img: |	data/export
+	mkdir data/export/img
+	cp webui-prototypes/img/*.png data/export/img/
+	cp misc/img/*.png data/export/img/
+	cp misc/img/*.svg data/export/img/
+
 
 data/shapes: data/landcovers_aggr.shp \
       data/waterbodies_aggr.shp \
@@ -186,7 +197,11 @@ data/tables/landcover_quality_metrics: data/tables/landcovers_aggr data/tables/h
 	psql -d gis -f "sql-scripts/landcover_quality_metrics.sql" -v ON_ERROR_STOP=1
 	touch $@
 	
-data/tables/no_landcover: data/tables/landcovers_aggr data/tables/hex_land | data/tables
+data/tables/features_stats2: data/tables/landcovers_aggr data/tables/no_landcover 
+	psql -d gis -f "sql-scripts/features_stats2.sql" -v ON_ERROR_STOP=1
+	touch $@	
+
+data/tables/no_landcover: data/tables/landcovers_aggr data/tables/hex_land 
 	psql -d gis -f "sql-scripts/no_landcover.sql" -v ON_ERROR_STOP=1
 	touch $@	
 	

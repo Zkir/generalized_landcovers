@@ -2,9 +2,10 @@
 import json
 import os
 import cgi
-import psycopg2
-import psycopg2.extras
+import sqlite3
 from decimal import Decimal
+
+SQLITE_DB_PATH = 'landcover_stats.sqlite'
 
 class DecimalEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -13,22 +14,18 @@ class DecimalEncoder(json.JSONEncoder):
         return super(DecimalEncoder, self).default(obj)
 
 def get_db_connection():
-    """Establishes a connection to the PostgreSQL database."""
+    """Establishes a connection to the SQLite database."""
     try:
-        conn = psycopg2.connect(
-            dbname=os.getenv("PGDATABASE", "gis"),
-            user=os.getenv("PGUSER", "gis"),
-            password=os.getenv("PGPASSWORD", "gis"),
-            host=os.getenv("PGHOST", "localhost"),
-            port=os.getenv("PGPORT", "5432")
-        )
+        conn = sqlite3.connect(SQLITE_DB_PATH)
+        conn.row_factory = sqlite3.Row
         return conn
-    except psycopg2.OperationalError:
+    except sqlite3.Error:
         return None
 
 def get_stats(conn, country=None):
-    """Fetches pre-computed statistics from the h3.country_stats table."""
-    with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+    """Fetches pre-computed statistics from the country_stats table."""
+    with conn:
+        cur = conn.cursor()
         if country:
             if country == 'All Countries':
                 cur.execute("""
@@ -37,15 +34,15 @@ def get_stats(conn, country=None):
                         SUM(total_hexes) as total_hexes,
                         SUM(empty_hexes) as empty_hexes,
                         SUM(pcover * total_hexes) / SUM(total_hexes) as pcover
-                    FROM h3.country_stats
+                    FROM country_stats
                     WHERE total_hexes > 0;
                 """)
             else:
-                cur.execute("SELECT * FROM h3.country_stats WHERE name_en = %(country)s", {'country': country})
+                cur.execute("SELECT * FROM country_stats WHERE name_en = ?", (country,))
             result = cur.fetchone()
             return dict(result) if result else {}
         else:
-            cur.execute("SELECT * FROM h3.country_stats ORDER BY name_en ASC;")
+            cur.execute("SELECT * FROM country_stats ORDER BY name_en ASC;")
             results = cur.fetchall()
             return [dict(row) for row in results]
 
@@ -65,7 +62,7 @@ def main():
     try:
         stats = get_stats(conn, country)
         print(json.dumps(stats, indent=2, cls=DecimalEncoder))
-    except (psycopg2.Error, KeyError) as e:
+    except (sqlite3.Error, KeyError) as e:
         print(json.dumps({"error": "A database error occurred or data not found.", "details": str(e)}))
     finally:
         if conn:

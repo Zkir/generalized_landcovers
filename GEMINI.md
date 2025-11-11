@@ -152,4 +152,9 @@ The goal is to create a web page that visualizes the `makefile` build process as
     *   Add `data/export/gantt_chart.html` to the `all` target or a new `profile` target to ensure it's generated during the build process.
 
 This plan ensures that the Gantt chart visualization is generated as part of the build process, providing insights into task durations and dependencies.
+- Migrated the frontend API to use a pre-generated SQLite database (`landcover_stats.sqlite`), decoupling it from the main PostgreSQL database. This involved:
+  - Creating a new script, `py-scripts/export_stats_to_sqlite.py`, to export statistics from PostgreSQL. The script pre-renders GeoJSON for geometries and centroids, storing them as text in the SQLite database to optimize frontend performance.
+  - Integrating this script into the `makefile` to ensure the SQLite database is updated during the build process.
+  - Fully migrating `country_api.py` to read exclusively from the new SQLite database.
+  - Refactoring `empty_hex_api.py` to use a hybrid approach. It now fetches all primary hex data (ID, geometry, and center) from the SQLite database, while still connecting to PostgreSQL for on-demand, detailed landcover statistics for a selected hex.
 - Added `waterbodies.zip` to the downloads page. This involved creating a `misc/waterbodies.readme.txt` file, modifying the `makefile` to generate `data/export/downloads/waterbodies.zip` and include it as a dependency for `downloads.html`, and updating `py-scripts/downloads.py` to list the new zip file in the generated HTML.
