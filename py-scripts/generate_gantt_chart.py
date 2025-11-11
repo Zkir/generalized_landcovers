@@ -276,32 +276,6 @@ def calculate_task_timings(dependencies, durations):
             if in_degree[v] == 0:
                 queue.append(v)
 
-    # --- Backward Pass (Calculate Latest Start and Finish Times) ---
-    project_finish_time = max(info['earliest_finish'] for info in task_info.values())
-
-    # Initialize latest_finish for all tasks to project_finish_time
-    for task_name, info in task_info.items():
-        info['latest_finish'] = project_finish_time
-        info['latest_start'] = project_finish_time - info['duration'] # Initial calculation
-
-    # Process tasks in reverse topological order
-    for u in reversed(processed_tasks_order):
-        # If u has successors, its latest_finish is the min latest_start of its successors
-        # Otherwise, it's the project_finish_time (already set)
-        
-        min_successor_ls = float('inf')
-        has_successor = False
-        for v in graph[u]: # v is a successor of u
-            min_successor_ls = min(min_successor_ls, task_info[v]['latest_start'])
-            has_successor = True
-        
-        if has_successor:
-            task_info[u]['latest_finish'] = min_successor_ls
-            task_info[u]['latest_start'] = task_info[u]['latest_finish'] - task_info[u]['duration']
-        
-        # Determine if task is critical
-        task_info[u]['is_critical'] = (abs(task_info[u]['earliest_start'] - task_info[u]['latest_start']) < 1e-9) # Using a small epsilon for float comparison
-
     # --- Identify reachable tasks from 'all' target ---
     reachable_tasks = set()
     queue_reachable = collections.deque(['all']) # Start from the 'all' target
@@ -316,6 +290,41 @@ def calculate_task_timings(dependencies, durations):
         if u in task_info:
             for prereq in task_info[u]['prerequisites']:
                 queue_reachable.append(prereq)
+
+    # --- Backward Pass (Calculate Latest Start and Finish Times) ---
+    # Project finish time is the max earliest finish of all tasks *reachable* from 'all'
+    project_finish_time = max(
+        (info['earliest_finish'] for name, info in task_info.items() if name in reachable_tasks),
+        default=0
+    )
+
+    # Initialize latest_finish for all tasks to project_finish_time
+    for task_name, info in task_info.items():
+        info['latest_finish'] = project_finish_time
+        info['latest_start'] = project_finish_time - info['duration'] # Initial calculation
+
+    # Process tasks in reverse topological order
+    for u in reversed(processed_tasks_order):
+        # Only calculate for reachable tasks, others will have default latest times
+        if u not in reachable_tasks:
+            continue
+
+        # If u has successors, its latest_finish is the min latest_start of its successors
+        # Otherwise, it's the project_finish_time (already set)
+        
+        min_successor_ls = float('inf')
+        has_successor = False
+        for v in graph[u]: # v is a successor of u
+            if v in reachable_tasks: # Only consider successors that are also reachable
+                min_successor_ls = min(min_successor_ls, task_info[v]['latest_start'])
+                has_successor = True
+        
+        if has_successor:
+            task_info[u]['latest_finish'] = min_successor_ls
+            task_info[u]['latest_start'] = task_info[u]['latest_finish'] - task_info[u]['duration']
+        
+        # Determine if task is critical
+        task_info[u]['is_critical'] = (abs(task_info[u]['earliest_start'] - task_info[u]['latest_start']) < 1e-9) # Using a small epsilon for float comparison
     
     hanging_tasks = []
     for task_name, info in task_info.items():
@@ -328,7 +337,8 @@ def calculate_task_timings(dependencies, durations):
     gantt_data = []
     for task_name, info in task_info.items():
         # Only include tasks that actually ran (duration > 0) or are significant
-        if (task_name in reachable_tasks) and (info['duration'] > 0 or info['prerequisites'] ) : #or info['is_critical'] 
+        #if (task_name in reachable_tasks) and (info['duration'] > 0 or info['prerequisites'] ): #or info['is_critical'] 
+        if (task_name in reachable_tasks) and (info['duration'] > 0 or info['is_critical'] ):  
             gantt_data.append({
                 'name': task_name,
                 'start_s': info['earliest_start'], # Use earliest start for Gantt chart
@@ -552,7 +562,7 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
             overflow: hidden;
             text-overflow: ellipsis;
             box-sizing: border-box;
-            padding: 0 5px;
+            /*padding: 0 5px;*/
             margin-top: 5px; /* Center vertically within 30px row */
             min-width: 1px; /* Ensure visibility for very short tasks */
         }}
