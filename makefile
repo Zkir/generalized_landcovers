@@ -25,6 +25,7 @@ upload: data/export/server/landcovers.mbtiles ## Upload downloadable files and g
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/landcovers.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/peaks.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/places.zip
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/waterbodies.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ index.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ about.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ renderedtags.html
@@ -60,7 +61,7 @@ data/export/gantt_chart.html: makefile makefile-profiling.log | data/export
 data/export/country_stats.html: data/tables/country_stats
 	python3 py-scripts/country_stats.py
 
-data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip 
+data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip data/export/downloads/waterbodies.zip
 	python3 py-scripts/downloads.py
 	
 data/export/downloads/unrendered_landcovers.osm: taginfo.json data/source/planet-latest-updated.osm.pbf
@@ -90,6 +91,9 @@ data/export/downloads/peaks.zip: data/peaks.shp | data/export/downloads
 
 data/export/downloads/places.zip: data/places.shp | data/export/downloads
 	zip -j $@ data/places.* misc/places.readme.txt
+
+data/export/downloads/waterbodies.zip: data/waterbodies_aggr.shp | data/export/downloads
+	zip -j $@ data/waterbodies_aggr.* misc/waterbodies.readme.txt
 
 data/shapes: data/landcovers_aggr.shp \
       data/waterbodies_aggr.shp \
