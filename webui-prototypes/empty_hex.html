@@ -110,6 +110,17 @@
             <strong>Hex Inspector</strong>
             <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
         </nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <nav class="mobile-menu" id="mobileMenu">
+            <a href="about.html">About</a>
+            <a href="renderedtags.html">Tag Usage</a>
+            <a href="country_stats.html">Country Stats</a>
+            <a href="downloads.html">Downloads</a>
+            <a href="empty_hex.html">Hex Inspector</a>									
+            <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
+        </nav>
     </header>
 
     <div id="main-content">
@@ -151,6 +162,23 @@
 			
 			    <script src="https://api.tiles.mapbox.com/mapbox.js/v3.3.1/mapbox.js"></script>
 			    <script>
+			        // Mobile menu functionality
+			        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+			            document.getElementById('mobileMenu').classList.toggle('active');
+			        });
+			        
+			        // Close mobile menu when clicking outside
+			        document.addEventListener('click', function(event) {
+			            const mobileMenu = document.getElementById('mobileMenu');
+			            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+			            
+			            if (mobileMenu.classList.contains('active') && 
+			                !mobileMenu.contains(event.target) && 
+			                !mobileMenuBtn.contains(event.target)) {
+			                mobileMenu.classList.remove('active');
+			            }
+			        });
+
 			        let currentHexLayer = null; // To keep track of the current hex layer
 			        let countryStats = {};
 			
