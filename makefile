@@ -56,9 +56,6 @@ data/export/country_api.py: misc/country_api.py | data/export
 	cp misc/country_api.py data/export/country_api.py
 	chmod +x data/export/country_api.py
 
-data/export/gantt_chart.html: makefile makefile-profiling.log | data/export
-	python3 py-scripts/generate_gantt_chart.py
-
 data/export/landcover_stats.sqlite: data/tables/features_stats2 data/tables/country_stats | data/export
 	python3 py-scripts/export_stats_to_sqlite.py
 
@@ -276,7 +273,7 @@ update_db: ## Update DB via OSM hour diffs
 	osm2pgsql-replication update -d gis  --max-diff-size 100 --  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes data/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style
 
 .PHONY: clean
-clean: ## Delete all the *generalized* map data in DB and the files in the work folder. Raw planed data imported via osm2pgsql remains intact!
+clean: ## Delete all the *generalized* map data in DB and the files in the work folder. Raw planet data imported via osm2pgsql remains intact!
 	psql -d gis -c "DROP SCHEMA IF EXISTS  h3 CASCADE" -v ON_ERROR_STOP=1
 	rm -rf data/* 
 	mkdir data/downloads
