@@ -178,34 +178,42 @@ def get_dependencies_influences(ast: List[Tuple[Tokens, Dict[str, Any]]]):
 
 def parse_profiling_log(log_path):
     """
-    Parses the makefile-profiling.log to extract task durations.
-    Returns a dictionary where keys are target names and values are durations in seconds.
-    If a target appears multiple times, the last duration is used.
+    Parses the makefile-profiling.log to extract task durations and start times.
+    Returns a dictionary where keys are target names and values are dicts
+    containing duration and start timestamp.
+    If a target appears multiple times, the last entry is used.
     """
-    durations = {}
-    with open(log_path, 'r') as f:
-        for line in f:
-            # Split into max 5 parts: BUILD_ID, START_TS, DURATION, STATUS, and the rest is TARGET
-            parts = line.strip().split(maxsplit=4)
-            if len(parts) == 5:
-                try:
-                    duration_s = int(parts[2])
-                    targets_line = parts[4]
-                    
-                    # The log can have comma-separated targets for one rule
-                    for target_name in targets_line.split(','):
-                        target_name = target_name.strip()
-                        # The log for 'help' target includes its description.
-                        # The makefile parser gets only 'help'.
-                        # We need to match what the makefile parser gets.
-                        # Let's assume target names don't contain spaces.
-                        actual_target = target_name.split()[0]
-                        durations[actual_target] = duration_s
-                except (ValueError, IndexError):
-                    continue # Skip malformed lines
-    return durations
+    task_data = {}
+    try:
+        with open(log_path, 'r') as f:
+            for line in f:
+                # Split into max 5 parts: BUILD_ID, START_TS, DURATION, STATUS, and the rest is TARGET
+                parts = line.strip().split(maxsplit=4)
+                if len(parts) == 5:
+                    try:
+                        start_ts = int(parts[1])
+                        duration_s = int(parts[2])
+                        targets_line = parts[4]
+                        
+                        # The log can have comma-separated targets for one rule
+                        for target_name in targets_line.split(','):
+                            target_name = target_name.strip()
+                            # The log for 'help' target includes its description.
+                            # The makefile parser gets only 'help'.
+                            # We need to match what the makefile parser gets.
+                            # Let's assume target names don't contain spaces.
+                            actual_target = target_name.split()[0]
+                            task_data[actual_target] = {
+                                'duration_s': duration_s,
+                                'start_ts': start_ts
+                            }
+                    except (ValueError, IndexError):
+                        continue # Skip malformed lines
+    except FileNotFoundError:
+        print(f"Warning: Profiling log file not found at {log_path}")
+    return task_data
 
-def calculate_task_timings(dependencies, durations):
+def calculate_task_timings(dependencies, task_data, docstrings):
     """
     Calculates start and end times for each task based on dependencies and durations.
     Returns a list of dictionaries, each representing a task with its timing info.
@@ -215,7 +223,9 @@ def calculate_task_timings(dependencies, durations):
     # Initialize task_info with all known targets and their durations
     for target, deps_list in dependencies.items():
         task_info[target] = {
-            'duration': durations.get(target, 0.0),
+            'duration': task_data.get(target, {}).get('duration_s', 0.0),
+            'start_ts': task_data.get(target, {}).get('start_ts'),
+            'docstring': docstrings.get(target, ''),
             'prerequisites': deps_list[0] + deps_list[1],
             'earliest_start': 0.0,
             'earliest_finish': 0.0,
@@ -224,11 +234,13 @@ def calculate_task_timings(dependencies, durations):
             'is_critical': False
         }
     
-    # Add any tasks from durations that are not in dependencies (e.g., phony targets not explicitly listed)
-    for target, duration in durations.items():
+    # Add any tasks from task_data that are not in dependencies
+    for target, data in task_data.items():
         if target not in task_info:
             task_info[target] = {
-                'duration': duration,
+                'duration': data.get('duration_s', 0.0),
+                'start_ts': data.get('start_ts'),
+                'docstring': docstrings.get(target, ''),
                 'prerequisites': [],
                 'earliest_start': 0.0,
                 'earliest_finish': 0.0,
@@ -328,10 +340,12 @@ def calculate_task_timings(dependencies, durations):
     
     hanging_tasks = []
     for task_name, info in task_info.items():
-        if task_name not in reachable_tasks: # and (info['duration'] > 0 or info['prerequisites']):
+        if task_name not in reachable_tasks:
             hanging_tasks.append({
                 'name': task_name,
-                'duration_s': info['duration']
+                'duration_s': info['duration'],
+                'start_ts': info.get('start_ts'),
+                'docstring': info.get('docstring', '')
             })
 
     gantt_data = []
@@ -477,12 +491,41 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
 
     hanging_tasks_html = ""
     if hanging_tasks:
+        hanging_tasks_rows_html = []
+        # Sort hanging tasks by name for consistent ordering
+        hanging_tasks.sort(key=lambda x: x['name'])
+        for task in hanging_tasks:
+            last_run_str = (
+                datetime.fromtimestamp(task['start_ts']).strftime('%Y-%m-%d %H:%M:%S')
+                if task['start_ts'] else 'N/A'
+            )
+            docstring_str = task['docstring'] or ''
+            
+            hanging_tasks_rows_html.append(
+                f"<tr>"
+                f"<td><strong>{remove_data_prefix(task['name'])}</strong></td>"
+                f"<td>{format_time(task['duration_s'])}</td>"
+                f"<td>{last_run_str}</td>"
+                f"<td>{docstring_str}</td>"
+                f"</tr>"
+            )
+
         hanging_tasks_html = f"""
         <div class="hanging-tasks-section">
             <h2>Hanging Tasks (not reachable from 'all')</h2>
-            <ul>
-        {''.join([f"<li>{remove_data_prefix(task['name'])} ({format_time(task['duration_s'])})</li>" for task in hanging_tasks])}
-            </ul>
+            <table class="hanging-tasks-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Duration</th>
+                        <th>Last Run</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {''.join(hanging_tasks_rows_html)}
+                </tbody>
+            </table>
         </div>
         """
 
@@ -600,6 +643,27 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
             margin-bottom: 3px;
             color: #555;
         }}
+        .hanging-tasks-table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }}
+        .hanging-tasks-table th, .hanging-tasks-table td {{
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            font-size: 12px;
+        }}
+        .hanging-tasks-table th {{
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }}
+        .hanging-tasks-table tr:nth-child(even) {{
+            background-color: #f9f9f9;
+        }}
+        .hanging-tasks-table tr:hover {{
+            background-color: #f1f1f1;
+        }}
     </style>
 </head>
 <body>
@@ -650,12 +714,19 @@ if __name__ == "__main__":
     dependencies, _, _, _ = get_dependencies_influences(ast)
     print(f"Parsed {len(dependencies)} targets from makefile.")
 
+    # Create a docstring map
+    docstrings = {
+        item['target']: item['docs']
+        for _, item in ast
+        if _ == Tokens.target and item.get('docs')
+    }
+
     # Parse profiling log
-    durations = parse_profiling_log(PROFILING_LOG_PATH)
-    print(f"Parsed {len(durations)} task durations from profiling log.")
+    task_data = parse_profiling_log(PROFILING_LOG_PATH)
+    print(f"Parsed {len(task_data)} task records from profiling log.")
 
     # Calculate task timings
-    gantt_data, task_info, hanging_tasks = calculate_task_timings(dependencies, durations)
+    gantt_data, task_info, hanging_tasks = calculate_task_timings(dependencies, task_data, docstrings)
     print(f"Calculated timings for {len(gantt_data)} tasks.")
 
     # Sort gantt_data topologically with end_s as secondary criterion

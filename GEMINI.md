@@ -41,7 +41,7 @@ Prioritized via MoSCoW method:
 
 ### Must
 
-* Rewrite the [README.md](README.md). It looks quite obsolete and pointless in comparison with the [About page](webui-prototypes/about.html)
+* Rewrite the [README.md](README.md). It looks quite obsolete and pointless in comparison with the [About page](webui-prototypes/about.html) Maybe the README.md file should rather focus on installation, and how to make this working, rather than on generalization itself.
 
 ### Should
 *  Integrate the Gantt-chart view feature (`generate_gantt_chart.py`) into the process feature (probably into `run.sh`)
@@ -88,3 +88,6 @@ This approach ensures that the project's existing functionality is preserved whi
 
 ## Recent Accomplishments
 - Added a mobile menu to the Hex Inspector page (`webui-prototypes/empty_hex.html`) for improved navigation on smaller screens.
+
+- Rewrote the  to be more focused on the project's purpose, technology, and installation, and to link to the  page for generalization details.
+- Rewrote the README.md to be more focused on the project's purpose, technology, and installation.
