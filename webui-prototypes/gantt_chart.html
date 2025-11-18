@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makefile Gantt Chart - OpenLandcoverMap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #f1f1f1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        main {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #444;
+            padding-bottom: 0.5rem;
+        }
+        
+        .gantt-chart-container {
+            display: flex;
+            border: 1px solid #444;
+            background-color: #2c2c2c;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            min-height: 830px;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .gantt-labels {
+            flex: 0 0 350px;
+            padding-right: 10px;
+            box-sizing: border-box;
+            background-color: #2c2c2c;
+        }
+        
+        .gantt-label-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 30px;
+            line-height: 30px;
+            font-size: 12px;
+            color: #f1f1f1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: right;
+            border-bottom: 1px solid #444;
+            padding: 0 5px;
+        }
+        
+        .gantt-label-item:last-child {
+            border-bottom: none;
+        }
+        
+        .gantt-label-name {
+            flex-grow: 1;
+            text-align: right;
+            padding-right: 5px;
+        }
+        
+        .gantt-label-duration {
+            width: 60px;
+            text-align: right;
+            font-size: 10px;
+            color: #aaa;
+        }
+        
+        .gantt-label-item.critical-task-label .gantt-label-name,
+        .gantt-label-item.critical-task-label .gantt-label-duration {
+            font-weight: bold;
+            color: #F44336;
+        }
+        
+        .gantt-timeline-wrapper {
+            flex-grow: 1;
+            background-color: #1a1a1a; /* Цвет фона временной шкалы */
+            border-radius: 4px;
+            margin:  0 0;
+            padding: 0 5px; /* Отступы по бокам с цветом #1a1a1a */
+            position: relative;
+        }
+        
+        .gantt-timeline {
+            position: relative;
+            min-height: 810px;
+            width: 100%;
+        }
+        
+        .gantt-task {
+            position: absolute;
+            height: 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-sizing: border-box;
+            margin-top: 5px;
+            min-width: 1px;
+            font-size: 11px;
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .gantt-task.critical-task {
+            background-color: #F44336;
+            font-weight: bold;
+        }
+        
+        .task-name {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .task-duration {
+            font-size: 10px;
+            margin-left: 5px;
+        }
+        
+        .summary-statistics, .hanging-tasks-section {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #444;
+            background-color: #2c2c2c;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        
+        .summary-statistics h2, .hanging-tasks-section h2 {
+            margin-top: 0;
+            color: #4CAF50;
+            border-bottom: 1px solid #444;
+            padding-bottom: 0.5rem;
+        }
+        
+        .summary-statistics p, .hanging-tasks-section ul {
+            margin-bottom: 5px;
+            color: #f1f1f1;
+        }
+        
+        .hanging-tasks-section ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .hanging-tasks-section li {
+            margin-bottom: 3px;
+            color: #aaa;
+        }
+        
+        .hanging-tasks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .hanging-tasks-table th, .hanging-tasks-table td {
+            border: 1px solid #444;
+            padding: 8px;
+            text-align: left;
+            font-size: 12px;
+        }
+        
+        .hanging-tasks-table th {
+            background-color: #1a1a1a;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
+        .hanging-tasks-table tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .hanging-tasks-table tr:hover {
+            background-color: #3a3a3a;
+        }
+        
+        .hanging-tasks-table td {
+            color: #f1f1f1;
+        }
+        
+        .hanging-tasks-table a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        
+        .hanging-tasks-table a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">OpenLandcoverMap :)</a>
+        <nav class="desktop-menu">
+            <a href="about.html">About</a>
+            <a href="renderedtags.html">Tag Usage</a>
+            <a href="country_stats.html">Country Stats</a>
+            <a href="downloads.html">Downloads</a>
+            <a href="empty_hex.html">Hex Inspector</a>
+            <a href="gantt_chart.html">Gantt Chart</a>
+            <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
+        </nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <nav class="mobile-menu" id="mobileMenu">
+            <a href="about.html">About</a>
+            <a href="renderedtags.html">Tag Usage</a>
+            <a href="country_stats.html">Country Stats</a>
+            <a href="downloads.html">Downloads</a>
+            <a href="empty_hex.html">Hex Inspector</a>
+            <a href="gantt_chart.html">Gantt Chart</a>
+            <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Makefile Build Gantt Chart</h1>
+        <div class="gantt-chart-container">
+            <div class="gantt-labels">
+                <div class="gantt-label-item critical-task-label">
+                    <span class="gantt-label-name">data</span>
+                    <span class="gantt-label-duration">00</span>
+                </div>
+                <div class="gantt-label-item critical-task-label">
+                    <span class="gantt-label-name">tables</span>
+                    <span class="gantt-label-duration">00</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">ne_10m_admin_0_countries.shp</span>
+                    <span class="gantt-label-duration">01</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">ocean_lz.shp</span>
+                    <span class="gantt-label-duration">01</span>
+                </div>
+                <div class="gantt-label-item critical-task-label">
+                    <span class="gantt-label-name">tables/h3_hexes</span>
+                    <span class="gantt-label-duration">05:39</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">tables/places</span>
+                    <span class="gantt-label-duration">02:32</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">places.shp</span>
+                    <span class="gantt-label-duration">03</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">export/downloads/places.zip</span>
+                    <span class="gantt-label-duration">01</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">tables/water_bodies_aggr</span>
+                    <span class="gantt-label-duration">37:36</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">waterbodies_aggr.shp</span>
+                    <span class="gantt-label-duration">08</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">export/downloads/waterbodies.zip</span>
+                    <span class="gantt-label-duration">34</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">tables/hex_land</span>
+                    <span class="gantt-label-duration">18:42</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">tables/peaks</span>
+                    <span class="gantt-label-duration">01:08:06</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">peaks.shp</span>
+                    <span class="gantt-label-duration">17</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">export/downloads/peaks.zip</span>
+                    <span class="gantt-label-duration">05</span>
+                </div>
+                <div class="gantt-label-item critical-task-label">
+                    <span class="gantt-label-name">tables/landcovers_aggr</span>
+                    <span class="gantt-label-duration">03:44:36</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">landcovers_aggr.shp</span>
+                    <span class="gantt-label-duration">02</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">export/downloads/landcovers.zip</span>
+                    <span class="gantt-label-duration">03</span>
+                </div>
+                <div class="gantt-label-item critical-task-label">
+                    <span class="gantt-label-name">tables/no_landcover</span>
+                    <span class="gantt-label-duration">08</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">tables/features_stats2</span>
+                    <span class="gantt-label-duration">57</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">tables/landcover_tag_stats</span>
+                    <span class="gantt-label-duration">07:15</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">export/renderedtags.html</span>
+                    <span class="gantt-label-duration">02:43</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">taginfo.json</span>
+                    <span class="gantt-label-duration">02:43</span>
+                </div>
+                <div class="gantt-label-item ">
+                    <span class="gantt-label-name">export/server/landcovers.mbtiles</span>
+                    <span class="gantt-label-duration">15:18</span>
+                </div>
+                <div class="gantt-label-item critical-task-label">
+                    <span class="gantt-label-name">tables/country_stats</span>
+                    <span class="gantt-label-duration">27:07</span>
+                </div>
+                <div class="gantt-label-item critical-task-label">
+                    <span class="gantt-label-name">export/landcover_stats.sqlite</span>
+                    <span class="gantt-label-duration">15</span>
+                </div>
+                <div class="gantt-label-item critical-task-label">
+                    <span class="gantt-label-name">all</span>
+                    <span class="gantt-label-duration">00</span>
+                </div>
+            </div>
+            <div class="gantt-timeline-wrapper">
+                <div class="gantt-timeline">
+                    <div class="gantt-task critical-task" style="left: 0.0%; width: 0.0%; top: 0px;">
+                        <span class="task-duration">00</span>
+                    </div>
+                    <div class="gantt-task critical-task" style="left: 0.0%; width: 0.0%; top: 30px;">
+                        <span class="task-duration">00</span>
+                    </div>
+                    <div class="gantt-task " style="left: 0.0%; width: 0.1%; top: 60px;">
+                        <span class="task-duration">01</span>
+                    </div>
+                    <div class="gantt-task " style="left: 0.0%; width: 0.1%; top: 90px;">
+                        <span class="task-duration">01</span>
+                    </div>
+                    <div class="gantt-task critical-task" style="left: 0.0%; width: 2.1920465567410283%; top: 120px;">
+                        <span class="task-duration">05:39</span>
+                    </div>
+                    <div class="gantt-task " style="left: 2.1920465567410283%; width: 0.9828645328160363%; top: 150px;">
+                        <span class="task-duration">02:32</span>
+                    </div>
+                    <div class="gantt-task " style="left: 3.1749110895570642%; width: 0.1%; top: 180px;">
+                        <span class="task-duration">03</span>
+                    </div>
+                    <div class="gantt-task " style="left: 3.194309731652117%; width: 0.1%; top: 210px;">
+                        <span class="task-duration">01</span>
+                    </div>
+                    <div class="gantt-task " style="left: 2.1920465567410283%; width: 14.587778855480115%; top: 240px;">
+                        <span class="task-duration">37:36</span>
+                    </div>
+                    <div class="gantt-task " style="left: 16.779825412221143%; width: 0.1%; top: 270px;">
+                        <span class="task-duration">08</span>
+                    </div>
+                    <div class="gantt-task " style="left: 16.83155512447462%; width: 0.21985127707727126%; top: 300px;">
+                        <span class="task-duration">34</span>
+                    </div>
+                    <div class="gantt-task " style="left: 16.779825412221143%; width: 7.255092143549952%; top: 330px;">
+                        <span class="task-duration">18:42</span>
+                    </div>
+                    <div class="gantt-task " style="left: 2.1920465567410283%; width: 26.420950533462655%; top: 360px;">
+                        <span class="task-duration">01:08:06</span>
+                    </div>
+                    <div class="gantt-task " style="left: 28.612997090203685%; width: 0.10992563853863563%; top: 390px;">
+                        <span class="task-duration">17</span>
+                    </div>
+                    <div class="gantt-task " style="left: 28.722922728742322%; width: 0.1%; top: 420px;">
+                        <span class="task-duration">05</span>
+                    </div>
+                    <div class="gantt-task critical-task" style="left: 2.1920465567410283%; width: 87.13870029097963%; top: 450px;">
+                        <span class="task-duration">03:44:36</span>
+                    </div>
+                    <div class="gantt-task " style="left: 89.33074684772066%; width: 0.1%; top: 480px;">
+                        <span class="task-duration">02</span>
+                    </div>
+                    <div class="gantt-task " style="left: 89.34367927578403%; width: 0.1%; top: 510px;">
+                        <span class="task-duration">03</span>
+                    </div>
+                    <div class="gantt-task critical-task" style="left: 89.33074684772066%; width: 0.1%; top: 540px;">
+                        <span class="task-duration">08</span>
+                    </div>
+                    <div class="gantt-task " style="left: 89.38247655997414%; width: 0.3685741998060136%; top: 570px;">
+                        <span class="task-duration">57</span>
+                    </div>
+                    <div class="gantt-task " style="left: 89.33074684772066%; width: 2.8128031037827355%; top: 600px;">
+                        <span class="task-duration">07:15</span>
+                    </div>
+                    <div class="gantt-task " style="left: 92.14354995150339%; width: 1.0539928871645652%; top: 630px;">
+                        <span class="task-duration">02:43</span>
+                    </div>
+                    <div class="gantt-task " style="left: 92.14354995150339%; width: 1.0539928871645652%; top: 660px;">
+                        <span class="task-duration">02:43</span>
+                    </div>
+                    <div class="gantt-task " style="left: 89.34367927578403%; width: 5.935984481086324%; top: 690px;">
+                        <span class="task-duration">15:18</span>
+                    </div>
+                    <div class="gantt-task critical-task" style="left: 89.38247655997414%; width: 10.520530229550598%; top: 720px;">
+                        <span class="task-duration">27:07</span>
+                    </div>
+                    <div class="gantt-task critical-task" style="left: 99.90300678952472%; width: 0.1%; top: 750px;">
+                        <span class="task-duration">15</span>
+                    </div>
+                    <div class="gantt-task critical-task" style="left: 100.0%; width: 0.0%; top: 780px;">
+                        <span class="task-duration">00</span>
+                    </div>
+                </div>
+            </div>        
+        </div>
+
+        <div class="summary-statistics">
+            <h2>Summary Statistics</h2>
+            <p><strong>Total duration of all tasks:</strong> 06:54:52</p>
+            <p><strong>Critical path duration:</strong> 04:17:45</p>
+        </div>
+        
+        <div class="hanging-tasks-section">
+            <h2>Hanging Tasks (not reachable from 'all')</h2>
+            <table class="hanging-tasks-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Duration</th>
+                        <th>Last Run</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>clean</strong></td><td>01</td><td>2025-11-11 04:03:29</td><td>Delete all the *generalized* map data in DB and the files in the work folder. Raw planet data imported via osm2pgsql remains intact!</td></tr><tr><td><strong>export/downloads/unrendered_landcovers.osm</strong></td><td>22:38</td><td>2025-11-10 09:07:07</td><td></td></tr><tr><td><strong>source</strong></td><td>00</td><td>2025-11-13 00:50:57</td><td></td></tr><tr><td><strong>source/planet-latest-updated.osm.pbf</strong></td><td>02:59:35</td><td>2025-11-10 06:07:32</td><td></td></tr><tr><td><strong>source/planet-latest.osm.pbf</strong></td><td>02:30:14</td><td>2025-11-10 03:37:18</td><td></td></tr><tr><td><strong>tables/landcover_quality_metrics</strong></td><td>04:32:23</td><td>2025-11-10 07:28:47</td><td></td></tr><tr><td><strong>help</strong></td><td>00</td><td>2025-11-13 00:35:11</td><td>Print descriptions for tasks</td></tr><tr><td><strong>import_planet</strong></td><td>00</td><td>N/A</td><td>import data into DB from planet.osm.pbf</td></tr><tr><td><strong>test</strong></td><td>00</td><td>N/A</td><td></td></tr><tr><td><strong>update_db</strong></td><td>00</td><td>N/A</td><td>Update DB via OSM hour diffs</td></tr><tr><td><strong>upload</strong></td><td>07:17</td><td>2025-11-12 12:09:27</td><td>Upload downloadable files and generated htmls to the web-ui</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <small>Page created 2025-10-15 12:38:50</small>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            
+            if (mobileMenu.classList.contains('active') && 
+                !mobileMenu.contains(event.target) && 
+                !mobileMenuBtn.contains(event.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -32,7 +32,7 @@ def main():
     """
     json_file = 'taginfo.json'
     planet_file = 'data/source/planet-latest-updated.osm.pbf'
-    output_file = 'data/export/unrendered_landcovers.osm'
+    output_file = 'data/export/downloads/unrendered_landcovers.osm'
 
     if not os.path.exists(json_file):
         print(f"Error: {json_file} not found. Please generate it first.")

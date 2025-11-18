@@ -1,52 +1,82 @@
 .PHONY: all
-all: data/tables/landcover_quality_metrics \
-      data/shapes \
+all:  data/shapes \
       mapnik_carto_generated.xml \
       taginfo.json \
-      data/export/landcovers.mbtiles \
-	  data/export/unrendered_landcovers.osm \
+      data/export/server/landcovers.mbtiles \
+	  data/export/server/.htaccess \
+	  data/export/server/tileserver.php \
       data/export/downloads.html \
       data/export/country_stats.html \
       data/export/renderedtags.html \
       data/export/about.html \
       data/export/index.html \
-	  data/export/style.css
+      data/export/empty_hex.html \
+      data/export/empty_hex_api.py \
+      data/export/country_api.py \
+      data/export/landcover_stats.sqlite \
+	  data/export/img \
+	  data/export/style.css ## Do generalization and create web-ui image, including downloadable files
 
+#     data/tables/landcover_quality_metrics \
+#	  data/export/downloads/unrendered_landcovers.osm \
 
 .PHONY: upload
-upload: data/export/landcovers.mbtiles
+upload: data/export/server/landcovers.mbtiles ## Upload downloadable files and generated htmls to the web-ui
 	if [ -z "$(FTPUSER)" ] ; then   echo "FTPUSER env variable is not defined" ; exit 1; fi
 	if [ -z "$(FTPPASSWORD)" ] ; then   echo "FTPPASSWORD env variable is not defined" ; exit 1; fi
+	cd data/export/server ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ landcover_stats.sqlite
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/landcovers.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/peaks.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/places.zip
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/waterbodies.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ index.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ about.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ renderedtags.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ country_stats.html
-	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
+	
 
-data/export/index.html: | data/export
+data/export/index.html: webui-prototypes/index.html | data/export
 	cp webui-prototypes/index.html data/export/index.html
 
-data/export/about.html: | data/export
+data/export/about.html: webui-prototypes/about.html | data/export
 	cp webui-prototypes/about.html data/export/about.html
 
-data/export/style.css: | data/export
+data/export/style.css:  webui-prototypes/style.css | data/export
 	cp webui-prototypes/style.css data/export/style.css
+
+data/export/empty_hex.html: webui-prototypes/empty_hex.html | data/export
+	cp webui-prototypes/empty_hex.html data/export/empty_hex.html
+
+data/export/empty_hex_api.py: misc/empty_hex_api.py | data/export
+	cp misc/empty_hex_api.py data/export/empty_hex_api.py
+	chmod +x data/export/empty_hex_api.py
+
+data/export/country_api.py: misc/country_api.py | data/export
+	cp misc/country_api.py data/export/country_api.py
+	chmod +x data/export/country_api.py
+
+data/export/landcover_stats.sqlite: data/tables/features_stats2 data/tables/country_stats | data/export
+	python3 py-scripts/export_stats_to_sqlite.py
 
 data/export/country_stats.html: data/tables/country_stats
 	python3 py-scripts/country_stats.py
 
-data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip 
+data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip data/export/downloads/waterbodies.zip
 	python3 py-scripts/downloads.py
 	
-data/export/unrendered_landcovers.osm: taginfo.json data/source/planet-latest-updated.osm.pbf
+data/export/downloads/unrendered_landcovers.osm: taginfo.json data/source/planet-latest-updated.osm.pbf
 	python3 py-scripts/extract_unrendered.py
 
-data/export/landcovers.mbtiles: data/shapes  | data/export
-	node ../tilemill/index.js export generalized_landcovers  data/export/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet
+data/export/server/.htaccess : | data/export/server
+	cp misc/tileserver/.htaccess data/export/server/.htaccess
+	
+data/export/server/tileserver.php : | data/export/server
+	cp misc/tileserver/tileserver.php data/export/server/tileserver.php
+
+data/export/server/landcovers.mbtiles: data/shapes  | data/export/server
+	(. ~/.nvm/nvm.sh && nvm use v8.15.0 && node ../tilemill/index.js export generalized_landcovers  data/export/server/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet)
 
 taginfo.json data/export/renderedtags.html &: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats | data/export
 	python3 py-scripts/taginfo_json.py
@@ -64,6 +94,16 @@ data/export/downloads/peaks.zip: data/peaks.shp | data/export/downloads
 data/export/downloads/places.zip: data/places.shp | data/export/downloads
 	zip -j $@ data/places.* misc/places.readme.txt
 
+data/export/downloads/waterbodies.zip: data/waterbodies_aggr.shp | data/export/downloads
+	zip -j $@ data/waterbodies_aggr.* misc/waterbodies.readme.txt
+	
+data/export/img: |	data/export
+	mkdir data/export/img
+	cp webui-prototypes/img/*.png data/export/img/
+	cp misc/img/*.png data/export/img/
+	cp misc/img/*.svg data/export/img/
+
+
 data/shapes: data/landcovers_aggr.shp \
       data/waterbodies_aggr.shp \
       data/ocean_lz.shp \
@@ -80,14 +120,6 @@ data/landcovers_aggr.shp: data/tables/landcovers_aggr
   "PG:dbname=gis host=localhost port=5432 user=$(PGUSER)  password=$(PGPASSWORD)" \
   -sql "SELECT * FROM h3.landcovers_aggr" \
   -lco ENCODING=UTF-8
-
-data/landcovers.gpkg: data/tables/landcovers_aggr
-	ogr2ogr -f "GPKG" \
-  -progress -overwrite \
-  data/landcovers.gpkg \
-  "PG:dbname=gis host=localhost port=5432 user=$(PGUSER)  password=$(PGPASSWORD)" \
-  -nln landcovers \
-  -sql "SELECT * FROM h3.landcovers" 
 
 data/waterbodies_aggr.shp: data/tables/water_bodies_aggr
 	ogr2ogr -f "ESRI Shapefile" \
@@ -121,7 +153,7 @@ data/ocean_lz.shp:
   -sql "SELECT * FROM simplified_water_polygons" \
   -lco ENCODING=UTF-8
 
-data/tables/country_stats:  data/tables/ne_10m_admin_0_countries data/tables/landcovers_aggr
+data/tables/country_stats: data/tables/ne_10m_admin_0_countries data/tables/landcovers_aggr data/tables/hex_land data/tables/no_landcover
 	psql -d gis -f "sql-scripts/country_stats.sql" -v ON_ERROR_STOP=1
 	touch $@
 
@@ -133,10 +165,6 @@ data/tables/ne_10m_admin_0_countries: data/ne_10m_admin_0_countries.shp
                       -nln h3.ne_10m_admin_0_countries \
                       -progress -overwrite 
 	touch $@
-
-
-#ogr2ogr -f PostgreSQL PG:"dbname='shape' host='127.0.0.1' port='5434' user='geosolutions' password='Geos'" ../data/user_data/Mainrd.shp -lco #GEOMETRY_NAME=geom -lco FID=gid -lco SPATIAL_INDEX=GIST -nlt PROMOTE_TO_MULTI -nln main_roads_2 -overwrite
-
 
 data/ne_10m_admin_0_boundary_lines_land.shp: data/downloads/ne_10m_admin_0_boundary_lines_land.zip
 	unzip -o -d data $<
@@ -162,14 +190,26 @@ data/tables/peaks: data/tables/h3_hexes | data/tables
 data/tables/places: data/tables/h3_hexes | data/tables
 	psql -d gis -f "sql-scripts/places.sql" -v ON_ERROR_STOP=1
 	touch $@
+	
+data/tables/landcover_quality_metrics: data/tables/landcovers_aggr data/tables/hex_land | data/tables
+	psql -d gis -f "sql-scripts/landcover_quality_metrics.sql" -v ON_ERROR_STOP=1
+	touch $@
+	
+data/tables/features_stats2: data/tables/landcovers_aggr data/tables/no_landcover 
+	psql -d gis -f "sql-scripts/features_stats2.sql" -v ON_ERROR_STOP=1
+	touch $@	
+
+data/tables/no_landcover: data/tables/landcovers_aggr data/tables/hex_land 
+	psql -d gis -f "sql-scripts/no_landcover.sql" -v ON_ERROR_STOP=1
+	touch $@	
+	
+	
+data/tables/hex_land: data/tables/h3_hexes data/tables/water_bodies_aggr | data/tables
+	psql -d gis -f "sql-scripts/find_almost_land_hexes.sql" -v ON_ERROR_STOP=1
+	touch $@
 
 data/tables/water_bodies_aggr: data/tables/h3_hexes | data/tables
 	psql -d gis -f "sql-scripts/gen_water_bodies.sql" -v ON_ERROR_STOP=1
-	touch $@
-
-
-data/tables/landcover_quality_metrics: data/tables/landcovers_aggr | data/tables
-	psql -d gis -f "sql-scripts/landcover_quality_metrics.sql" -v ON_ERROR_STOP=1
 	touch $@
 
 data/tables/landcovers_aggr: data/tables/h3_hexes | data/tables
@@ -194,7 +234,11 @@ data/downloads: | data
 
 data/export/downloads: | data/export
 	mkdir $@
-
+	
+	
+data/export/server: | data/export
+	mkdir $@
+	
 data/export: | data
 	mkdir $@
 
@@ -219,18 +263,24 @@ data/source/planet-latest-updated.osm.pbf: data/source/planet-latest.osm.pbf
 test: 
 	python3 test.py
 
+
 .PHONY: import_planet
-import_planet: data/source/planet-latest-updated.osm.pbf | data
+import_planet: data/source/planet-latest-updated.osm.pbf | data ## import data into DB from planet.osm.pbf
 	osm2pgsql -d gis -U $(USER) --create --slim  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes data/nodes.bin --number-processes 16 -S ~/src/openstreetmap-carto/openstreetmap-carto.style -r pbf data/source/planet-latest-updated.osm.pbf
 	osm2pgsql-replication init -d gis --server https://planet.openstreetmap.org/replication/hour
 
 .PHONY: update_db
-update_db: 
+update_db: ## Update DB via OSM hour diffs
 	osm2pgsql-replication update -d gis  --max-diff-size 100 --  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes data/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style
 
 .PHONY: clean
-clean:
+clean: ## Delete all the *generalized* map data in DB and the files in the work folder. Raw planet data imported via osm2pgsql remains intact!
 	psql -d gis -c "DROP SCHEMA IF EXISTS  h3 CASCADE" -v ON_ERROR_STOP=1
 	rm -rf data/* 
 	mkdir data/downloads
 	mkdir data/tables
+
+
+.PHONY: help
+help: ## Print descriptions for tasks
+	@grep -E '^[a-zA-Z][^:]*:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = " *&?:.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'	

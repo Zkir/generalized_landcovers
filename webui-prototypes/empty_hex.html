@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empty Hex Inspector</title>
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/v3.3.1/mapbox.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional styles for this page */
+        :root {
+            --light-gray: #ecf0f1;
+        }    
+        body.map-page {
+            display: flex;
+            flex-direction: column;
+        }
+        #main-content {
+            display: flex;
+            flex-grow: 1;
+            height: calc(100vh - 60px); /* Height minus header */
+        }
+        #info-panel {
+            width: 30%;
+            padding: 1em;
+            overflow-y: auto;
+            background-color: var(--secondary-color);
+            border-right: 1px solid var(--border-color);
+        }
+        #map-container {
+            width: 70%;
+            position: relative; /* Needed for mapbox child elements */
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+        #info-panel h1 {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5em;
+        }
+		#info-panel h2 {
+            color: var(--accent-color);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.4rem;
+        }
+        
+        .editor-link {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 0.8rem;
+            margin: 0.2rem 0.2rem;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #353535 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .editor-link:hover {
+            background: linear-gradient(135deg, var(--hover-color) 0%, #404040 100%);
+            border-color: var(--accent-color);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+            text-decoration: none;
+        }
+        
+        .editor-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            display: inline;
+            background: var(--light-gray);
+            margin-right: 0.6rem;
+        }
+        #show-another-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, var(--accent-color) 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0.4rem 0;
+        }
+        #show-another-btn:hover {
+            background: linear-gradient(135deg, #45a049 0%, var(--accent-color) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
+        }
+    </style>
+</head>
+<body class="map-page">
+
+    <header>
+        <a href="index.html" class="logo">OpenLandcoverMap :)</a>
+        <nav class="desktop-menu">
+            <a href="about.html">About</a>
+            <a href="renderedtags.html">Tag Usage</a>
+            <a href="country_stats.html">Country Stats</a>
+            <a href="downloads.html">Downloads</a>
+            <strong>Hex Inspector</strong>
+            <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
+        </nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <nav class="mobile-menu" id="mobileMenu">
+            <a href="about.html">About</a>
+            <a href="renderedtags.html">Tag Usage</a>
+            <a href="country_stats.html">Country Stats</a>
+            <a href="downloads.html">Downloads</a>
+            <a href="empty_hex.html">Hex Inspector</a>									
+            <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
+        </nav>
+    </header>
+
+    <div id="main-content">
+        <div id="info-panel">
+            <h1>Empty Hex Inspector</h1>
+            <p>This page displays hexagons which do not contain enough landcover data for generalization and desperaterly require some improvement.</p>
+
+            <div id="country-selector-container" style="margin-bottom: 1em;">
+                <label for="country-selector">Country:</label>
+                <select id="country-selector" style="width: 100%; padding: 0.5em;">
+                    <option value="">All Countries</option>
+                </select>
+            </div>
+
+            <div id="country-stats" style="margin-bottom: 1em; padding: 0.5em; background-color: #333; border-radius: 4px;">
+                <p>Loading country statistics...</p>
+            </div>
+
+            <h2 id="hex-id">Hex: ...</h2>
+            <div id="edit-links">
+                <p>Loading edit links...</p>
+            </div>
+			<button id="show-another-btn">
+            <i class="fas fa-sync-alt" style="margin-right: 0.5rem;"></i>
+                    Show Another Empty Hex
+            </button>
+			<p></p>
+			            <h2>Landcover Statistics</h2>
+						<div id="stats">
+			                <p>Loading statistics...</p>
+			            </div>
+			
+			        </div>
+			
+			        <div id="map-container">
+			            <div id="map"></div>
+			        </div>
+			    </div>
+			
+			    <script src="https://api.tiles.mapbox.com/mapbox.js/v3.3.1/mapbox.js"></script>
+			    <script>
+			        // Mobile menu functionality
+			        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+			            document.getElementById('mobileMenu').classList.toggle('active');
+			        });
+			        
+			        // Close mobile menu when clicking outside
+			        document.addEventListener('click', function(event) {
+			            const mobileMenu = document.getElementById('mobileMenu');
+			            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+			            
+			            if (mobileMenu.classList.contains('active') && 
+			                !mobileMenu.contains(event.target) && 
+			                !mobileMenuBtn.contains(event.target)) {
+			                mobileMenu.classList.remove('active');
+			            }
+			        });
+
+			        let currentHexLayer = null; // To keep track of the current hex layer
+			        let countryStats = {};
+			
+			        document.addEventListener('DOMContentLoaded', function () {
+			            // Initialize an empty map
+			            const map = L.mapbox.map('map', null, { // Initialize with null layer
+			                center: [0, 0],
+			                zoom: 2,
+			                hash: true,
+			                maxZoom: 8 // Set max zoom for the map
+			            });
+			
+			            // Create the project layer and add it
+			            const projectLayer = L.mapbox.tileLayer('server/landcovers.tilejson').addTo(map);
+			
+			            // Create the OSM layer
+			            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			            });
+			
+			            const baseMaps = {
+							"Generalized Landcovers": projectLayer,
+			                "OSM Standard": osmLayer
+			            };
+			
+			            L.control.layers(baseMaps).addTo(map);
+			
+			            const countrySelector = document.getElementById('country-selector');
+			
+			                        // Fetch and populate countries
+			                        async function populateCountries() {
+			                            try {
+			                                const response = await fetch('country_api.py');
+			                                const countries = await response.json();
+			                                if (countries && !countries.error) {
+			                                    countries.forEach(country => {
+			                                        const option = document.createElement('option');
+			                                        option.value = country.name_en;
+			                                        option.textContent = country.name_en;
+			                                        countrySelector.appendChild(option);
+			                                        countryStats[country.name_en] = country;
+			                                    });
+			                                }
+			                                // Load saved country from local storage
+			                                const savedCountry = localStorage.getItem('selectedCountry');
+			                                if (savedCountry) {
+			                                    countrySelector.value = savedCountry;
+			                                }
+			                                fetchAndDisplayCountryStats(countrySelector.value); // Initial fetch
+			                                fetchAndDisplayHex(); // Initial hex load
+			                            } catch (error) {
+			                                console.error('Error fetching countries:', error);
+			                            }
+			                        }
+			            
+			                        populateCountries();			
+			            // Save selection to local storage and fetch stats
+			            countrySelector.addEventListener('change', () => {
+			                const selectedCountry = countrySelector.value;
+			                localStorage.setItem('selectedCountry', selectedCountry);
+			                fetchAndDisplayCountryStats(selectedCountry);
+			                fetchAndDisplayHex();
+			            });
+			
+			            // Function to fetch and display country stats
+			            async function fetchAndDisplayCountryStats(country) {
+			                const statsContainer = document.getElementById('country-stats');
+			                statsContainer.innerHTML = '<p>Loading country statistics...</p>';
+			
+			                const displayStats = (data) => {
+			                    if (!data || data.error || !data.total_hexes) {
+			                        statsContainer.innerHTML = `<p>Statistics not available for this region.</p>`;
+			                        return;
+			                    }
+			
+			                    const emptyHexes = data.empty_hexes;
+			                    const totalHexes = data.total_hexes;
+			                    const coveragePercent = data.pcover * 100;
+			
+			                    const countryDisplayName = (country === 'All Countries' || country === '') ? 'the whole world' : `<b>${country}</b>`;
+                    statsContainer.innerHTML = `
+                        <p style="margin: 0;">There are <strong>${emptyHexes.toLocaleString()}</strong> empty hexes, out of <strong>${totalHexes.toLocaleString()}</strong> (${coveragePercent.toFixed(1)}% coverage) in ${countryDisplayName}.</p>
+                    `;			                };
+			
+			                if (country && country !== 'All Countries') {
+			                    displayStats(countryStats[country]);
+			                } else {
+			                    // Fetch world stats
+			                    const apiUrl = `country_api.py?country=All%20Countries`;
+			                    try {
+			                        const response = await fetch(apiUrl);
+			                        const data = await response.json();
+			                        displayStats(data);
+			                    } catch (error) {
+			                        console.error('Error fetching country stats:', error);
+			                        statsContainer.innerHTML = '<p>Could not load country statistics.</p>';
+			                    }
+			                }
+			            }
+
+            // Function to fetch and display hex data
+            async function fetchAndDisplayHex() {
+                // Clear previous hex layer if it exists
+                if (currentHexLayer) {
+                    map.removeLayer(currentHexLayer);
+                }
+
+                // Reset visibility of elements
+                document.getElementById('hex-id').style.display = 'block';
+                document.getElementById('edit-links').style.display = 'block';
+                document.getElementById('show-another-btn').style.display = 'block';
+                const landcoverStatsTitle = document.querySelector('#info-panel h2:last-of-type');
+                if(landcoverStatsTitle) landcoverStatsTitle.style.display = 'block';
+                document.getElementById('stats').style.display = 'block';
+
+                document.getElementById('hex-id').innerText = "Hex: Loading...";
+                document.getElementById('stats').innerHTML = '<p>Loading statistics...</p>';
+                document.getElementById('edit-links').innerHTML = '<p>Loading edit links...</p>';
+                document.getElementById('show-another-btn').disabled = true; // Disable button during fetch
+
+                const selectedCountry = countrySelector.value;
+                const apiUrl = `empty_hex_api.py?country=${encodeURIComponent(selectedCountry)}`;
+
+                try {
+                    const response = await fetch(apiUrl); // Fetch from the CGI script
+                    const data = await response.json();
+
+                    if (data.error) {
+                        if (data.error === "No empty hexes found that meet the criteria.") {
+                            const selectedCountryName = countrySelector.options[countrySelector.selectedIndex].text;
+                            document.getElementById('hex-id').innerHTML = `<h2>Congratulations!</h2><p>All the hexes in <b>${selectedCountryName}</b> are filled in.</p>`;
+                            document.getElementById('edit-links').style.display = 'none';
+                            document.getElementById('show-another-btn').style.display = 'none';
+                            if(landcoverStatsTitle) landcoverStatsTitle.style.display = 'none';
+                            document.getElementById('stats').style.display = 'none';
+                            if (currentHexLayer) {
+                                map.removeLayer(currentHexLayer);
+                            }
+                            map.setView([0, 0], 2);
+                        } else {
+                            document.getElementById('hex-id').innerText = "Error";
+                            document.getElementById('stats').innerHTML = `<p>${data.error}</p>`;
+                            document.getElementById('edit-links').innerHTML = '<p>Error loading links.</p>';
+                        }
+                        return;
+                    }
+
+                    // --- Update Info Panel ---
+                    document.getElementById('hex-id').innerText = `Hex: ${data.hex_id}`;
+
+                    // Display stats
+                    const statsContainer = document.getElementById('stats');
+                    if (data.stats && data.stats.length > 0) {
+                        let statsTable = '<table><tr><th>Landcover</th><th>Area (m²)</th><th>Coverage</th></tr>';
+                        data.stats.forEach(stat => {
+                            statsTable += `<tr>
+                                <td>${stat.feature}</td>
+                                <td>${Math.round(stat.area)}</td>
+                                <td>${stat.percentage.toFixed(2)}%</td>
+                            </tr>`;
+                        });
+                        statsTable += '</table>';
+                        statsContainer.innerHTML = statsTable;
+                    } else {
+                        statsContainer.innerHTML = '<p>No landcovers on this hex! :( <br /> But you can fix it! </p>';
+                    }
+
+                    // --- Update Map ---
+                    currentHexLayer = L.geoJSON(data.geometry, {
+                        style: {
+                            color: "#ff0000",
+                            weight: 2,
+                            opacity: 0.8,
+                            fillOpacity: 0.1
+                        }
+                    }).addTo(map);
+
+                    map.fitBounds(currentHexLayer.getBounds(), { maxZoom: 8 }); // Respect max zoom when fitting bounds
+
+                    // --- Generate Edit Links ---
+                    const bounds = currentHexLayer.getBounds();
+                    const idUrl = `https://www.openstreetmap.org/edit?editor=id#map=${map.getZoom()}/${map.getCenter().lat}/${map.getCenter().lng}`;
+                    const josmUrl = `http://127.0.0.1:8111/load_and_zoom?left=${bounds.getWest()}&right=${bounds.getEast()}&top=${bounds.getNorth()}&bottom=${bounds.getSouth()}`;
+
+                    document.getElementById('edit-links').innerHTML = `
+                        <a href="${idUrl}" target="_blank" class="editor-link"><img src="/img/id_editor_logo.svg" alt="iD" class="editor-icon"></img>Edit with iD</a>
+                        <a href="${josmUrl}" target="_blank" class="editor-link"><img src="/img/josm_editor_logo.png" alt="JOSM" class="editor-icon"></img>Edit with JOSM</a>
+                    `;
+
+                } catch (error) {
+                    console.error('Error fetching or processing data:', error);
+                    document.getElementById('stats').innerHTML = '<p>Could not load data. Ensure the Python API server is running.</p>';
+                    document.getElementById('edit-links').innerHTML = '<p>Error loading links.</p>';
+                } finally {
+                    document.getElementById('show-another-btn').disabled = false; // Re-enable button
+                }
+            }
+
+
+
+            // Add event listener to the button
+            document.getElementById('show-another-btn').addEventListener('click', fetchAndDisplayHex);
+        });
+    </script>
+</body>
+</html>

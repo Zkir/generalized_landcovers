@@ -1,116 +1,135 @@
-#  Generalized Landcovers aka OpenLandcoverMap ;)
+# OpenLandcoverMap
 
-This is an attempt to create properly generalized map, to see at least something on zoom levels z0-z8. It is well known that standard OSM ("mapnik" aka "opensteetmap-carto") is empty and boring on those zooms.
+**OpenLandcoverMap** is a project designed to create generalized landcover maps from OpenStreetMap (OSM) data, specifically for zoom levels z0-z8. It addresses the common issue of standard OSM maps appearing empty and devoid of features at these lower zoom levels by providing a more visually informative and richer map rendering.
 
-![picture: landcovers vs osm standard](pic01_landcovers_vs_mapnik.png)
+![Generalized Landcovers vs. Standard OSM](webui-prototypes/img/pic02_landcovers_vs_mapnik.png)
 
-Currently, the online map is accessible here: 
+The live map is accessible at: **https://openlandcovermap.org**
 
-**https://openlandcovermap.org**
+I hope that the awesome people responsible for the slippy map at openstreetmap.org will look at our map, see what's possible,
+and think hard about the future of cartographic representation in the OSM project.
 
-## Ideas
-What can be drawn on zooms z0-z8? 
-We cannot just draw existing osm polygonal features, because they are too small 
-(and there are to many of them). We cannot even select polygons by size, because objects are fractional: 
-they consist of lots of smaller parts.
+## The Approach
 
-So we need to create completely different geometry.  We will do it in a very simple way. 
-We will take all the  <b>landuse= *</b> and <b>natural= *</b>’ polygons,  and match them with a hexagonal grid (‘h3’, currently of resolution 6).  For each grid cell, we identify a **single tag** which describes this sell in the best way, polygons of which occupy the maximum area in that cell.
+The core idea of this project is to use a hexagonal grid system (Uber's H3) to process and generalize raw OSM data. For each cell in the grid, the dominant landcover type is identified, and these cells are then merged to create larger, more coherent polygons that are suitable for rendering at low zoom levels. This same principle is applied to generalize other features like cities and mountain peaks.
 
-![picture: polygon grid matching](pic02_h3grid.png)
+For a detailed explanation of the various generalization techniques used for landcovers, water bodies, populated places, and mountain peaks, please see the **[About Page](webui-prototypes/about.html)**.
 
+## Technology Stack
 
-To make the map more interesting, we will add cities and mountain peaks. _"Cartographic importance"_ should be calculated for each point, since it is impossible to select cities/mountain peaks for zooms z0-z8 based directly on population/elevation.
+This project is built upon a foundation of powerful open-source geospatial tools:
 
-## Taginfo project
+*   **PostGIS:** A PostgreSQL extension for storing and processing complex spatial data.
+*   **H3:** A hexagonal hierarchical spatial index used for the core generalization logic. The `h3-pg` extension provides the necessary database functions.
+*   **osm2pgsql:** For importing raw OpenStreetMap data into the PostGIS database.
+*   **Mapnik:** The core rendering engine. Styles are defined in `.mml` and `.mss` files and compiled into `mapnik.xml` using the `carto` tool. 
+    This `mapnik.xml` is then used by Mapnik for rendering.
+*   **Tilemill:** A powerful map design studio built on Node.js, which uses Mapnik-compatible styles. In this project, Tilemill is specifically used to *export*
+    the generalized map data into efficient [MBTiles format](https://wiki.openstreetmap.org/wiki/MBTiles) for web serving.
+	While Mapnik is the underlying rendering technology, directly generating web tiles with it can be difficult to configure and requires specific Apache setup;
+	Tilemill streamlines this process for web deployment.
+*   **Python:** For various automation scripts, data analysis, and helper tasks.
+*   **GNU Make:** For orchestrating the entire data processing and build pipeline.
 
-We have our own Taginfo project page so that the tags that are used in this map are visible . 
+## Getting Started
 
-* https://taginfo.openstreetmap.org/projects/openlandcovermap#tags
+Follow these steps to set up the project and generate the map data on your own machine.
 
-## Installation
-### Prerequisites
-It is assumed that OSM data is imported into PostGis database named 'gis' via osm2pgsql, for example like this: 
+### 1. Prerequisites
 
+It's assumed that you have up and running OSM tile server. After all, this project is (or was initially) aimed to patch the standard OSM carto style. 
+For guidance on setting up a tile server, refer to the specialized tutorial on [switch2osm.org](https://switch2osm.org/serving-tiles/manually-building-a-tile-server-ubuntu-24-04-lts/).
+
+However, working tileserver is not really mandatory, you can run the generalization process by itself, and experiment with resulting data, using, for example, QGIS.
+The following are the most important steps to configure it.
+
+**a) OSM Data in PostGIS:**
+You must have a PostGIS database (e.g., named `gis`) with OpenStreetMap data imported via `osm2pgsql`. The import command should be configured to use the `hstore` format and apply the appropriate style transformations.
+
+A typical `osm2pgsql` command might look like this (adapt paths and parameters for your system):
 ```sh
-osm2pgsql-bin\osm2pgsql -d gis -U test1 -W --create --slim  -G --hstore --tag-transform-script z:\home\zkir\src\openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes d:\nodes.bin --number-processes 8 -S z:\home\zkir\src\openstreetmap-carto\openstreetmap-carto.style -r pbf "d:\_planet.osm\planet-231211.osm.pbf"
+osm2pgsql -d gis -U <your_user> -W --create --slim -G --hstore --tag-transform-script openstreetmap-carto.lua -C 24000 --flat-nodes /path/to/nodes.bin --number-processes 8 -S openstreetmap-carto.style /path/to/planet-latest.osm.pbf
 ```
+`make import_planet` command contains preconfigured version of this command.
 
-and that all the stuff necessary to render osm tiles ("opensteetmap-carto", fonts, mapnik, mod_tile, apache etc) is installed. You may start with the following manuals: 
+**b) H3 PostGIS Extension:**
+The `h3-pg` extension must be installed and enabled in your database.
 
-* https://switch2osm.org/serving-tiles/manually-building-a-tile-server-ubuntu-22-04-lts/
-* https://ircama.github.io/osm-carto-tutorials/tile-server-ubuntu/
-
-### PostGIS h3 extension
-h3 extension should be installed on the gis database, each time gis database is recreated.
-
+On Debian/Ubuntu, you may be able to install it via `apt` after adding the official PostgreSQL repository:
+```sh
+# First, add the PostgreSQL repository (see https://www.postgresql.org/download/)
+sudo apt install postgresql-16-h3
+```
+Then, connect to your database and run:
 ```sql
 CREATE EXTENSION h3;
 CREATE EXTENSION h3_postgis CASCADE;
 ```
-_I remember that I had to compile it from sources and install some compilers. No clue however how to repeat that._
 
-The following worked out for me on the second try.
+**c) Tilemill and Node.js:**
+Tilemill is used to generate the MBTiles for the web map. It requires Node.js, and the `makefile` specifies Node.js v8.15.0.
 
-Connect to apt.postgresql.org repository.
+1.  **Install Node.js (v8.15.0 recommended):** It's highly recommended to use `nvm` (Node Version Manager) to manage Node.js versions.
+    ```sh
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    source ~/.bashrc # or ~/.profile
+    nvm install v8.15.0
+    nvm use v8.15.0
+    ```
+2.  **Install Tilemill:** Clone the Tilemill repository into the parent directory of this project (so it's accessible at `../tilemill` from the project root).
+    ```sh
+    cd ..
+    git clone https://github.com/tilemillproject/tilemill.git
+    cd tilemill
+    npm install
+    ```
+    *Note: Tilemill is an older project and might require specific environment setups or dependency adjustments to run correctly on modern systems.*
 
+**d) Database Credentials:**
+The build scripts require database credentials to be set as environment variables. Add the following to your `~/.bashrc` or `~/.profile`:
 ```sh
-sudo apt install -y postgresql-common
-sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+export PGUSER=<your_postgres_user>
+export PGPASSWORD=<your_postgres_password>
 ```
 
-Install h3 from that repository:  
+### 2. Build Process
 
-```sh
-sudo apt install postgresql-14-h3
-```
-replace 14 with the used version of postgres
+The entire data generation pipeline is managed by the `makefile`.
 
-### Postgres user name and password
-ogr2org requires both name and password even for local user, so please specify it
+*   **`make all` (or just `make`)**
+    This is the main command. It runs the full pipeline, which performs the following steps:
+    1.  Creates the necessary tables in the `h3` schema in your PostGIS database.
+    2.  Executes the SQL scripts in `sql-scripts/` to perform the generalization.
+    3.  Exports the generalized geometries into Shapefiles located in the `data/export/` directory.
+    4.  Generates the final `mapnik.xml` style file required for rendering.
 
-```sh
-export PGUSER=<somedumbuser>
-export PGPASSWORD=<somestrongpassword>
-```
-probably ~/.bashrc is a good place for that.
+*   **`make clean`**
+    This command removes all generated files and drops the `h3` schema from the database, allowing you to start the process from scratch.
+	It does not affect 'raw' (ungeneralized) data imported by osm2pgsql.
 
-### Run data creation
-We need to create generalized geometry, to be used for rendering. 
+*   **`make import_planet` / `make update_db`**
+    These targets are for managing the OSM data itself, either by performing a full import or by updating the database with the latest changes from OSM. These are long-running processes.
 
-```sh
-make
-```
-This will create both tables with generalized geometry in posgis (h3.* schema) and export shape files in _data_ folder.
+### 3. Testing the Installation
 
-Note: it could take significant time, e.g. several hours.
+(_Note: this section requires some revision._ _It should be clarified when `make test` should be run and what it really tests._)
 
-Also it should create **mapnik.xml** from  mss files, but it is not yet implemented (precompiled **mapnik.xml** is included).
-
-### Test installation
-
-Run 
-
+To verify that everything is set up correctly, run:
 ```sh
 make test
 ```
+This command will render a small sample map of the world to `landcovers_test_render.png` and compare it with the reference image `landcovers_test_render_sample.png`. 
+If the script completes without errors, your installation is working correctly.
 
-If all is OK, it will render map of the world to 'landcovers_test_render.png', compare it with 'landcovers_test_render_sample.png'
 
-![landcovers_test_render_sample.png](landcovers_test_render_sample.png)
+![Test Render Sample](landcovers_test_render_sample.png)
 
-After that, **mapnik.xml** can be used to produce tiles. If any error occurs, you are on your own :)
+Once `make all` has completed successfully, the generated `mapnik.xml` can be used with a tile server to render the map.
 
 ## Discussion
 
-Questions can be asked here, both in English and Russian
+For questions, feedback, and discussion, please visit the thread on the **[OpenStreetMap Community Forum](https://community.openstreetmap.org/t/announcement-openlandcovermap)**.
 
-* https://www.openstreetmap.org/user/Zkir/diary/403070
-* https://www.openstreetmap.org/user/Zkir/diary/403129
+## License
 
-## Acknowledgements
-This project is largely inspired by [gravitystorm openstreetmap-carto](https://github.com/gravitystorm/openstreetmap-carto) and many svg/png files for map features are borrowed from it.
-
-## Author and license
-This project is created by Zkir aka Kirill B. and released under [MIT License](LICENSE.md).
-
+The source code for this project is created by Zkir and is released under the **[MIT License](LICENSE.md)**. The map patterns and symbols are largely borrowed from the [openstreetmap-carto](https://github.com/gravitystorm/openstreetmap-carto) project.

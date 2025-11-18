@@ -16,6 +16,7 @@
             <a href="renderedtags.html">Tag Usage</a>
             <a href="country_stats.html">Country Stats</a>
             <a href="downloads.html">Downloads</a>
+            <a href="empty_hex.html">Hex Inspector</a>
             <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
         </nav>
         <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -26,6 +27,7 @@
             <a href="renderedtags.html">Tag Usage</a>
             <a href="country_stats.html">Country Stats</a>
             <a href="downloads.html">Downloads</a>
+            <a href="empty_hex.html">Hex Inspector</a>									
             <a href="https://github.com/Zkir/generalized_landcovers"><i class="fab fa-github"></i> GitHub</a>
         </nav>
     </header>
@@ -99,12 +101,28 @@
             }
         });
         
-        // Initialize map
-        var map = L.mapbox.map('map', 'server/landcovers.tilejson', {
+        // Initialize an empty map
+        var map = L.mapbox.map('map', null, {
             center: [25.0, 0],
             zoom: 3,
-            hash: true
+            hash: true,
+			maxZoom: 8 // Set max zoom for the map
         });
+
+        // Create the project layer and add it
+        const projectLayer = L.mapbox.tileLayer('server/landcovers.tilejson').addTo(map);
+
+        // Add OSM as an alternative basemap
+        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        const baseMaps = {
+            "Generalized Landcovers": projectLayer,
+            "OSM Standard": osmLayer
+        };
+
+        L.control.layers(baseMaps).addTo(map);
 
         // Legend functionality
         const toggleButton = document.getElementById('toggleLegend');

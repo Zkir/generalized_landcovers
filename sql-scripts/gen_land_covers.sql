@@ -6,9 +6,6 @@ drop table IF EXISTS h3.hex_features_stats;
 drop table IF EXISTS h3.landcovers_h3;
 DROP TABLE IF EXISTS h3.landcovers_aggr;
 DROP TABLE IF EXISTS h3.landcovers_aggr_m; 
-drop table IF EXISTS h3.landcover_quality;
-drop table IF EXISTS h3.landcover_quality2;  
-drop table IF EXISTS h3.landcover_quality3;  
 */
 
 /*

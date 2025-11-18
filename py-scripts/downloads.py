@@ -9,10 +9,12 @@ WEB_PATH="downloads"
 LANDCOVERS_ZIP = "landcovers.zip"
 PEAKS_ZIP = "peaks.zip"
 PLACES_ZIP= "places.zip"
+WATERBODIES_ZIP = "waterbodies.zip"
 
 files=[[LANDCOVERS_ZIP,"Generalized landcover polygons in shape format"],
          [PEAKS_ZIP," Mountain peak points with cartographic importance calculated  <br />using the Discrete Isolation method."],
-         [PLACES_ZIP,"City and town points with cartographic importance calculated <br />using the Grid Cell method."] ]
+         [PLACES_ZIP,"City and town points with cartographic importance calculated <br />using the Grid Cell method."],
+         [WATERBODIES_ZIP,"Generalized waterbody polygons in shape format"] ]
 
 
 db_user_name = os.environ.get("PGUSER")

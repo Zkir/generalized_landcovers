@@ -1,0 +1,22 @@
+GENERALIZED WATERBODIES DATASET
+Based on the original map data (c) Openstreetmap contributors ODbL
+Format: ESRI Shapefile
+
+WHAT THIS DATASET IS
+This dataset is generalized representation of the water bodies, extracted from Openstreetmap data.
+Objects with natural=water/water=*  tags are used. 
+
+Those generalized polygons can be displayed on zoom levels z0-z8 (scales approximately 1:500M - 1:2M),
+ where standard OSM tiles (known also as  osm-carto style) are boring and empty.
+
+For more information and author contacts check  
+1. the project page: http://openlandcovermap.org
+2. github repository: https://github.com/Zkir/generalized_landcovers
+
+
+THE DATASET IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF CORRECTNESS, MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE DATASET OR THE USE OR OTHER DEALINGS IN THE DATASET.
