@@ -34,6 +34,36 @@ Map {
    polygon-fill:@water;
 }
 
+#rivers_gen {
+  line-color: @water;
+  line-cap: round;
+  line-join: round;
+  line-width: 0;
+
+  // Style for high zoom levels
+  [zoom=6],[zoom=7],[zoom=8]{
+	[width >    0]  { line-width: 0.5; }
+	[width >  500]  { line-width: 1; }
+	[width > 1000]  { line-width: 2; }
+	[width > 2000]  { line-width: 3; }
+  }
+  // Style for mid zoom levels
+  [zoom=4],[zoom=5]{
+	[width > 500] { line-width:  0.5; }
+	[width > 1000] { line-width: 1.0; }
+	[width > 2000] { line-width: 1.5; }
+  }
+  // Style for low zoom levels - only show major rivers
+  [zoom=2],[zoom=3]{
+    [width >  500] { line-width: 0.5; }
+    [width > 1000] { line-width: 1.0; }
+  }
+  [zoom=0],[zoom=1] {
+    [width > 1000] { line-width: 0.5; }
+  }
+}
+
+
 
 #places_{    
       [zoom=3][rank<=1],

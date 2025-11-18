@@ -90,6 +90,18 @@
     },
     {
       "geometry": "linestring",
+      "id": "rivers_gen",
+      "class": "",
+      "Datasource": {
+        "file": "/home/zkir/src/generalized_landcovers/data/rivers_gen.shp",
+        "type": "shape"
+      },
+      "srs-name": "autodetect",
+      "srs": "",
+      "name": "rivers_gen"
+    },
+    {
+      "geometry": "linestring",
       "extent": [
         -141.00554863899987,
         -55.120923766999944,
