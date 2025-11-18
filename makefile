@@ -24,6 +24,8 @@ all:  data/shapes \
 upload: data/export/server/landcovers.mbtiles ## Upload downloadable files and generated htmls to the web-ui
 	if [ -z "$(FTPUSER)" ] ; then   echo "FTPUSER env variable is not defined" ; exit 1; fi
 	if [ -z "$(FTPPASSWORD)" ] ; then   echo "FTPPASSWORD env variable is not defined" ; exit 1; fi
+	cd data/export/server ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ landcovers.mbtiles
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ landcover_stats.sqlite
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/landcovers.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/peaks.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/places.zip
@@ -33,8 +35,7 @@ upload: data/export/server/landcovers.mbtiles ## Upload downloadable files and g
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ renderedtags.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ country_stats.html
-	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/server/ server/landcovers.mbtiles
-	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ landcover_stats.sqlite
+	
 
 data/export/index.html: webui-prototypes/index.html | data/export
 	cp webui-prototypes/index.html data/export/index.html

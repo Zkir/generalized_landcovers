@@ -91,3 +91,8 @@ This approach ensures that the project's existing functionality is preserved whi
 
 - Rewrote the  to be more focused on the project's purpose, technology, and installation, and to link to the  page for generalization details.
 - Rewrote the README.md to be more focused on the project's purpose, technology, and installation.
+
+- Added information about Tilemill's role in generating MBTiles for the website to .
+- Added information about Tilemill's role in generating MBTiles for the website to README.md.
+- Provided a more detailed explanation of Mapnik and Tilemill's roles in the project, including installation guidance for Tilemill and Node.js, in .
+- Provided a more detailed explanation of Mapnik and Tilemill's roles in the project, including installation guidance for Tilemill and Node.js, in README.md.
