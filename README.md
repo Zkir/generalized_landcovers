@@ -11,9 +11,12 @@ and think hard about the future of cartographic representation in the OSM projec
 
 ## The Approach
 
-The core idea of this project is to use a hexagonal grid system (Uber's H3) to process and generalize raw OSM data. For each cell in the grid, the dominant landcover type is identified, and these cells are then merged to create larger, more coherent polygons that are suitable for rendering at low zoom levels. This same principle is applied to generalize other features like cities and mountain peaks.
+The core idea of this project is to use a hexagonal grid system (Uber's H3) to process and generalize raw OSM data. 
+For each cell in the grid, the dominant landcover type is identified, and these cells are then merged to create larger, 
+more coherent polygons that are suitable for rendering at low zoom levels. 
 
-For a detailed explanation of the various generalization techniques used for landcovers, water bodies, populated places, and mountain peaks, please see the **[About Page](webui-prototypes/about.html)**.
+For a detailed explanation of the various generalization techniques used for landcovers, water bodies, populated places, and mountain peaks, 
+please see the **[About Page](https://openlandcovermap.org/about.html)**.
 
 ## Technology Stack
 
