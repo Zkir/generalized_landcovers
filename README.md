@@ -95,6 +95,17 @@ export PGUSER=<your_postgres_user>
 export PGPASSWORD=<your_postgres_password>
 ```
 
+**e) External Shapefiles:**
+The `openstreetmap-carto` style, which this project uses as a base, requires several pre-processed shapefiles for rendering certain features like coastlines. One of these is `simplified_water_polygons`. This table is not generated from the main planet import but is imported from a shapefile.
+
+To download and import these required shapefiles:
+1. Navigate to your local clone of the `openstreetmap-carto` repository.
+2. Run the provided script:
+   ```sh
+   python3 scripts/get-external-data.py
+   ```
+This script will download the necessary files (like `simplified-water-polygons-split-3857.zip`), unzip them, and use `ogr2ogr` to import them into your `gis` database.
+
 ### 2. Build Process
 
 The entire data generation pipeline is managed by the `makefile`.

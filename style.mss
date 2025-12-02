@@ -34,34 +34,42 @@ Map {
    polygon-fill:@water;
 }
 
+
 #rivers_gen {
   line-color: @water;
   line-cap: round;
   line-join: round;
   line-width: 0;
 
-  // Style for high zoom levels
-  [zoom=6],[zoom=7],[zoom=8]{
-	[width >    0]  { line-width: 0.5; }
-	[width >  500]  { line-width: 1; }
-	[width > 1000]  { line-width: 2; }
-	[width > 2000]  { line-width: 3; }
-  }
-  // Style for mid zoom levels
-  [zoom=4],[zoom=5]{
-	[width > 500] { line-width:  0.5; }
-	[width > 1000] { line-width: 1.0; }
-	[width > 2000] { line-width: 1.5; }
-  }
   // Style for low zoom levels - only show major rivers
-  [zoom=2],[zoom=3]{
-    [width >  500] { line-width: 0.5; }
-    [width > 1000] { line-width: 1.0; }
+  [zoom=1][rank > 200],[zoom=2][rank > 100] {
+      line-width: 0.5; 
   }
-  [zoom=0],[zoom=1] {
-    [width > 1000] { line-width: 0.5; }
+  
+  [zoom=3][rank>50],[zoom=4][rank>25]{
+    [rank >  0] { line-width: 0.5; }
+    [rank > 500] { line-width: 1.0; }
   }
+  
+  // Style for mid zoom levels
+  [zoom=5][rank>10],[zoom=6][rank>5]{
+	[rank > 0] { line-width:  0.5; }
+	[rank > 10] { line-width: 1.0; }
+	[rank > 100] { line-width: 1.5; }
+  }
+  
+  // Style for high zoom levels
+  [zoom=7],[zoom=8]{
+	[rank >    0]  { line-width: 0.5; }
+	[rank >    8]  { line-width: 1; }
+	[rank >   32]  { line-width: 1.5; }
+	[rank >   64]  { line-width: 2; }
+	[rank >  128]  { line-width: 2.5; }
+	[rank >  512]  { line-width: 3; }
+  }
+  
 }
+
 
 
 

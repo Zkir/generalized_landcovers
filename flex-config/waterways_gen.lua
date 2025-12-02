@@ -9,6 +9,7 @@ osm2pgsql.run_sql({
         CREATE TABLE h3.rivers_gen (
             osm_id int8,
             width real,
+            rank real,
             name text,
             geom geometry(Geometry, 3857)
         );
