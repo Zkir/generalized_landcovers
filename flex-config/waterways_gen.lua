@@ -11,6 +11,7 @@ osm2pgsql.run_sql({
             width real,
             rank real,
             name text,
+            role text,
             geom geometry(Geometry, 3857)
         );
     ]]
