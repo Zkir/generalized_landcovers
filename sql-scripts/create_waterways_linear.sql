@@ -20,6 +20,8 @@ SELECT
          AND rel.tags @> '{"waterway": "river"}'
          AND member->>'role' = 'main_stream'
          AND member->>'type' = 'W'
+     /*Note: we need stricty ONE record per osm_id
+	 * Typical error is that way is included into relation several times*/    
      GROUP BY member->>'ref';
 
 CREATE INDEX ON h3.waterway_roles(osm_id);
@@ -47,8 +49,6 @@ CREATE TABLE h3.waterways_linear AS
 	    OR l.osm_id IN (1364991437))
 	    
 	    --AND ST_X(ST_Centroid(way))>2000000 AND ST_Y(ST_Centroid(way))>4000000
-	/*Note, we need stricty ONE record per osm_id
-	 * Typical error is that way is included into relation several times*/    
 	GROUP BY l.osm_id, l.name, l.waterway; /* for some mysterious reason ways are split by osm2pgsql*/   
 
 

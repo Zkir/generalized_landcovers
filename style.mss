@@ -59,15 +59,21 @@ Map {
   }
   
   // Style for high zoom levels
-  [zoom=7],[zoom=8]{
+  [zoom=7][rank>32]{
 	[rank >    0]  { line-width: 0.5; }
-	[rank >    8]  { line-width: 1; }
+	[rank >  128]  { line-width: 1; }
+	[rank >  256]  { line-width: 1.5; }
+	[rank >  512]  { line-width: 2; }
+	[rank > 1024]  { line-width: 2.5; }
+  }
+  [zoom=8][rank>8]{
+	[rank >    0]  { line-width: 0.5; }
+	[rank >   16]  { line-width: 1; }
 	[rank >   32]  { line-width: 1.5; }
 	[rank >   64]  { line-width: 2; }
 	[rank >  256]  { line-width: 2.5; }
 	[rank > 1024]  { line-width: 3; }
   }
-  
 }
 
 

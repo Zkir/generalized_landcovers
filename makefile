@@ -136,7 +136,7 @@ data/rivers_gen.shp: data/tables/rivers_gen
   -progress -overwrite \
   data/rivers_gen.shp \
   "PG:dbname=gis host=localhost port=5432 user=$(PGUSER)  password=$(PGPASSWORD)" \
-  -sql "SELECT * FROM h3.rivers_gen WHERE width > 0" \
+  -sql "SELECT * FROM h3.rivers_gen WHERE rank >= 2" \
   -lco ENCODING=UTF-8
 
 data/places.shp: data/tables/places
