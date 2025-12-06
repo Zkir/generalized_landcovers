@@ -55,6 +55,8 @@ osm2pgsql -d gis -U <your_user> -W --create --slim -G --hstore --tag-transform-s
 ```
 `make import_planet` command contains preconfigured version of this command.
 
+Note: This project utilizes a custom, patched version of osm2pgsql-gen for advanced river generalization. The source code for this modified version is available at <a href="https://github.com/Zkir/osm2pgsql-patched/tree/waterway-gen-patch">https://github.com/Zkir/osm2pgsql-patched/tree/waterway-gen-patch</a>.
+
 **b) H3 PostGIS Extension:**
 The `h3-pg` extension must be installed and enabled in your database.
 
