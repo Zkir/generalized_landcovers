@@ -30,6 +30,7 @@ upload: data/export/server/landcovers.mbtiles ## Upload downloadable files and g
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/peaks.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/places.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/waterbodies.zip
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/rivers.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ index.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ about.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ renderedtags.html
@@ -63,7 +64,7 @@ data/export/landcover_stats.sqlite: data/tables/features_stats2 data/tables/coun
 data/export/country_stats.html: data/tables/country_stats
 	python3 py-scripts/country_stats.py
 
-data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip data/export/downloads/waterbodies.zip
+data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip data/export/downloads/waterbodies.zip data/export/downloads/rivers.zip
 	python3 py-scripts/downloads.py
 	
 data/export/downloads/unrendered_landcovers.osm: taginfo.json data/source/planet-latest-updated.osm.pbf
@@ -97,6 +98,9 @@ data/export/downloads/places.zip: data/places.shp | data/export/downloads
 
 data/export/downloads/waterbodies.zip: data/waterbodies_aggr.shp | data/export/downloads
 	zip -j $@ data/waterbodies_aggr.* misc/waterbodies.readme.txt
+
+data/export/downloads/rivers.zip: data/rivers_gen.shp | data/export/downloads
+	zip -j $@ data/rivers_gen.* misc/rivers.readme.txt
 	
 data/export/img: |	data/export
 	mkdir data/export/img
@@ -293,7 +297,7 @@ import_planet: data/source/planet-latest-updated.osm.pbf | data ## import data i
 
 .PHONY: update_db
 update_db: ## Update DB via OSM hour diffs
-	osm2pgsql-replication update -d gis  --max-diff-size 100 --  -G -C 0 --flat-nodes data/nodes.bin --number-processes 8 -O flex -S /home/zkir/src/openstreetmap-carto/openstreetmap-carto.lua
+	osm2pgsql-replication update -d gis  --max-diff-size 100 -- -C 0 --flat-nodes data/nodes.bin --number-processes 8 -O flex -S flex-config/openstreetmap-carto-flex.lua
 
 .PHONY: clean
 clean: ## Delete all the *generalized* map data in DB and the files in the work folder. Raw planet data imported via osm2pgsql remains intact!

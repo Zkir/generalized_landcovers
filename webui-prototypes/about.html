@@ -122,7 +122,7 @@
            taged in OSM with <code>natural=water</code>. </p>
 
         <h3>Rivers</h3>
-		<img src="img/pic06_rivers.png" alt="Hexes and Cities" class="about-image">
+		<img src="img/pic06_rivers.png" alt="Generalized rivers with calculated rank" class="about-image">
         <p>Raw river data in OpenStreetMap is far too detailed to be useful on a world map, which would otherwise be cluttered with countless tiny streams. The goal of river generalization is to create a simplified, recognizable river network showing only the most significant waterways. 
 		<p>We use a modified version of the algorithm proposed by <strong>Jochen Topf</strong> in his blog post <a href="https://blog.jochentopf.com/2023-01-30-generalizing-river-networks.html">Generalizing river networks</a> and implemented in osm2pgsql-gen.</p>
         <p>Jochen Topf suggests using a "non-decreasing width" as the rank. While the idea of a non-decreasing rank seems correct, using width as the criterion is unsatisfactory. Firstly, rivers have local widenings that have no relation to their "cartographic significance." Secondly, in the proposed algorithm, when a river splits into distributaries, all of them inherit this non-decreasing width. This is undesirable because it makes all distributaries appear significant, leading to thick, messy, and ugly river lines on the map. Thirdly, width is specified (via tag or <code>natural=water</code> polygons) not for all significant rivers, especially outside Europe, which causes them to sharply lose significance, which is undesirable. </p>
