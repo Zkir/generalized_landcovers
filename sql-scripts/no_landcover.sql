@@ -10,4 +10,7 @@ CREATE TABLE h3.no_landcover AS
 	        SELECT 1 
 	           FROM h3.landcovers_h3 lh3 
 	           WHERE cast(hl.ix AS VARCHAR(16)) = lh3.ix)
-	   AND ST_Y(ST_Transform(ST_Centroid(geom), 4326)) > -60; 
+	   AND ST_Y(ST_Transform(ST_Centroid(geom), 4326)) > -60;
+
+--CREATE INDEX ON h3.no_landcover (ix);
+CREATE INDEX ON h3.no_landcover USING GIST (geom);
