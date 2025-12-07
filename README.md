@@ -55,6 +55,8 @@ osm2pgsql -d gis -U <your_user> -W --create --slim -G --hstore --tag-transform-s
 ```
 `make import_planet` command contains preconfigured version of this command.
 
+Note: This project utilizes a custom, patched version of osm2pgsql-gen for advanced river generalization. The source code for this modified version is available at <a href="https://github.com/Zkir/osm2pgsql-patched/tree/waterway-gen-patch">https://github.com/Zkir/osm2pgsql-patched/tree/waterway-gen-patch</a>.
+
 **b) H3 PostGIS Extension:**
 The `h3-pg` extension must be installed and enabled in your database.
 
@@ -94,6 +96,17 @@ The build scripts require database credentials to be set as environment variable
 export PGUSER=<your_postgres_user>
 export PGPASSWORD=<your_postgres_password>
 ```
+
+**e) External Shapefiles:**
+The `openstreetmap-carto` style, which this project uses as a base, requires several pre-processed shapefiles for rendering certain features like coastlines. One of these is `simplified_water_polygons`. This table is not generated from the main planet import but is imported from a shapefile.
+
+To download and import these required shapefiles:
+1. Navigate to your local clone of the `openstreetmap-carto` repository.
+2. Run the provided script:
+   ```sh
+   python3 scripts/get-external-data.py
+   ```
+This script will download the necessary files (like `simplified-water-polygons-split-3857.zip`), unzip them, and use `ogr2ogr` to import them into your `gis` database.
 
 ### 2. Build Process
 

@@ -16,7 +16,7 @@ The project uses a combination of technologies:
 
 The project uses a `makefile` to manage the build process. Here are the key commands:
 
-*   `make all`: This is the default command. It runs the entire data processing pipeline, which includes:
+*   `make all`: This is the a default command. It runs the entire data processing pipeline, which includes:
     *   Creating tables in the PostGIS database.
     *   Generating shapefiles from the database tables.
     *   Creating a `mapnik.xml` file from the `.mml` and `.mss` style files.
@@ -47,6 +47,7 @@ Prioritized via MoSCoW method:
 *  Integrate the Gantt-chart view feature (`generate_gantt_chart.py`) into the process feature (probably into `run.sh`)
 *  Use common style for the Gantt chart page, the same as for other pages.
 *  **Migrate to vector tiles** (See the 'Plan: Modernize the Rendering Stack' secton below)
+*  Refactor the project to eliminate the dependency on the pre-simplified `simplified_water_polygons` table. This could involve generating simplified water polygons directly from the main `planet_osm_polygon` table using `ST_Simplify` as part of the data preparation pipeline.
 
 ### Could
 None
@@ -87,6 +88,7 @@ The project will produce two sets of outputs:
 This approach ensures that the project's existing functionality is preserved while adding the significant benefits of a modern, vector-tile-based web map.
 
 ## Recent Accomplishments
+- Fixed a bug in the river generalization script (`src/gen/gen-rivers.cpp`) where width was not correctly propagated across junctions. The logic was improved to prioritize continuing along the same `osm_id`.
 - Added a mobile menu to the Hex Inspector page (`webui-prototypes/empty_hex.html`) for improved navigation on smaller screens.
 
 - Rewrote the  to be more focused on the project's purpose, technology, and installation, and to link to the  page for generalization details.

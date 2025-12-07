@@ -1,6 +1,6 @@
 {
     "data_format": 1,
-    "data_updated": "20251115T121518Z",
+    "data_updated": "20251205T013816Z",
     "project": {
         "contact_email": "zkir@zkir.ru",
         "contact_name": "Kirill B. aka Zkir",
@@ -440,14 +440,6 @@
                 "area"
             ],
             "value": "wood"
-        },
-        {
-            "description": "Accepted as landcover, but not rendered.",
-            "key": "natural",
-            "object_types": [
-                "area"
-            ],
-            "value": "wwood"
         },
         {
             "description": "Considered to be a synonym of natural=wood",

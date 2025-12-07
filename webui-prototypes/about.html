@@ -21,6 +21,7 @@
             margin-left: 20px;
             margin-bottom: 10px;    
         }
+		code {font-weight: bold;}
     </style>
 </head>
 <body>
@@ -116,9 +117,32 @@
            See the full list of supported landcover tags on the <a href="renderedtags.html">Tag Usage</a> page. </p>
 
         <h3> Water Bodies </h3>
-        <p>For waterbodies another traditional method is used. We select water bodies larger than 20 sq. km, buffer them to merge nearby water bodies,
+        <p>For water bodies another traditional method is used. We select water bodies larger than 20 sq. km, buffer them to merge nearby water bodies,
            and then shrink them back. This process simplifies complex coastlines and merges groups of lakes/reservoirs and wide rivers, 
-           taged in OSM with <i>natural=water</i>. </p>
+           taged in OSM with <code>natural=water</code>. </p>
+
+        <h3>Rivers</h3>
+		<img src="img/pic06_rivers.png" alt="Generalized rivers with calculated rank" class="about-image">
+        <p>Raw river data in OpenStreetMap is far too detailed to be useful on a world map, which would otherwise be cluttered with countless tiny streams. The goal of river generalization is to create a simplified, recognizable river network showing only the most significant waterways. 
+		<p>We use a modified version of the algorithm proposed by <strong>Jochen Topf</strong> in his blog post <a href="https://blog.jochentopf.com/2023-01-30-generalizing-river-networks.html">Generalizing river networks</a> and implemented in osm2pgsql-gen.</p>
+        <p>Jochen Topf suggests using a "non-decreasing width" as the rank. While the idea of a non-decreasing rank seems correct, using width as the criterion is unsatisfactory. Firstly, rivers have local widenings that have no relation to their "cartographic significance." Secondly, in the proposed algorithm, when a river splits into distributaries, all of them inherit this non-decreasing width. This is undesirable because it makes all distributaries appear significant, leading to thick, messy, and ugly river lines on the map. Thirdly, width is specified (via tag or <code>natural=water</code> polygons) not for all significant rivers, especially outside Europe, which causes them to sharply lose significance, which is undesirable. </p>
+        <p> Therefore, this project uses a rank based on the <strong>edge's position in the river graph</strong>, with width used only as an auxiliary parameter.
+        	To achieve this, the algorithm follows a two-stage process: first, we determine the <strong>width</strong> of every river segment, and then we calculate its <strong>rank</strong> to determine its importance.</p>        
+        <p><strong>Stage 1: Width Calculation</strong><br/>
+        Since the <code>width</code> attribute is not usually set for waterways, we have to compute it. For wide rivers mapped as polygons (e.g., <code>natural=water</code>), the width is estimated using the PostGIS function <code>ST_MaximumInscribedCircle</code>, which finds the diameter of the largest possible circle that can fit inside the water body polygon. This calculated width is then spatially transferred to any river lines that flow through these areas. Finally, these known width values are propagated downstream along the river network to fill in any gaps.</p>
+        
+        <p><strong>Stage 2: Ranking and Generalization</strong><br/>
+        Once widths are known, the river network is treated as a directed acyclic graph for ranking. After simplifying the graph by merging non-branching segments, the algorithm performs two critical tasks using the calculated width:
+        <ol>
+            <li><strong>Cycle Breaking:</strong> OSM data sometimes contains errors that create impossible loops (a river flowing in a circle). The algorithm detects these and breaks them by removing the "weakest link"—the segment with the smallest <code>width</code>.</li>
+            <li><strong>Ranking:</strong> A rank is calculated to model the river's significance. Source rivers (headwaters) start with a <code>rank=1</code>. When rivers merge, their ranks are summed, thus making the downstream river more significant. Conversely, when a river splits into distributaries, the main channel inherits most of the parent's rank, while minor offshoots are assigned a rank of 1, so that the total sum of ranks is preserved. <br />
+                
+                Determining the "main channel" of the river is a bit tricky. The first idea is just to select the offspring with the highest width value, but surprisingly it does not always produce good results. We cannot fully rely on the <a href="https://wiki.openstreetmap.org/wiki/Relation:waterway">waterway relation</a> either, because those relations are present for major rivers only and are sometimes incomplete. 
+                
+                However, using both factors together gives acceptable results. The algorithm first prioritizes segments that have the <code>main_stream</code> role in a <code>waterway</code> relation. If no segments have this role, it falls back to choosing the widest channel as the main one. </li>
+        </ol>
+        This combined, two-tiered approach (using role data first, then width) provides a much more accurate and realistic river network than relying on width alone.</p>
+		<p>The modified version of <code>osm2pgsql-gen</code> with this implemented algorithm is available in the repository at <a href="https://github.com/Zkir/osm2pgsql-patched/tree/waterway-gen-patch">https://github.com/Zkir/osm2pgsql-patched/tree/waterway-gen-patch</a>.</p>
 
 
         <h2>Technology Stack</h2>
@@ -149,7 +173,7 @@
 	    <p>All questions can be asked in the <a href="https://community.openstreetmap.org/t/announcement-openlandcovermap">Openstreet Community forum</a>. Any feedback is welcome!</p>
     </main>
     <footer>
-        <small>Page created 2025-10-15 12:38:50</small>
+        <small>Page updated on 2025-12-05 12:38:50</small>
     </footer>
 
     <script>

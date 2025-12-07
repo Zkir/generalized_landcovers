@@ -35,6 +35,50 @@ Map {
 }
 
 
+#rivers_gen {
+  line-color: @water;
+  line-cap: round;
+  line-join: round;
+  line-width: 0;
+
+  // Style for low zoom levels - only show major rivers
+  [zoom=1][rank > 2000],[zoom=2][rank > 1000] {
+      line-width: 0.5; 
+  }
+  
+  [zoom=3][rank>1000],[zoom=4][rank>512]{
+    [rank >   0] { line-width: 0.5; }
+    [rank > 1024] { line-width: 1.0; }
+  }
+  
+  // Style for mid zoom levels
+  [zoom=5][rank>128],[zoom=6][rank>64]{
+	[rank > 0] { line-width:  0.5; }
+	[rank > 256] { line-width: 1.0; }
+	[rank > 1024] { line-width: 1.5; }
+  }
+  
+  // Style for high zoom levels
+  [zoom=7][rank>32]{
+	[rank >    0]  { line-width: 0.5; }
+	[rank >  128]  { line-width: 1; }
+	[rank >  256]  { line-width: 1.5; }
+	[rank >  512]  { line-width: 2; }
+	[rank > 1024]  { line-width: 2.5; }
+  }
+  [zoom=8][rank>8]{
+	[rank >    0]  { line-width: 0.5; }
+	[rank >   16]  { line-width: 1; }
+	[rank >   32]  { line-width: 1.5; }
+	[rank >   64]  { line-width: 2; }
+	[rank >  256]  { line-width: 2.5; }
+	[rank > 1024]  { line-width: 3; }
+  }
+}
+
+
+
+
 #places_{    
       [zoom=3][rank<=1],
       [zoom=4][rank<=3],

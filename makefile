@@ -30,6 +30,7 @@ upload: data/export/server/landcovers.mbtiles ## Upload downloadable files and g
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/peaks.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/places.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/waterbodies.zip
+	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ downloads/rivers.zip
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ index.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ about.html
 	cd data/export ; ftp -u ftp://$(FTPUSER):$(FTPPASSWORD)@osm2.zkir.ru/landcovers/ renderedtags.html
@@ -63,7 +64,7 @@ data/export/landcover_stats.sqlite: data/tables/features_stats2 data/tables/coun
 data/export/country_stats.html: data/tables/country_stats
 	python3 py-scripts/country_stats.py
 
-data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip data/export/downloads/waterbodies.zip
+data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip data/export/downloads/waterbodies.zip data/export/downloads/rivers.zip
 	python3 py-scripts/downloads.py
 	
 data/export/downloads/unrendered_landcovers.osm: taginfo.json data/source/planet-latest-updated.osm.pbf
@@ -76,6 +77,7 @@ data/export/server/tileserver.php : | data/export/server
 	cp misc/tileserver/tileserver.php data/export/server/tileserver.php
 
 data/export/server/landcovers.mbtiles: data/shapes  | data/export/server
+	rm -f $@
 	(. ~/.nvm/nvm.sh && nvm use v8.15.0 && node ../tilemill/index.js export generalized_landcovers  data/export/server/landcovers.mbtiles --format=mbtiles --minzoom=0 --maxzoom=8 --quiet)
 
 taginfo.json data/export/renderedtags.html &: *.mss data/tables/landcovers_aggr data/tables/landcover_tag_stats | data/export
@@ -96,6 +98,9 @@ data/export/downloads/places.zip: data/places.shp | data/export/downloads
 
 data/export/downloads/waterbodies.zip: data/waterbodies_aggr.shp | data/export/downloads
 	zip -j $@ data/waterbodies_aggr.* misc/waterbodies.readme.txt
+
+data/export/downloads/rivers.zip: data/rivers_gen.shp | data/export/downloads
+	zip -j $@ data/rivers_gen.* misc/rivers.readme.txt
 	
 data/export/img: |	data/export
 	mkdir data/export/img
@@ -110,7 +115,8 @@ data/shapes: data/landcovers_aggr.shp \
       data/places.shp \
       data/peaks.shp \
       data/ne_10m_admin_0_boundary_lines_land.shp \
-      data/ne_110m_admin_0_boundary_lines_land.shp
+      data/ne_110m_admin_0_boundary_lines_land.shp \
+      data/rivers_gen.shp
 	touch $@ 
 
 data/landcovers_aggr.shp: data/tables/landcovers_aggr
@@ -127,6 +133,14 @@ data/waterbodies_aggr.shp: data/tables/water_bodies_aggr
   data/waterbodies_aggr.shp \
   "PG:dbname=gis host=localhost port=5432 user=$(PGUSER)  password=$(PGPASSWORD)" \
   -sql "SELECT * FROM h3.water_bodies_aggr" \
+  -lco ENCODING=UTF-8
+
+data/rivers_gen.shp: data/tables/rivers_gen
+	ogr2ogr -f "ESRI Shapefile" \
+  -progress -overwrite \
+  data/rivers_gen.shp \
+  "PG:dbname=gis host=localhost port=5432 user=$(PGUSER)  password=$(PGPASSWORD)" \
+  -sql "SELECT * FROM h3.rivers_gen WHERE rank >= 2" \
   -lco ENCODING=UTF-8
 
 data/places.shp: data/tables/places
@@ -212,12 +226,24 @@ data/tables/water_bodies_aggr: data/tables/h3_hexes | data/tables
 	psql -d gis -f "sql-scripts/gen_water_bodies.sql" -v ON_ERROR_STOP=1
 	touch $@
 
+data/tables/rivers_gen: data/tables/h3_hexes data/tables/waterway_areas data/tables/waterways_linear | data/tables
+	osm2pgsql-gen -d gis -U $(USER) -S flex-config/waterways_gen.lua
+	touch $@
+
 data/tables/landcovers_aggr: data/tables/h3_hexes | data/tables
 	psql -d gis -f "sql-scripts/gen_land_covers.sql" -v ON_ERROR_STOP=1
 	touch $@
 
 data/tables/h3_hexes: | data/tables
 	psql -d gis -f "sql-scripts/prepare_h3_hexes.sql" -v ON_ERROR_STOP=1
+	touch $@
+
+data/tables/waterway_areas: | data/tables
+	psql -d gis -f "sql-scripts/create_waterway_areas.sql" -v ON_ERROR_STOP=1
+	touch $@
+
+data/tables/waterways_linear: | data/tables
+	psql -d gis -f "sql-scripts/create_waterways_linear.sql" -v ON_ERROR_STOP=1
 	touch $@
 
 data/downloads/ne_10m_admin_0_boundary_lines_land.zip: | data/downloads
@@ -266,12 +292,12 @@ test:
 
 .PHONY: import_planet
 import_planet: data/source/planet-latest-updated.osm.pbf | data ## import data into DB from planet.osm.pbf
-	osm2pgsql -d gis -U $(USER) --create --slim  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes data/nodes.bin --number-processes 16 -S ~/src/openstreetmap-carto/openstreetmap-carto.style -r pbf data/source/planet-latest-updated.osm.pbf
+	osm2pgsql -d gis -U $(USER) --create --slim -C 0 --flat-nodes data/nodes.bin --number-processes 16 -O flex -S flex-config/openstreetmap-carto-flex.lua -r pbf data/source/planet-latest-updated.osm.pbf
 	osm2pgsql-replication init -d gis --server https://planet.openstreetmap.org/replication/hour
 
 .PHONY: update_db
 update_db: ## Update DB via OSM hour diffs
-	osm2pgsql-replication update -d gis  --max-diff-size 100 --  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 0 --flat-nodes data/nodes.bin --number-processes 8 -S ~/src/openstreetmap-carto/openstreetmap-carto.style
+	osm2pgsql-replication update -d gis  --max-diff-size 100 -- -C 0 --flat-nodes data/nodes.bin --number-processes 8 -O flex -S flex-config/openstreetmap-carto-flex.lua
 
 .PHONY: clean
 clean: ## Delete all the *generalized* map data in DB and the files in the work folder. Raw planet data imported via osm2pgsql remains intact!
