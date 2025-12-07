@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, Generator, List, Tuple, TextIO, Pattern
 from enum import Enum # Import Enum
 from more_itertools import peekable
+import html
 
 # --- Start of adapted code from make-profiler/make_profiler/parser.py ---
 class Tokens(str, Enum):
@@ -444,7 +445,7 @@ def remove_data_prefix(path):
     return path    
     
     
-def generate_gantt_html(gantt_data, output_path, hanging_tasks):
+def generate_gantt_html(gantt_data, output_path, hanging_tasks, task_info):
     """
     Generates an HTML file with a simple Gantt chart using HTML/CSS.
     """
@@ -482,8 +483,15 @@ def generate_gantt_html(gantt_data, output_path, hanging_tasks):
         # Vertical position based on index
         top_offset = i * 30 # 30px per row
 
+        task_name = task['name']
+        prereqs = task_info.get(task_name, {}).get('prerequisites', [])
+        display_prereqs = [remove_data_prefix(p) for p in prereqs]
+        
+        tooltip_text = "Prerequisites:\n" + "\n".join(display_prereqs) if display_prereqs else "No direct prerequisites"
+        tooltip_text_escaped = html.escape(tooltip_text, quote=True)
+
         tasks_html.append(f"""
-            <div class="gantt-task {'critical-task' if task['is_critical'] else ''}" style="left: {start_percent}%; width: {duration_percent}%; top: {top_offset}px;">
+            <div class="gantt-task {'critical-task' if task['is_critical'] else ''}" style="left: {start_percent}%; width: {duration_percent}%; top: {top_offset}px;" title="{tooltip_text_escaped}">
                 <!-- <span class="task-name">{task['name']}</span> -->
                 <span class="task-duration">{format_time(task['duration_s'])}</span>
             </div>
@@ -733,4 +741,4 @@ if __name__ == "__main__":
     gantt_data = sort_gantt_data_topologically(gantt_data, task_info)
 
     # Generate HTML
-    generate_gantt_html(gantt_data, OUTPUT_HTML_PATH, hanging_tasks)
+    generate_gantt_html(gantt_data, OUTPUT_HTML_PATH, hanging_tasks, task_info)
