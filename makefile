@@ -238,11 +238,11 @@ data/tables/h3_hexes: | data/tables
 	psql -d gis -f "sql-scripts/prepare_h3_hexes.sql" -v ON_ERROR_STOP=1
 	touch $@
 
-data/tables/waterway_areas: | data/tables
+data/tables/waterway_areas: | data/tables/h3_hexes
 	psql -d gis -f "sql-scripts/create_waterway_areas.sql" -v ON_ERROR_STOP=1
 	touch $@
 
-data/tables/waterways_linear: | data/tables
+data/tables/waterways_linear: | data/tables/h3_hexes
 	psql -d gis -f "sql-scripts/create_waterways_linear.sql" -v ON_ERROR_STOP=1
 	touch $@
 
@@ -297,7 +297,8 @@ import_planet: data/source/planet-latest-updated.osm.pbf | data ## import data i
 
 .PHONY: update_db
 update_db: ## Update DB via OSM hour diffs
-	osm2pgsql-replication update -d gis  --max-diff-size 100 -- -C 0 --flat-nodes data/nodes.bin --number-processes 8 -O flex -S flex-config/openstreetmap-carto-flex.lua
+	touch data/nodes.bin
+	osm2pgsql-replication update -d gis  --max-diff-size 100 -- -C 0 --flat-nodes data/nodes.bin --number-processes 16 -O flex -S flex-config/openstreetmap-carto-flex.lua
 
 .PHONY: clean
 clean: ## Delete all the *generalized* map data in DB and the files in the work folder. Raw planet data imported via osm2pgsql remains intact!
