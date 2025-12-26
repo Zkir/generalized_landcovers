@@ -67,7 +67,7 @@ data/export/country_stats.html: data/tables/country_stats
 data/export/downloads.html:      data/export/downloads/landcovers.zip  data/export/downloads/peaks.zip  data/export/downloads/places.zip data/export/downloads/waterbodies.zip data/export/downloads/rivers.zip
 	python3 py-scripts/downloads.py
 	
-data/export/downloads/unrendered_landcovers.osm: taginfo.json data/source/planet-latest-updated.osm.pbf
+data/export/downloads/unrendered_landcovers.osm: taginfo.json planet/planet-latest-updated.osm.pbf
 	python3 py-scripts/extract_unrendered.py
 
 data/export/server/.htaccess : | data/export/server
@@ -271,19 +271,19 @@ data/export: | data
 data/tables: | data
 	mkdir $@
 
-data/source: | data
+planet: | data
 	mkdir $@
 
 data: 
 	mkdir $@
 
 
-data/source/planet-latest.osm.pbf: | data/source
-	(cd data/source; aria2c https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf.torrent --seed-time=0)
-	(cd data/source; mv planet-*.osm.pbf planet-latest.osm.pbf)
+planet/planet-latest.osm.pbf: | planet
+	(cd planet; aria2c https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf.torrent --seed-time=0)
+	(cd planet; mv planet-*.osm.pbf planet-latest.osm.pbf)
 
-data/source/planet-latest-updated.osm.pbf: data/source/planet-latest.osm.pbf
-	(cd data/source; osmupdate planet-latest.osm.pbf planet-latest-updated.osm.pbf)
+planet/planet-latest-updated.osm.pbf: planet/planet-latest.osm.pbf
+	(cd planet; osmupdate planet-latest.osm.pbf planet-latest-updated.osm.pbf)
 
 .PHONY: test
 test: 
@@ -291,14 +291,13 @@ test:
 
 
 .PHONY: import_planet
-import_planet: data/source/planet-latest-updated.osm.pbf | data ## import data into DB from planet.osm.pbf
-	osm2pgsql -d gis -U $(USER) --create --slim -C 0 --flat-nodes data/nodes.bin --number-processes 16 -O flex -S flex-config/openstreetmap-carto-flex.lua -r pbf data/source/planet-latest-updated.osm.pbf
+import_planet: planet/planet-latest-updated.osm.pbf | data ## import data into DB from planet.osm.pbf
+	osm2pgsql -d gis -U $(USER) --create --slim -C 0 --flat-nodes planet/nodes.bin --number-processes 16 -O flex -S flex-config/openstreetmap-carto-flex.lua -r pbf planet/planet-latest-updated.osm.pbf
 	osm2pgsql-replication init -d gis --server https://planet.openstreetmap.org/replication/hour
 
 .PHONY: update_db
 update_db: ## Update DB via OSM hour diffs
-	touch data/nodes.bin
-	osm2pgsql-replication update -d gis  --max-diff-size 100 -- -C 0 --flat-nodes data/nodes.bin --number-processes 16 -O flex -S flex-config/openstreetmap-carto-flex.lua
+	osm2pgsql-replication update -d gis  --max-diff-size 100 -- -C 0 --flat-nodes planet/nodes.bin --number-processes 16 -O flex -S flex-config/openstreetmap-carto-flex.lua
 
 .PHONY: clean
 clean: ## Delete all the *generalized* map data in DB and the files in the work folder. Raw planet data imported via osm2pgsql remains intact!
