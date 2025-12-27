@@ -26,3 +26,5 @@ webui-prototypes/empty_hex_data.json
 makefile-profiling.log
 planet/planet-latest.osm.pbf
 planet/planet-latest.osm.pbf.bak
+planet/nodes.bin
+planet/planet-latest-updated.osm.pbf
